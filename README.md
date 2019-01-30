@@ -1,5 +1,12 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Deploy to aws bucket
+
+```
+yarn build
+aws s3 sync build s3://hashtag-lunch-reviews
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
