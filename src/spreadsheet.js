@@ -27,7 +27,7 @@ export function load(callback) {
 
             const formattedRow = {};
             _.zip(headerRow, row).forEach(([key, value]) => {
-              if (key == "rating") {
+              if (key === "rating") {
                 formattedRow[key] = parseFloat(value.replace(",", "."));
               } else {
                 formattedRow[key] = value;

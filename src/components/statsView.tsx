@@ -1,6 +1,7 @@
 import React from "react";
 import { Rating } from "../types";
 import styled from "styled-components";
+import FontAwesome from "react-fontawesome";
 
 interface Props {
   ratings: Array<Rating>;
@@ -14,6 +15,15 @@ export default ({ ratings, headerClicked }: Props) => {
     cells.push(<Cell key={`name-${rating.name}`}>{rating.name}</Cell>);
     cells.push(<Cell key={`rating-${rating.name}`}>{rating.rating}</Cell>);
     cells.push(<Cell key={`comment-${rating.name}`}>{rating.comment}</Cell>);
+    cells.push(
+      <Cell key={`link-${rating.name}`}>
+        {
+          <a href={rating.google_maps_link}>
+            <FontAwesome name="external-link" />
+          </a>
+        }
+      </Cell>
+    );
   });
 
   return (
@@ -37,7 +47,7 @@ export default ({ ratings, headerClicked }: Props) => {
         >
           Comment
         </HeaderCell>
-
+        <HeaderCell>Link</HeaderCell>
         {cells.map((c: any) => c)}
       </GridContainer>
     </>
@@ -63,7 +73,7 @@ const GridContainer = styled.div`
   display: grid;
   width: 50%;
   /* grid-auto-rows: 50px; */
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 
   /* grid-template-areas:
     "n r c"
