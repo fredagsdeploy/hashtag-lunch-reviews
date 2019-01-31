@@ -9,20 +9,21 @@ interface Props {
 }
 
 export const StatsView = ({ ratings, headerClicked }: Props) => {
-  const cells: any = [];
-  ratings.forEach((rating, i) => {
-    const Cell = i % 2 == 0 ? EvenCell : OddCell;
-    cells.push(<Cell key={`name-${rating.name}`}>{rating.name}</Cell>);
-    cells.push(<Cell key={`rating-${rating.name}`}>{rating.rating}</Cell>);
-    cells.push(<Cell key={`comment-${rating.name}`}>{rating.comment}</Cell>);
-    cells.push(
-      <Cell key={`link-${rating.name}`}>
-        {
-          <a href={rating.google_maps_link}>
-            <FontAwesome name="external-link" />
-          </a>
-        }
-      </Cell>
+  const cells = ratings.map((rating, i) => {
+    return (
+      <>
+        <Cell key={`name-${rating.name}`}>{rating.name}</Cell>
+        <Cell key={`rating-${rating.name}`}>{rating.rating}</Cell>
+        <Cell key={`comment-${rating.name}`}>{rating.comment}</Cell>
+
+        <Cell key={`link-${rating.name}`}>
+          {
+            <a href={rating.google_maps_link}>
+              <FontAwesome name="external-link" />
+            </a>
+          }
+        </Cell>
+      </>
     );
   });
 
@@ -54,17 +55,23 @@ export const StatsView = ({ ratings, headerClicked }: Props) => {
   );
 };
 
-const BaseCell = styled.span`
+const Cell = styled.span`
   padding: 8px 4px;
+  &:nth-child(8n + 9) {
+    background: lightgrey;
+  }
+  &:nth-child(8n + 10) {
+    background: lightgrey;
+  }
+  &:nth-child(8n + 11) {
+    background: lightgrey;
+  }
+  &:nth-child(8n + 12) {
+    background: lightgrey;
+  }
 `;
 
-const EvenCell = styled(BaseCell)``;
-
-const OddCell = styled(BaseCell)`
-  background: lightgrey;
-`;
-
-const HeaderCell = styled(BaseCell)`
+const HeaderCell = styled(Cell)`
   font-weight: bold;
   border-bottom: 2px solid black;
 `;
