@@ -7,18 +7,8 @@ import config from "../config";
 import { load } from "../spreadsheet";
 
 export default () => {
-  const [ratings, setRatings] = useState([]);
+  const [ratings, setRatings] = useState<Array<Rating>>([]);
   const [sortedBy, setSortedBy] = useState("rating");
-
-  const onLoad = (data: any, error?: Error) => {
-    if (data) {
-      console.log("Loaded data", data);
-
-      setRatings(data.sort(byRating));
-    } else {
-      console.log("error in on load", error);
-    }
-  };
 
   const initClient = () => {
     window.gapi.client
@@ -26,8 +16,13 @@ export default () => {
         apiKey: config.apiKey,
         discoveryDocs: config.discoveryDocs
       })
-      .then(() => {
-        load(onLoad);
+      .then(load)
+      .then((ratings: Array<Rating>) => {
+        console.log("Loaded data", ratings);
+        setRatings(ratings.sort(byRating));
+      })
+      .catch((err: Error) => {
+        console.log("Error on loading data", err);
       });
   };
 
