@@ -1,4 +1,4 @@
-import config from "./config";
+import config from "../config";
 import _ from "lodash";
 
 interface Response {
@@ -9,8 +9,17 @@ interface ErrorResponse {
   result: any;
 }
 
-export async function load() {
-  await window.gapi.client.load("sheets", "v4");
+export const initSpreadsheetApi = async () => {
+  await window.gapi.load("client", () => {
+    window.gapi.client.init({
+      apiKey: config.apiKey,
+      discoveryDocs: config.discoveryDocs
+    });
+  });
+  return window.gapi.client.load("sheets", "v4");
+};
+
+export async function getRatings() {
   return window.gapi.client.sheets.spreadsheets.values
     .get({
       spreadsheetId: config.spreadsheetId,

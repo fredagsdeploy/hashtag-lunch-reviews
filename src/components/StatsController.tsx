@@ -4,19 +4,14 @@ import { StatsView } from "./StatsView";
 import _ from "lodash";
 
 import config from "../config";
-import { load } from "../spreadsheet";
+import { getRatings } from "../lib/spreadsheet";
 
 export const StatsController = () => {
   const [ratings, setRatings] = useState<Array<Rating>>([]);
   const [sortedBy, setSortedBy] = useState("rating");
 
   const initClient = () => {
-    window.gapi.client
-      .init({
-        apiKey: config.apiKey,
-        discoveryDocs: config.discoveryDocs
-      })
-      .then(load)
+    getRatings()
       .then((ratings: Array<Rating>) => {
         console.log("Loaded data", ratings);
         setRatings(_.orderBy(ratings, [sortedBy], "desc"));
