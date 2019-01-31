@@ -4,7 +4,7 @@ import { StatsView } from "./StatsView";
 import _ from "lodash";
 
 import config from "../config";
-import { getRatings } from "../lib/spreadsheet";
+import { getRatings, postPlace } from "../lib/spreadsheet";
 
 export const StatsController = () => {
   const [ratings, setRatings] = useState<Array<Rating>>([]);
@@ -35,5 +35,19 @@ export const StatsController = () => {
     setRatings(sortedRatings);
   };
 
-  return <StatsView ratings={ratings} headerClicked={sortBy} />;
+  const addPlace = () => {
+    console.log("shuold add place");
+    postPlace({
+      comment: "test-place-comment",
+      google_maps_link: "",
+      name: "test-place-name"
+    });
+  };
+
+  return (
+    <>
+      <StatsView ratings={ratings} headerClicked={sortBy} />
+      <div onClick={addPlace}>Press me :)</div>
+    </>
+  );
 };
