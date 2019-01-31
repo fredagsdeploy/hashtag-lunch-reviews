@@ -1,6 +1,6 @@
 import React from "react";
 
-import StatsController from "./components/StatsController";
+import { StatsController } from "./components/StatsController";
 
 declare global {
   interface Window {
@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-export default () => {
+export const App = () => {
   return (
     <div className="App">
       <StatsController />

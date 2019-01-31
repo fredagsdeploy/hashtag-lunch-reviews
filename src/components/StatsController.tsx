@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Rating } from "../types";
-import StatsView from "./StatsView";
+import { StatsView } from "./StatsView";
 import _ from "lodash";
 
 import config from "../config";
 import { load } from "../spreadsheet";
 
-export default () => {
+export const StatsController = () => {
   const [ratings, setRatings] = useState<Array<Rating>>([]);
   const [sortedBy, setSortedBy] = useState("rating");
 

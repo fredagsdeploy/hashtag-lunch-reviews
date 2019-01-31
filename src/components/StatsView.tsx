@@ -8,7 +8,7 @@ interface Props {
   headerClicked: Function;
 }
 
-export default ({ ratings, headerClicked }: Props) => {
+export const StatsView = ({ ratings, headerClicked }: Props) => {
   const cells: any = [];
   ratings.forEach((rating, i) => {
     const Cell = i % 2 == 0 ? EvenCell : OddCell;
