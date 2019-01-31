@@ -10,7 +10,7 @@ export default () => {
   const [ratings, setRatings] = useState([]);
   const [sortedBy, setSortedBy] = useState("rating");
 
-  const onLoad = (data: any, error: Error) => {
+  const onLoad = (data: any, error?: Error) => {
     if (data) {
       console.log("Loaded data", data);
 
