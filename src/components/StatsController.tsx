@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Rating } from "../types";
-import StatsView from "./statsView";
+import StatsView from "./StatsView";
 import _ from "lodash";
 
 import config from "../config";

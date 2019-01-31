@@ -1,6 +1,6 @@
 import React from "react";
 
-import StatsController from "./components/statsController";
+import StatsController from "./components/StatsController";
 
 declare global {
   interface Window {
