@@ -24,7 +24,7 @@ export async function getRatings() {
   return window.gapi.client.sheets.spreadsheets.values
     .get({
       spreadsheetId: config.spreadsheetId,
-      range: "'Places & Ratings'!A:D"
+      range: "'Places & Ratings'!A:E"
     })
     .then(
       (response: Response) => {
@@ -51,6 +51,11 @@ export async function getRatings() {
               throw new Error(`Key: ${key}`);
             }
             if (key === "rating") {
+              if (!value) {
+                throw new Error(`Bad value: ${value}`);
+              }
+              formattedRow[key] = parseFloat(value.replace(",", "."));
+            } else if (key === "normalized_rating") {
               if (!value) {
                 throw new Error(`Bad value: ${value}`);
               }

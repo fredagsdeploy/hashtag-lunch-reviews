@@ -2,6 +2,7 @@ export interface Rating {
   name: string;
   google_maps_link: string;
   rating: number;
+  normalized_rating: number;
   comment: string;
 }
 

@@ -17,6 +17,12 @@ export const StatsView = ({ ratings, headerClicked }: Props) => {
         <Cell key={`rating-${rating.name}`}>
           <StarRating name={`rating-a-${rating.name}`} rating={rating.rating} />
         </Cell>
+        <Cell key={`normalized-rating-${rating.name}`}>
+          <StarRating
+            name={`rating-a-${rating.name}`}
+            rating={rating.normalized_rating}
+          />
+        </Cell>
         <Cell key={`comment-${rating.name}`}>{rating.comment}</Cell>
 
         <Cell key={`link-${rating.name}`}>
@@ -46,6 +52,12 @@ export const StatsView = ({ ratings, headerClicked }: Props) => {
           Rating
         </HeaderCell>
         <HeaderCell
+          key="normalized-rating-header-cell"
+          onClick={() => headerClicked("normalized_rating")}
+        >
+          Normalized Rating
+        </HeaderCell>
+        <HeaderCell
           key="comment-header-cell"
           onClick={() => headerClicked("comment")}
         >
@@ -60,16 +72,19 @@ export const StatsView = ({ ratings, headerClicked }: Props) => {
 
 const Cell = styled.span`
   padding: 8px 4px;
-  &:nth-child(8n + 9) {
+  &:nth-child(10n + 11) {
     background: lightgrey;
   }
-  &:nth-child(8n + 10) {
+  &:nth-child(10n + 12) {
     background: lightgrey;
   }
-  &:nth-child(8n + 11) {
+  &:nth-child(10n + 13) {
     background: lightgrey;
   }
-  &:nth-child(8n + 12) {
+  &:nth-child(10n + 14) {
+    background: lightgrey;
+  }
+  &:nth-child(10n + 15) {
     background: lightgrey;
   }
 `;
@@ -83,7 +98,7 @@ const GridContainer = styled.div`
   display: grid;
   width: 50%;
   /* grid-auto-rows: 50px; */
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
 
   /* grid-template-areas:
     "n r c"
