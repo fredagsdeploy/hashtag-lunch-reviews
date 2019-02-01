@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { Rating } from "../types";
 import { StatsView } from "./StatsView";
 import _ from "lodash";
 
-import config from "../config";
 import { getRatings, postPlace } from "../lib/spreadsheet";
 
 export const StatsController = () => {
   const [ratings, setRatings] = useState<Array<Rating>>([]);
   const [sortedBy, setSortedBy] = useState("rating");
+
+  const newPlaceInitialState = {
+    name: "",
+    comment: "",
+    google_maps_link: ""
+  };
+
+  const [newPlace, setNewPlace] = useState(newPlaceInitialState);
 
   const initClient = () => {
     getRatings()
@@ -37,17 +44,44 @@ export const StatsController = () => {
 
   const addPlace = () => {
     console.log("shuold add place");
-    postPlace({
-      comment: "test-place-comment",
-      google_maps_link: "",
-      name: "test-place-name"
-    });
+    try {
+      postPlace(newPlace).then((place: Rating) => {
+        setNewPlace(newPlaceInitialState);
+        setRatings([...ratings, place]);
+      });
+    } catch (error) {
+      console.log("failure posting new place?", error);
+    }
+  };
+
+  const handleNewPlaceInput = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.name);
+    console.log(event.target.value);
+    setNewPlace({ ...newPlace, [event.target.name]: event.target.value });
   };
 
   return (
     <>
       <StatsView ratings={ratings} headerClicked={sortBy} />
-      <div onClick={addPlace}>Press me :)</div>
+      <input
+        name="name"
+        onChange={handleNewPlaceInput}
+        type="text"
+        value={newPlace.name}
+      />
+      <input
+        name="comment"
+        onChange={handleNewPlaceInput}
+        type="text"
+        value={newPlace.comment}
+      />
+      <input
+        name="google_maps_link"
+        onChange={handleNewPlaceInput}
+        type="text"
+        value={newPlace.google_maps_link}
+      />
+      <input type="button" value="Add new place" onClick={addPlace} />
     </>
   );
 };
