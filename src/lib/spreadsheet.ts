@@ -1,5 +1,6 @@
 import config from "../config";
 import _ from "lodash";
+import { Place, Rating } from "../types";
 
 interface Response {
   result: any;
@@ -62,8 +63,6 @@ export async function getRatings() {
           return formattedRow;
         });
 
-        console.log("wha?", formattedData);
-
         return formattedData;
       },
       (response: ErrorResponse) => {
@@ -71,3 +70,28 @@ export async function getRatings() {
       }
     );
 }
+
+const formatPlaceForRequest = (place: Place): Array<Array<any>> => [
+  [place.name, null, place.comment, place.google_maps_link]
+];
+
+export const postPlace = async (place: Place): Promise<Rating> => {
+  const postRange = "Places & Ratings!A:D";
+  return window.gapi.client.sheets.spreadsheets.values
+    .append(
+      {
+        spreadsheetId: config.spreadsheetId,
+        range: postRange,
+        valueInputOption: "RAW"
+      },
+      {
+        range: postRange,
+        majorDimension: "ROWS",
+        values: formatPlaceForRequest(place)
+      }
+    )
+    .then((resp: Response) => {
+      console.log("success?", resp);
+      return place;
+    });
+};

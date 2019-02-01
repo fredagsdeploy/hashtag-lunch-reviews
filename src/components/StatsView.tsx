@@ -1,6 +1,7 @@
 import React from "react";
 import { Rating } from "../types";
 import styled from "styled-components";
+import { StarRating } from "./StarRating";
 import FontAwesome from "react-fontawesome";
 
 interface Props {
@@ -13,7 +14,9 @@ export const StatsView = ({ ratings, headerClicked }: Props) => {
     return (
       <>
         <Cell key={`name-${rating.name}`}>{rating.name}</Cell>
-        <Cell key={`rating-${rating.name}`}>{rating.rating}</Cell>
+        <Cell key={`rating-${rating.name}`}>
+          <StarRating name={`rating-a-${rating.name}`} rating={rating.rating} />
+        </Cell>
         <Cell key={`comment-${rating.name}`}>{rating.comment}</Cell>
 
         <Cell key={`link-${rating.name}`}>

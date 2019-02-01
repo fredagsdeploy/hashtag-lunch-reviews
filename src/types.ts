@@ -4,3 +4,9 @@ export interface Rating {
   rating: number;
   comment: string;
 }
+
+export interface Place {
+  name: string;
+  google_maps_link: string;
+  comment: string;
+}
