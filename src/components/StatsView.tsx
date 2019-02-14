@@ -12,17 +12,17 @@ interface Props {
 export const StatsView = ({ ratings, headerClicked }: Props) => {
   const cells = ratings.map((rating, i) => {
     return (
-      <>
+      <Row>
         <Cell key={`name-${rating.name}`}>{rating.name}</Cell>
-        <Cell key={`rating-${rating.name}`}>
+        <StarCell key={`rating-${rating.name}`}>
           <StarRating name={`rating-a-${rating.name}`} rating={rating.rating} />
-        </Cell>
-        <Cell key={`normalized-rating-${rating.name}`}>
+        </StarCell>
+        <StarCell key={`normalized-rating-${rating.name}`}>
           <StarRating
             name={`rating-a-${rating.name}`}
             rating={rating.normalized_rating}
           />
-        </Cell>
+        </StarCell>
         <Cell key={`comment-${rating.name}`}>{rating.comment}</Cell>
 
         <Cell key={`link-${rating.name}`}>
@@ -32,75 +32,66 @@ export const StatsView = ({ ratings, headerClicked }: Props) => {
             </a>
           }
         </Cell>
-      </>
+      </Row>
     );
   });
 
   return (
     <>
       <GridContainer>
-        <HeaderCell
-          key="name-header-cell"
-          onClick={() => headerClicked("name")}
-        >
-          Name
-        </HeaderCell>
-        <HeaderCell
-          key="rating-header-cell"
-          onClick={() => headerClicked("rating")}
-        >
-          Rating
-        </HeaderCell>
-        <HeaderCell
-          key="normalized-rating-header-cell"
-          onClick={() => headerClicked("normalized_rating")}
-        >
-          Normalized Rating
-        </HeaderCell>
-        <HeaderCell
-          key="comment-header-cell"
-          onClick={() => headerClicked("comment")}
-        >
-          Comment
-        </HeaderCell>
-        <HeaderCell>Link</HeaderCell>
-        {cells.map((c: any) => c)}
+        <Row>
+          <HeaderCell
+            key="name-header-cell"
+            onClick={() => headerClicked("name")}
+          >
+            Name
+          </HeaderCell>
+          <HeaderCell
+            key="rating-header-cell"
+            onClick={() => headerClicked("rating")}
+          >
+            Rating
+          </HeaderCell>
+          <HeaderCell
+            key="normalized-rating-header-cell"
+            onClick={() => headerClicked("normalized_rating")}
+          >
+            Normalized Rating
+          </HeaderCell>
+          <HeaderCell
+            key="comment-header-cell"
+            onClick={() => headerClicked("comment")}
+          >
+            Comment
+          </HeaderCell>
+          <HeaderCell>Link</HeaderCell>
+        </Row>
+        {cells}
       </GridContainer>
     </>
   );
 };
 
-const Cell = styled.span`
+const Cell = styled.td`
   padding: 8px 4px;
-  &:nth-child(10n + 11) {
-    background: lightgrey;
-  }
-  &:nth-child(10n + 12) {
-    background: lightgrey;
-  }
-  &:nth-child(10n + 13) {
-    background: lightgrey;
-  }
-  &:nth-child(10n + 14) {
-    background: lightgrey;
-  }
-  &:nth-child(10n + 15) {
-    background: lightgrey;
-  }
 `;
 
-const HeaderCell = styled(Cell)`
+const StarCell = styled(Cell)`
+  white-space: nowrap;
+`;
+
+const HeaderCell = styled.th`
   font-weight: bold;
   border-bottom: 2px solid black;
 `;
 
-const GridContainer = styled.div`
-  display: grid;
+const GridContainer = styled.table`
   width: 50%;
-  /* grid-auto-rows: 50px; */
-  grid-template-columns: repeat(5, 1fr);
+  border-collapse: collapse;
+`;
 
-  /* grid-template-areas:
-    "n r c"
-    "n r c"; */
+const Row = styled.tr`
+  &:nth-child(2n + 3) {
+    background-color: lightgrey;
+  }
 `;
