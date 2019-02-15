@@ -2,31 +2,18 @@ import React from "react";
 import FontAwesome from "react-fontawesome";
 import styled from "styled-components";
 
-const getStarForIterationAndRating = (
-  starNumber: number,
-  starRating: number
-) => {
-  const starDiff = Math.abs(starRating - starNumber);
-  if (starNumber <= Math.floor(starRating)) {
+interface StarProps {
+  key: string;
+  filled: number; // Star fills according to rules: empty < 0.25 <= half < 0.75 <= Full
+}
+
+const Star = ({ filled }: StarProps) => {
+  if (0.75 <= filled) {
     return <YellowStar />;
-  } else if (0.25 <= starDiff && starDiff < 0.75) {
+  } else if (0.25 <= filled && filled < 0.75) {
     return <YellowHalfStar />;
   }
   return <YellowHollowStar />;
-};
-
-const starRound = (rating: number): number => {
-  if (rating == NaN) {
-    return 0;
-  }
-  const decimalPart = rating - Math.floor(rating);
-  if (decimalPart < 0.25) {
-    return Math.floor(rating);
-  } else if (decimalPart < 0.75) {
-    return rating;
-  } else {
-    return Math.ceil(rating);
-  }
 };
 
 interface Props {
@@ -36,11 +23,13 @@ interface Props {
 
 export const StarRating = (props: Props) => {
   const rating = props.rating;
-  const starRating = starRound(rating);
-  console.log(props.name, rating);
 
   return (
-    <>{[1, 2, 3, 4, 5].map(i => getStarForIterationAndRating(i, rating))}</>
+    <>
+      {[0, 1, 2, 3, 4].map(i => (
+        <Star key={`${i}`} filled={rating - i} />
+      ))}
+    </>
   );
 };
 
