@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ```
 yarn build
-aws s3 sync build s3://hashtag-lunch-reviews
+aws s3 sync build s3://<bucket>
 ```
 
 ## Available Scripts
