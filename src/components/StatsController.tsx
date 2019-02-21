@@ -1,9 +1,9 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
+import _ from "lodash";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useBoolean } from "../customHooks/useBoolean";
+import { getRatings, postPlace } from "../lib/spreadsheet";
 import { Rating } from "../types";
 import { StatsView } from "./StatsView";
-import _ from "lodash";
-
-import { getRatings, postPlace } from "../lib/spreadsheet";
 
 export const StatsController = () => {
   const [ratings, setRatings] = useState<Array<Rating>>([]);
@@ -16,6 +16,10 @@ export const StatsController = () => {
   };
 
   const [newPlace, setNewPlace] = useState(newPlaceInitialState);
+
+  const [isAddingPlace, toggleIsAddingPlace, setIsAddingPlace] = useBoolean(
+    false
+  );
 
   const initClient = () => {
     getRatings()
@@ -47,6 +51,7 @@ export const StatsController = () => {
     try {
       postPlace(newPlace).then((place: Rating) => {
         setNewPlace(newPlaceInitialState);
+        setIsAddingPlace(false);
         setRatings([...ratings, place]);
       });
     } catch (error) {
@@ -55,33 +60,23 @@ export const StatsController = () => {
   };
 
   const handleNewPlaceInput = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.name) {
+      throw new Error("No name on event.target");
+    }
     console.log(event.target.name);
     console.log(event.target.value);
     setNewPlace({ ...newPlace, [event.target.name]: event.target.value });
   };
 
   return (
-    <>
-      <StatsView ratings={ratings} headerClicked={sortBy} />
-      <input
-        name="name"
-        onChange={handleNewPlaceInput}
-        type="text"
-        value={newPlace.name}
-      />
-      <input
-        name="comment"
-        onChange={handleNewPlaceInput}
-        type="text"
-        value={newPlace.comment}
-      />
-      <input
-        name="google_maps_link"
-        onChange={handleNewPlaceInput}
-        type="text"
-        value={newPlace.google_maps_link}
-      />
-      <input type="button" value="Add new place" onClick={addPlace} />
-    </>
+    <StatsView
+      ratings={ratings}
+      headerClicked={sortBy}
+      addRowPressed={() => toggleIsAddingPlace()}
+      isAddingPlace={isAddingPlace}
+      newPlaceData={newPlace}
+      newPlaceDataChange={handleNewPlaceInput}
+      sumbitNewPlace={addPlace}
+    />
   );
 };

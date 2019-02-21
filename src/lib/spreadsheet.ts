@@ -24,7 +24,7 @@ export async function getRatings() {
   return window.gapi.client.sheets.spreadsheets.values
     .get({
       spreadsheetId: config.spreadsheetId,
-      range: "'Places & Ratings'!A:E"
+      range: "place_with_rating_data_output!A:F"
     })
     .then(
       (response: Response) => {
@@ -52,14 +52,16 @@ export async function getRatings() {
             }
             if (key === "rating") {
               if (!value) {
-                throw new Error(`Bad value: ${value}`);
+                formattedRow[key] = NaN;
+              } else {
+                formattedRow[key] = parseFloat(value.replace(",", "."));
               }
-              formattedRow[key] = parseFloat(value.replace(",", "."));
             } else if (key === "normalized_rating") {
               if (!value) {
-                throw new Error(`Bad value: ${value}`);
+                formattedRow[key] = NaN;
+              } else {
+                formattedRow[key] = parseFloat(value.replace(",", "."));
               }
-              formattedRow[key] = parseFloat(value.replace(",", "."));
             } else {
               formattedRow[key] = value;
             }
@@ -77,11 +79,11 @@ export async function getRatings() {
 }
 
 const formatPlaceForRequest = (place: Place): Array<Array<any>> => [
-  [place.name, null, place.comment, place.google_maps_link]
+  [null, place.name, place.comment, place.google_maps_link]
 ];
 
 export const postPlace = async (place: Place): Promise<Rating> => {
-  const postRange = "Places & Ratings!A:D";
+  const postRange = "places!A:D";
   return window.gapi.client.sheets.spreadsheets.values
     .append(
       {
