@@ -25,7 +25,12 @@ export const StatsController = () => {
     getRatings()
       .then((ratings: Array<Rating>) => {
         console.log("Loaded data", ratings);
-        setRatings(_.orderBy(ratings, [sortedBy], "desc"));
+        const sortedRatingsWithRanking = _.orderBy(
+          ratings,
+          [sortedBy],
+          "desc"
+        ).map((rating, i) => ({ ...rating, rank: i + 1 }));
+        setRatings(sortedRatingsWithRanking);
       })
       .catch((err: Error) => {
         console.log("Error on loading data", err);
@@ -41,7 +46,7 @@ export const StatsController = () => {
       setRatings(ratings.reverse());
       return;
     }
-    const sortedRatings = _.orderBy(ratings, [headerKey]);
+    const sortedRatings = _.orderBy(ratings, [headerKey], "desc");
     setSortedBy(headerKey);
     setRatings(sortedRatings);
   };

@@ -5,6 +5,7 @@ export interface Rating {
   rating: number;
   normalized_rating: number;
   comment: string;
+  rank: number;
 }
 
 export interface Place {

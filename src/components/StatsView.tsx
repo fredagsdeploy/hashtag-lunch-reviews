@@ -21,7 +21,8 @@ interface EditPlaceRowProps {
 
 const EditPlaceRow = ({ placeData, newPlaceDataChange }: EditPlaceRowProps) => {
   return (
-    <WhiteRow key="editplacerowstuff">
+    <WhiteRow>
+      <Cell />
       <Cell>
         <TextInput
           placeholder="Name"
@@ -64,6 +65,7 @@ export const StatsView = ({
   const rows = ratings.map((rating, i) => {
     return (
       <Row key={`${rating.id}`}>
+        <Cell>{rating.rank}</Cell>
         <Cell>{rating.name}</Cell>
         <StarCell>
           <StarRating name={`rating-a-${rating.name}`} rating={rating.rating} />
@@ -91,6 +93,7 @@ export const StatsView = ({
     <Table>
       <tbody>
         <Row>
+          <HeaderCell>Rank</HeaderCell>
           <HeaderCell onClick={() => headerClicked("name")}>Name</HeaderCell>
           <HeaderCell onClick={() => headerClicked("rating")}>
             Rating
