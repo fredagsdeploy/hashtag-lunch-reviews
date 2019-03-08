@@ -1,13 +1,48 @@
 import _ from "lodash";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, useMemo } from "react";
 import { useBoolean } from "../customHooks/useBoolean";
 import { getRatings, postPlace } from "../lib/spreadsheet";
 import { Rating } from "../types";
 import { StatsView } from "./StatsView";
+import { browserHistory } from "../history";
+import { unstable_createResource } from "react-cache";
 
-export const StatsController = () => {
-  const [ratings, setRatings] = useState<Array<Rating>>([]);
-  const [sortedBy, setSortedBy] = useState("rating");
+const tableResource = unstable_createResource(getRatings);
+
+interface Props {
+  userId: string;
+}
+
+const useRatings = () => {
+  const ratings = tableResource.read(0);
+
+  return ratings;
+};
+
+const useSorting = <T extends {}>(
+  array: T[],
+  key: keyof T,
+  ascending: boolean
+): T[] => {
+  return useMemo(() => _.orderBy(array, key, [ascending]), [
+    array,
+    key,
+    ascending
+  ]);
+};
+
+export const StatsController = ({ userId }: Props) => {
+  const ratingsFromServer = useRatings();
+
+  const [ratings, setRatings] = useState(ratingsFromServer);
+  const [ascending, toggleAscending] = useBoolean(false);
+  const [sortedBy, setSortedBy] = useState<keyof Rating>("rating");
+
+  const sortedRatings = useSorting(ratings, sortedBy, ascending);
+
+  console.log("userId", userId);
+
+  console.log({ sortedRatings });
 
   const newPlaceInitialState = {
     name: "",
@@ -21,34 +56,12 @@ export const StatsController = () => {
     false
   );
 
-  const initClient = () => {
-    getRatings()
-      .then((ratings: Array<Rating>) => {
-        console.log("Loaded data", ratings);
-        const sortedRatingsWithRanking = _.orderBy(
-          ratings,
-          [sortedBy],
-          "desc"
-        ).map((rating, i) => ({ ...rating, rank: i + 1 }));
-        setRatings(sortedRatingsWithRanking);
-      })
-      .catch((err: Error) => {
-        console.log("Error on loading data", err);
-      });
-  };
-
-  useEffect(() => {
-    window.gapi.load("client", initClient);
-  }, []);
-
-  const sortBy = (headerKey: string) => {
+  const sortBy = (headerKey: keyof Rating) => {
     if (sortedBy === headerKey) {
-      setRatings(ratings.reverse());
-      return;
+      toggleAscending();
+    } else {
+      setSortedBy(headerKey);
     }
-    const sortedRatings = _.orderBy(ratings, [headerKey], "desc");
-    setSortedBy(headerKey);
-    setRatings(sortedRatings);
   };
 
   const addPlace = () => {
@@ -57,7 +70,7 @@ export const StatsController = () => {
       postPlace(newPlace).then((place: Rating) => {
         setNewPlace(newPlaceInitialState);
         setIsAddingPlace(false);
-        setRatings([...ratings, place]);
+        setRatings([...sortedRatings, place]);
       });
     } catch (error) {
       console.log("failure posting new place?", error);
@@ -73,15 +86,21 @@ export const StatsController = () => {
     setNewPlace({ ...newPlace, [event.target.name]: event.target.value });
   };
 
+  const goToPlacePage = (rating: Rating) => {
+    console.log(`row clicked ${rating.name}`);
+    browserHistory.push(`/${rating.id}/${rating.name}`);
+  };
+
   return (
     <StatsView
-      ratings={ratings}
+      ratings={sortedRatings}
       headerClicked={sortBy}
       addRowPressed={() => toggleIsAddingPlace()}
       isAddingPlace={isAddingPlace}
       newPlaceData={newPlace}
       newPlaceDataChange={handleNewPlaceInput}
       sumbitNewPlace={addPlace}
+      placeClicked={goToPlacePage}
     />
   );
 };

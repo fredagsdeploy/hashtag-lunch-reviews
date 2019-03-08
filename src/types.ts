@@ -1,3 +1,5 @@
+import { string } from "prop-types";
+
 export interface Rating {
   id: string;
   name: string;
@@ -13,6 +15,24 @@ export interface Place {
   google_maps_link: string;
   comment: string;
 }
+
+export interface User {
+  id: string;
+  fullName: string;
+  givenName: string;
+  familyName: string;
+  imageUrl: string;
+  email: string;
+}
+
+export const emptyUser = {
+  id: "no-id",
+  fullName: "no-fullName",
+  givenName: "no-givenName",
+  familyName: "no-familyName",
+  imageUrl: "no-imageUrl",
+  email: "no-mail"
+};
 
 export const newPlace = {
   name: "",

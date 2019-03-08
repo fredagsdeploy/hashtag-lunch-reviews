@@ -12,6 +12,7 @@ interface Props {
   newPlaceDataChange: Function;
   isAddingPlace: boolean;
   sumbitNewPlace: Function;
+  placeClicked: Function;
 }
 
 interface EditPlaceRowProps {
@@ -60,11 +61,17 @@ export const StatsView = ({
   newPlaceData,
   newPlaceDataChange,
   isAddingPlace,
-  sumbitNewPlace
+  sumbitNewPlace,
+  placeClicked
 }: Props) => {
   const rows = ratings.map((rating, i) => {
     return (
-      <Row key={`${rating.id}`}>
+      <Row
+        key={`${rating.id}`}
+        onClick={() => {
+          placeClicked(rating);
+        }}
+      >
         <Cell>{rating.rank}</Cell>
         <Cell>{rating.name}</Cell>
         <StarCell>
@@ -167,6 +174,8 @@ const HeaderCell = styled.th`
 const Table = styled.table`
   width: 50%;
   border-collapse: collapse;
+  justify-self: center;
+  grid-area: c;
 `;
 
 const Row = styled.tr`
