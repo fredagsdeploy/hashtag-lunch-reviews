@@ -1,0 +1,60 @@
+Resources:
+  placeTable:
+    Type: AWS::DynamoDB::Table
+
+    Properties:
+      TableName: Places
+
+      AttributeDefinitions:
+        - AttributeName: place_id
+          AttributeType: S
+
+      KeySchema:
+        - AttributeName: place_id
+
+          KeyType: HASH
+
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+
+        WriteCapacityUnits: 1
+
+  reviewsTable:
+    Type: AWS::DynamoDB::Table
+
+    Properties:
+      TableName: Reviews
+
+      AttributeDefinitions:
+        - AttributeName: review_id
+          AttributeType: S
+
+      KeySchema:
+        - AttributeName: review_id
+
+          KeyType: HASH
+
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+
+        WriteCapacityUnits: 1
+
+  userTable:
+    Type: AWS::DynamoDB::Table
+
+    Properties:
+      TableName: User
+
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+
+      KeySchema:
+        - AttributeName: user_id
+
+          KeyType: HASH
+
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+
+        WriteCapacityUnits: 1

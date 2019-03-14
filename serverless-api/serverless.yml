@@ -1,0 +1,70 @@
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+# The `service` block is the name of the service
+service: hashtag-lunch-review-backend
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-offline
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+  region: eu-north-1
+
+# The `functions` block defines what code to deploy
+functions:
+  helloWorld:
+    handler: handler.helloWorld
+    # The `events` block defines how to trigger the handler.helloWorld code
+    events:
+      - http:
+          path: hello-world
+          method: get
+          cors: true
+  postPlaces:
+    handler: places.post
+
+    events:
+      - http:
+          path: places
+          method: post
+
+  getPlaces:
+    handler: places.get
+
+    events:
+      - http:
+          path: places
+          method: get
+
+  postReviews:
+    handler: reviews.postReviews
+
+    events:
+      - http:
+          path: reviews
+          method: post
+
+  getReviews:
+    handler: reviews.getReviews
+
+    events:
+      - http:
+          path: reviews
+          method: get
+
+custom:
+  dynamodb:
+    start:
+      migrate: true
+
+resources:
+  - ${file(./serverless_config/dynamo.yml)}
