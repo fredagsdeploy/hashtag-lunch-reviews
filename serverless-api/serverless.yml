@@ -21,16 +21,8 @@ provider:
 
 # The `functions` block defines what code to deploy
 functions:
-  helloWorld:
-    handler: handler.helloWorld
-    # The `events` block defines how to trigger the handler.helloWorld code
-    events:
-      - http:
-          path: hello-world
-          method: get
-          cors: true
   postPlaces:
-    handler: places.post
+    handler: src/places.post
 
     events:
       - http:
@@ -38,7 +30,7 @@ functions:
           method: post
 
   getPlaces:
-    handler: places.get
+    handler: src/places.get
 
     events:
       - http:
@@ -46,7 +38,7 @@ functions:
           method: get
 
   postReviews:
-    handler: reviews.postReviews
+    handler: src/reviews.postReviews
 
     events:
       - http:
@@ -54,7 +46,7 @@ functions:
           method: post
 
   getReviews:
-    handler: reviews.getReviews
+    handler: src/reviews.getReviews
 
     events:
       - http:
