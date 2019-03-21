@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "serverless": "^1.39.1",
     "serverless-dynamodb-local": "0.2.35",
     "serverless-offline": "^4.9.0",
     "serverless-plugin-typescript": "^1.1.5"
