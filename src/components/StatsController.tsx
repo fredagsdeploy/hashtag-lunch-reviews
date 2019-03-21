@@ -24,7 +24,7 @@ const useSorting = <T extends {}>(
   key: keyof T,
   ascending: boolean
 ): T[] => {
-  return useMemo(() => _.orderBy(array, key, [ascending]), [
+  return useMemo(() => _.orderBy(array, [key], [ascending ? "asc" : "desc"]), [
     array,
     key,
     ascending
@@ -88,7 +88,7 @@ export const StatsController = ({ userId }: Props) => {
 
   const goToPlacePage = (rating: Rating) => {
     console.log(`row clicked ${rating.name}`);
-    browserHistory.push(`/${rating.id}/${rating.name}`);
+    browserHistory.push(`/${rating.placeId}/${rating.name}`);
   };
 
   return (

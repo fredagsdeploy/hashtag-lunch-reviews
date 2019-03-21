@@ -14,13 +14,13 @@ const createReview = (
   reviewId: string,
   userId: string,
   placeId: string,
-  rating: number,
+  rating: string,
   comment: string
 ): Review => ({
   reviewId,
   userId,
   placeId,
-  rating,
+  rating: parseFloat(rating),
   comment
 });
 
@@ -28,7 +28,7 @@ export interface ReviewInput {
   reviewId: string;
   name: string;
   placeId: string;
-  rating: number;
+  rating: string;
   comment: string;
 }
 
@@ -43,9 +43,12 @@ export const postReviews: LambdaHandler = async event => {
 
   const newUUID = uuid();
 
-  const review = await saveReview(
-    createReview(newUUID, name, placeId, rating, comment)
-  );
-
-  return createResponse(201, { review });
+  try {
+    const review = await saveReview(
+      createReview(newUUID, name, placeId, rating, comment)
+    );
+    return createResponse(201, { review });
+  } catch (error) {
+    return createResponse(400, { error: error.message });
+  }
 };

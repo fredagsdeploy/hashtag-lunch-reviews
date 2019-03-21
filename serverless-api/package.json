@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@types/lodash": "^4.14.123",
+    "lodash": "^4.17.11"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.23",
     "@types/uuid": "^3.4.4",

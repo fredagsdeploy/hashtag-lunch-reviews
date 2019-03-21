@@ -1,4 +1,5 @@
 import * as AWS from "aws-sdk";
+import { getPlaceById } from "./places";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
@@ -45,6 +46,11 @@ export const saveReview = async (reviewInput: Review): Promise<Review> => {
     TableName: "Reviews",
     Item: reviewInput
   };
+
+  const place = await getPlaceById(reviewInput.placeId);
+  if (!place) {
+    throw new Error(`There's no place like ${reviewInput.placeId}`);
+  }
 
   await dynamodb.put(params).promise();
 

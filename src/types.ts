@@ -1,9 +1,9 @@
 import { string } from "prop-types";
 
 export interface Rating {
-  id: string;
+  placeId: string;
   name: string;
-  google_maps_link: string;
+  link: string;
   rating: number;
   normalized_rating: number;
   comment: string;

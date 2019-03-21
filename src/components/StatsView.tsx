@@ -67,7 +67,7 @@ export const StatsView = ({
   const rows = ratings.map((rating, i) => {
     return (
       <Row
-        key={`${rating.id}`}
+        key={rating.placeId}
         onClick={() => {
           placeClicked(rating);
         }}
@@ -87,7 +87,7 @@ export const StatsView = ({
 
         <Cell>
           {
-            <a href={rating.google_maps_link}>
+            <a href={rating.link}>
               <FontAwesome name="external-link" />
             </a>
           }

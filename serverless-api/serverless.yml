@@ -61,10 +61,26 @@ functions:
           path: users
           method: post
 
+  getRatings:
+    handler: src/ratings.getRatings
+
+    events:
+      - http:
+          path: ratings
+          method: get
+
 custom:
   dynamodb:
     start:
+      seed: true
       migrate: true
+    seed:
+      domain:
+        sources:
+          - table: Places
+            sources: [./seeds/places.json]
+          - table: Reviews
+            sources: [./seeds/reviews.json]
   serverless-offline:
     port: 4000
 
