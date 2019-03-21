@@ -6,17 +6,27 @@ Resources:
       TableName: Places
 
       AttributeDefinitions:
-        - AttributeName: place_id
+        - AttributeName: placeId
+          AttributeType: S
+        - AttributeName: placeName
           AttributeType: S
 
       KeySchema:
-        - AttributeName: place_id
-
+        - AttributeName: placeId
           KeyType: HASH
 
+      GlobalSecondaryIndexes:
+        - IndexName: placeNameIndex
+          KeySchema:
+            - AttributeName: placeName
+              KeyType: HASH
+          Projection:
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
       ProvisionedThroughput:
         ReadCapacityUnits: 1
-
         WriteCapacityUnits: 1
 
   reviewsTable:

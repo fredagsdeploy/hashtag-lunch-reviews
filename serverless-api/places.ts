@@ -1,4 +1,4 @@
-"use strict";
+export {};
 
 const uuid = require("uuid/v1");
 
@@ -34,36 +34,60 @@ module.exports.get = (event, context, callback) => {
   });
 };
 
-module.exports.post = (event, context, callback) => {
+module.exports.post = async (event, context) => {
+  const placeName = event.queryStringParameters.name;
+
+  const places = await getPlaceByName(placeName);
+
+  if (places.length > 0) {
+    return createResponse(409, { error: "placeName already exists" });
+  }
+
   var params = {
     TableName: "Places",
     Item: {
-      place_id: uuid(),
-      name: event.queryStringParameters.name
+      placeId: uuid(),
+      placeName: placeName
     }
   };
 
-  dynamodb.put(params, function(err, data) {
-    if (err) console.log(err);
-    else console.log(data);
-  });
+  try {
+    await dynamodb.put(params);
+  } catch (error) {
+    return createResponse(400, error);
+  }
 
-  const response = {
-    statusCode: 200,
+  const createdPlace = await getPlaceByName(placeName);
+  return createResponse(200, { createdPlace });
+};
+
+const getPlaceByName = async (placeName: string) => {
+  const queryParams = {
+    TableName: "Places",
+    IndexName: "placeNameIndex",
+    KeyConditionExpression: "placeName = :place_name",
+    ExpressionAttributeValues: { ":place_name": placeName }
+  };
+  const res = await dynamodb.query(queryParams).promise();
+
+  // if (res.Items.length == 0) {
+  //   throw new Error(`No item in Places Table with name "${placeName}"`);
+  // }
+  // if (res.Items.length > 1) {
+  //   throw new Error(
+  //     `Multiple items Places Table with name "${placeName}" exists. Name should be unique.`
+  //   );
+  // }
+
+  return res.Items;
+};
+
+function createResponse(statusCode: number, body: object) {
+  return {
+    statusCode,
     headers: {
       "Access-Control-Allow-Origin": "*" // Required for CORS support to work
     },
-    body: JSON.stringify({
-      newPlace: "very added",
-      places: [
-        {
-          id: "12",
-          name: "Beijing8",
-          description: "buns o dumplings"
-        }
-      ]
-    })
+    body: JSON.stringify(body)
   };
-
-  callback(null, response);
-};
+}
