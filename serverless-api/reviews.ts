@@ -1,8 +1,5 @@
-export {};
-
-const uuid = require("uuid/v1");
-
-let AWS = require("aws-sdk");
+import { v1 as uuid } from "uuid";
+import * as AWS from "aws-sdk";
 
 let dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
@@ -11,7 +8,7 @@ let dynamodb = new AWS.DynamoDB.DocumentClient({
   secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
 });
 
-module.exports.getReviews = (event, context, callback) => {
+export const getReviews = (event, context, callback) => {
   var params = {
     TableName: "Reviews"
   };
@@ -34,7 +31,7 @@ module.exports.getReviews = (event, context, callback) => {
   });
 };
 
-module.exports.postReviews = (event, context, callback) => {
+export const postReviews = (event, context, callback) => {
   var params = {
     TableName: "Reviews",
     Item: {

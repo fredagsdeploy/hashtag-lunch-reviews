@@ -1,8 +1,5 @@
-export {};
-
-const uuid = require("uuid/v1");
-
-let AWS = require("aws-sdk");
+import { v1 as uuid } from "uuid";
+import * as AWS from "aws-sdk";
 
 let dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
@@ -11,7 +8,7 @@ let dynamodb = new AWS.DynamoDB.DocumentClient({
   secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
 });
 
-module.exports.get = (event, context, callback) => {
+export const get = (event, context, callback) => {
   var params = {
     TableName: "Places"
   };
@@ -34,7 +31,7 @@ module.exports.get = (event, context, callback) => {
   });
 };
 
-module.exports.post = async (event, context) => {
+export const post = async (event, context) => {
   const placeName = event.queryStringParameters.name;
 
   const places = await getPlaceByName(placeName);
@@ -79,10 +76,10 @@ const getPlaceByName = async (placeName: string) => {
   //   );
   // }
 
-  return res.Items;
+  return res.Items || [];
 };
 
-function createResponse(statusCode: number, body: object) {
+const createResponse = (statusCode: number, body: object) => {
   return {
     statusCode,
     headers: {
@@ -90,4 +87,4 @@ function createResponse(statusCode: number, body: object) {
     },
     body: JSON.stringify(body)
   };
-}
+};
