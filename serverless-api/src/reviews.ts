@@ -1,7 +1,6 @@
 import { v1 as uuid } from "uuid";
 import * as AWS from "aws-sdk";
-import { createResponse } from "./common";
-import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
+import { createResponse, LambdaHandler } from "./common";
 
 let dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
@@ -9,11 +8,6 @@ let dynamodb = new AWS.DynamoDB.DocumentClient({
   accessKeyId: "DEFAULT_ACCESS_KEY", // needed if you don't have aws credentials at all in env
   secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
 });
-
-type LambdaHandler = (
-  event: APIGatewayEvent,
-  context: Context
-) => Promise<APIGatewayProxyResult>;
 
 export const getReviews: LambdaHandler = async event => {
   var params = {

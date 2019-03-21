@@ -1,4 +1,5 @@
-import { APIGatewayProxyResult } from "aws-lambda";
+import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
+import { Context } from "aws-sdk/clients/costexplorer";
 
 export const createResponse = (
   statusCode: number,
@@ -12,3 +13,8 @@ export const createResponse = (
     body: JSON.stringify(body)
   };
 };
+
+export type LambdaHandler = (
+  event: APIGatewayEvent,
+  context: Context
+) => Promise<APIGatewayProxyResult>;
