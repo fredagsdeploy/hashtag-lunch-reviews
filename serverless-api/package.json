@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.23",
     "@types/uuid": "^3.4.4",
     "serverless": "^1.39.1",
     "serverless-dynamodb-local": "0.2.35",

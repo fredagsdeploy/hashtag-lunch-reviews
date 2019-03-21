@@ -1,6 +1,7 @@
 import { v1 as uuid } from "uuid";
 import * as AWS from "aws-sdk";
 import { createResponse } from "./common";
+import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 
 let dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
@@ -9,7 +10,12 @@ let dynamodb = new AWS.DynamoDB.DocumentClient({
   secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
 });
 
-export const getReviews = async (event, context) => {
+type LambdaHandler = (
+  event: APIGatewayEvent,
+  context: Context
+) => Promise<APIGatewayProxyResult>;
+
+export const getReviews: LambdaHandler = async event => {
   var params = {
     TableName: "Reviews"
   };
@@ -19,17 +25,51 @@ export const getReviews = async (event, context) => {
   return createResponse(200, { reviews: response });
 };
 
-export const postReviews = async (event, context) => {
+const parseJSON = (input: string | null) => JSON.parse(input || "");
+
+interface ReviewInput {
+  reviewId: string;
+  name: string;
+  placeId: string;
+  rating: number;
+  comment: string;
+}
+
+interface Review {
+  reviewId: string;
+  userId: string;
+  placeId: string;
+  rating: number;
+  comment: string;
+}
+
+const createReview = (
+  reviewId: string,
+  userId: string,
+  placeId: string,
+  rating: number,
+  comment: string
+): Review => ({
+  reviewId,
+  userId,
+  placeId,
+  rating,
+  comment
+});
+
+export const postReviews: LambdaHandler = async event => {
+  const body = parseJSON(event.body) as Partial<ReviewInput>;
+
+  const { name, placeId, rating, comment } = body;
+
+  if (!name || !placeId || !rating || !comment) {
+    return createResponse(400, { error: "Missing paramters" });
+  }
+
   const newUUID = uuid();
   var params = {
     TableName: "Reviews",
-    Item: {
-      review_id: newUUID,
-      user_id: event.queryStringParameters.name, // TODO, do select before to check for existance
-      place_id: event.queryStringParameters.place_id, // TODO. do select before to check for existance
-      rating: event.queryStringParameters.rating,
-      comment: event.queryStringParameters.comment
-    }
+    Item: createReview(newUUID, name, placeId, rating, comment)
   };
 
   await dynamodb.put(params).promise();

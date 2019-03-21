@@ -1,4 +1,9 @@
-export const createResponse = (statusCode: number, body: object) => {
+import { APIGatewayProxyResult } from "aws-lambda";
+
+export const createResponse = (
+  statusCode: number,
+  body: object
+): APIGatewayProxyResult => {
   return {
     statusCode,
     headers: {
