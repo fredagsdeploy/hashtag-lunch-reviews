@@ -1,5 +1,6 @@
 import { v1 as uuid } from "uuid";
 import * as AWS from "aws-sdk";
+import { createResponse } from "./common";
 
 let dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
@@ -8,34 +9,22 @@ let dynamodb = new AWS.DynamoDB.DocumentClient({
   secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
 });
 
-export const getReviews = (event, context, callback) => {
+export const getReviews = async (event, context) => {
   var params = {
     TableName: "Reviews"
   };
 
-  dynamodb.scan(params, function(err, data) {
-    if (err) console.log(err);
-    else {
-      console.log(data);
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*" // Required for CORS support to work
-        },
-        body: JSON.stringify({
-          reviews: data
-        })
-      };
-      callback(null, response);
-    }
-  });
+  const response = await dynamodb.scan(params).promise();
+
+  return createResponse(200, { reviews: response });
 };
 
-export const postReviews = (event, context, callback) => {
+export const postReviews = async (event, context) => {
+  const newUUID = uuid();
   var params = {
     TableName: "Reviews",
     Item: {
-      review_id: uuid(),
+      review_id: newUUID,
       user_id: event.queryStringParameters.name, // TODO, do select before to check for existance
       place_id: event.queryStringParameters.place_id, // TODO. do select before to check for existance
       rating: event.queryStringParameters.rating,
@@ -43,20 +32,16 @@ export const postReviews = (event, context, callback) => {
     }
   };
 
-  dynamodb.put(params, function(err, data) {
-    if (err) console.log(err);
-    else console.log(data);
-  });
+  await dynamodb.put(params).promise();
 
-  const response = {
-    statusCode: 200,
-    headers: {
-      "Access-Control-Allow-Origin": "*" // Required for CORS support to work
-    },
-    body: JSON.stringify({
-      newPlace: "very added"
-    })
+  const getParams = {
+    TableName: "Reviews",
+    Key: {
+      review_id: newUUID
+    }
   };
 
-  callback(null, response);
+  const response = await dynamodb.get(getParams).promise();
+
+  return createResponse(201, { newPlace: response.Item });
 };

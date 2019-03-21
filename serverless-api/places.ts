@@ -1,5 +1,6 @@
 import { v1 as uuid } from "uuid";
 import * as AWS from "aws-sdk";
+import { createResponse } from "./common";
 
 let dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
@@ -63,14 +64,4 @@ const getPlaceByName = async (placeName: string) => {
   // }
 
   return res.Items || [];
-};
-
-const createResponse = (statusCode: number, body: object) => {
-  return {
-    statusCode,
-    headers: {
-      "Access-Control-Allow-Origin": "*" // Required for CORS support to work
-    },
-    body: JSON.stringify(body)
-  };
 };
