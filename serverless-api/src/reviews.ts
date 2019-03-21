@@ -63,7 +63,7 @@ export const postReviews: LambdaHandler = async event => {
   const { name, placeId, rating, comment } = body;
 
   if (!name || !placeId || !rating || !comment) {
-    return createResponse(400, { error: "Missing paramters" });
+    return createResponse(400, { error: "Missing parameters" });
   }
 
   const newUUID = uuid();
