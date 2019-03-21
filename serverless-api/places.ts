@@ -8,27 +8,13 @@ let dynamodb = new AWS.DynamoDB.DocumentClient({
   secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
 });
 
-export const get = (event, context, callback) => {
+export const get = async (event, context) => {
   var params = {
     TableName: "Places"
   };
 
-  dynamodb.scan(params, function(err, data) {
-    if (err) console.log(err);
-    else {
-      console.log(data);
-      const response = {
-        statusCode: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "*" // Required for CORS support to work
-        },
-        body: JSON.stringify({
-          places: data
-        })
-      };
-      callback(null, response);
-    }
-  });
+  const data = await dynamodb.scan(params).promise();
+  return createResponse(200, { places: data });
 };
 
 export const post = async (event, context) => {
