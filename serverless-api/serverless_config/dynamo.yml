@@ -36,11 +36,11 @@ Resources:
       TableName: Reviews
 
       AttributeDefinitions:
-        - AttributeName: review_id
+        - AttributeName: reviewId
           AttributeType: S
 
       KeySchema:
-        - AttributeName: review_id
+        - AttributeName: reviewId
 
           KeyType: HASH
 
@@ -56,11 +56,11 @@ Resources:
       TableName: User
 
       AttributeDefinitions:
-        - AttributeName: user_id
+        - AttributeName: userId
           AttributeType: S
 
       KeySchema:
-        - AttributeName: user_id
+        - AttributeName: userId
 
           KeyType: HASH
 

@@ -77,7 +77,7 @@ export const postReviews: LambdaHandler = async event => {
   const getParams = {
     TableName: "Reviews",
     Key: {
-      review_id: newUUID
+      reviewId: newUUID
     }
   };
 
