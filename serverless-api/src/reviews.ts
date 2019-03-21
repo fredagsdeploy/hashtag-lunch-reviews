@@ -1,41 +1,14 @@
 import { v1 as uuid } from "uuid";
-import * as AWS from "aws-sdk";
 import { createResponse, LambdaHandler } from "./common";
-
-let dynamodb = new AWS.DynamoDB.DocumentClient({
-  region: "localhost",
-  endpoint: "http://localhost:8000",
-  accessKeyId: "DEFAULT_ACCESS_KEY", // needed if you don't have aws credentials at all in env
-  secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
-});
+import { getAllReviews, saveReview, Review } from "./repository/reviews";
 
 export const getReviews: LambdaHandler = async event => {
-  var params = {
-    TableName: "Reviews"
-  };
+  const reviews = await getAllReviews();
 
-  const response = await dynamodb.scan(params).promise();
-
-  return createResponse(200, { reviews: response });
+  return createResponse(200, { reviews });
 };
 
 const parseJSON = (input: string | null) => JSON.parse(input || "");
-
-interface ReviewInput {
-  reviewId: string;
-  name: string;
-  placeId: string;
-  rating: number;
-  comment: string;
-}
-
-interface Review {
-  reviewId: string;
-  userId: string;
-  placeId: string;
-  rating: number;
-  comment: string;
-}
 
 const createReview = (
   reviewId: string,
@@ -51,6 +24,14 @@ const createReview = (
   comment
 });
 
+export interface ReviewInput {
+  reviewId: string;
+  name: string;
+  placeId: string;
+  rating: number;
+  comment: string;
+}
+
 export const postReviews: LambdaHandler = async event => {
   const body = parseJSON(event.body) as Partial<ReviewInput>;
 
@@ -61,21 +42,10 @@ export const postReviews: LambdaHandler = async event => {
   }
 
   const newUUID = uuid();
-  var params = {
-    TableName: "Reviews",
-    Item: createReview(newUUID, name, placeId, rating, comment)
-  };
 
-  await dynamodb.put(params).promise();
+  const review = await saveReview(
+    createReview(newUUID, name, placeId, rating, comment)
+  );
 
-  const getParams = {
-    TableName: "Reviews",
-    Key: {
-      reviewId: newUUID
-    }
-  };
-
-  const response = await dynamodb.get(getParams).promise();
-
-  return createResponse(201, { newPlace: response.Item });
+  return createResponse(201, { review });
 };
