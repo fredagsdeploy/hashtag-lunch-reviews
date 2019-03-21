@@ -53,6 +53,14 @@ functions:
           path: reviews
           method: get
 
+  postUsers:
+    handler: src/users.postUser
+
+    events:
+      - http:
+          path: users
+          method: post
+
 custom:
   dynamodb:
     start:

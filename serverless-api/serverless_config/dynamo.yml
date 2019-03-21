@@ -53,18 +53,29 @@ Resources:
     Type: AWS::DynamoDB::Table
 
     Properties:
-      TableName: User
+      TableName: Users
 
       AttributeDefinitions:
         - AttributeName: userId
           AttributeType: S
+        - AttributeName: googleId
+          AttributeType: S
 
       KeySchema:
         - AttributeName: userId
-
           KeyType: HASH
+
+      GlobalSecondaryIndexes:
+        - IndexName: googleIdIndex
+          KeySchema:
+            - AttributeName: googleId
+              KeyType: HASH
+          Projection:
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
       ProvisionedThroughput:
         ReadCapacityUnits: 1
-
         WriteCapacityUnits: 1
