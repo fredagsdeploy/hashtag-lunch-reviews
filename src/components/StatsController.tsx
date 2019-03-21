@@ -1,8 +1,8 @@
 import _ from "lodash";
 import React, { ChangeEvent, useEffect, useState, useMemo } from "react";
 import { useBoolean } from "../customHooks/useBoolean";
-import { getRatings, postPlace } from "../lib/spreadsheet";
-import { Rating } from "../types";
+import { getRatings, postPlace } from "../lib/backend";
+import { Rating, Place } from "../types";
 import { StatsView } from "./StatsView";
 import { browserHistory } from "../history";
 import { unstable_createResource } from "react-cache";
@@ -65,16 +65,16 @@ export const StatsController = ({ userId }: Props) => {
   };
 
   const addPlace = () => {
-    console.log("shuold add place");
-    try {
-      postPlace(newPlace).then((place: Rating) => {
-        setNewPlace(newPlaceInitialState);
-        setIsAddingPlace(false);
-        setRatings([...sortedRatings, place]);
-      });
-    } catch (error) {
-      console.log("failure posting new place?", error);
-    }
+    // console.log("shuold add place");
+    // try {
+    //   postPlace(newPlace).then((place: Place) => {
+    //     setNewPlace(newPlaceInitialState);
+    //     setIsAddingPlace(false);
+    //     setRatings([...sortedRatings, place]);
+    //   });
+    // } catch (error) {
+    //   console.log("failure posting new place?", error);
+    // }
   };
 
   const handleNewPlaceInput = (event: ChangeEvent<HTMLInputElement>) => {

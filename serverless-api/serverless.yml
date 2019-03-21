@@ -65,6 +65,8 @@ custom:
   dynamodb:
     start:
       migrate: true
+  serverless-offline:
+    port: 4000
 
 resources:
   - ${file(./serverless_config/dynamo.yml)}

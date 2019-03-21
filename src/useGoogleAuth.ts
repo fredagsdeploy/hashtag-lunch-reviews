@@ -25,8 +25,7 @@ export const useGoogleAuth = () => {
       .init({
         apiKey: config.apiKey,
         clientId: config.clientId,
-        discoveryDocs: config.discoveryDocs,
-        scope: config.scopes
+        scope: "profile email"
       })
       .then(() => {
         if (window.gapi.auth2.getAuthInstance().isSignedIn.get()) {

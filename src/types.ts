@@ -10,6 +10,14 @@ export interface Rating {
   rank: number;
 }
 
+export interface Review {
+  reviewId: string;
+  userId: string;
+  placeId: string;
+  rating: number;
+  comment: string;
+}
+
 export interface Place {
   name: string;
   google_maps_link: string;

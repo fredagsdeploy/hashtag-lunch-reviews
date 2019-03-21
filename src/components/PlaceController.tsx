@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { getReviewsForPlace } from "../lib/spreadsheet";
+import { getReviewsForPlace } from "../lib/backend";
 
 interface Props {
   match: any;
