@@ -1,6 +1,8 @@
 import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
 import { Context } from "aws-sdk/clients/costexplorer";
 
+export const parseJSON = (input: string | null) => JSON.parse(input || "");
+
 export const createResponse = (
   statusCode: number,
   body: object

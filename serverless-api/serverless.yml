@@ -16,8 +16,9 @@ plugins:
 provider:
   name: aws
   runtime: nodejs8.10
-
   region: eu-north-1
+  environment:
+    DYNAMODB_URL: ${file(./config.${self:provider.stage}.json):DYNAMODB_URL}
 
 # The `functions` block defines what code to deploy
 functions:

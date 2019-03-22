@@ -1,5 +1,5 @@
 import { v1 as uuid } from "uuid";
-import { createResponse, LambdaHandler } from "./common";
+import { createResponse, LambdaHandler, parseJSON } from "./common";
 import { getAllReviews, saveReview, Review } from "./repository/reviews";
 
 export const getReviews: LambdaHandler = async event => {
@@ -7,8 +7,6 @@ export const getReviews: LambdaHandler = async event => {
 
   return createResponse(200, { reviews });
 };
-
-const parseJSON = (input: string | null) => JSON.parse(input || "");
 
 const createReview = (
   reviewId: string,
