@@ -63,7 +63,7 @@ functions:
           method: post
 
   getRatings:
-    handler: src/ratings.getRatings
+    handler: src/ratings.getPlacesWithRatings
 
     events:
       - http:

@@ -8,26 +8,35 @@ interface Rating {
   rating: number;
 }
 
-export const getRatings = async () => {
+export const getPlacesWithRatings = async () => {
   const reviews = await getAllReviews();
   console.log(reviews);
 
   const places = await getAllPlaces();
 
-  const ratings = _.map(_.groupBy(reviews, r => r.placeId), (v, placeId) => {
-    const sum = v.reduce((sum, review) => review.rating + sum, 0);
-    const { placeName, ...place } = places.find(p => p.placeId === placeId)!;
+  const reviewsByPlace = _.groupBy(reviews, r => r.placeId);
 
-    return {
-      ...place,
-      name: placeName,
-      rating: sum / v.length
-    };
+  const placesWithRatings = _.map(places, place => {
+    const placeId = place.placeId;
+    if (placeId in reviewsByPlace) {
+      const reviews = reviewsByPlace[placeId];
+      const sum = reviews.reduce((sum, review) => review.rating + sum, 0);
+
+      return {
+        ...place,
+        rating: sum / reviews.length
+      };
+    }
+
+    return { ...place, rating: null };
   });
-  const rankedRatings = _.orderBy(ratings, "rating", "desc").map((r, i) => ({
-    ...r,
-    rank: i + 1
-  }));
+
+  const rankedRatings = _.orderBy(placesWithRatings, "rating", "desc").map(
+    (r, i) => ({
+      ...r,
+      rank: i + 1
+    })
+  );
 
   return createResponse(200, rankedRatings);
 };
