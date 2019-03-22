@@ -8,7 +8,7 @@ interface Props {
   ratings: Array<Rating>;
   headerClicked: Function;
   addRowPressed: Function;
-  newPlaceData: Place;
+  newPlaceData: Partial<Place>;
   newPlaceDataChange: Function;
   isAddingPlace: boolean;
   sumbitNewPlace: Function;
@@ -16,19 +16,30 @@ interface Props {
 }
 
 interface EditPlaceRowProps {
-  placeData: Place;
+  placeData: Partial<Place>;
   newPlaceDataChange: Function;
 }
 
 const EditPlaceRow = ({ placeData, newPlaceDataChange }: EditPlaceRowProps) => {
+  const { placeName, google_maps_link, comment } = placeData;
+  if (
+    placeName === undefined ||
+    google_maps_link === undefined ||
+    comment === undefined
+  ) {
+    throw new Error(
+      `Missing members in place data ${JSON.stringify(placeData)}`
+    );
+  }
+
   return (
     <WhiteRow>
       <Cell />
       <Cell>
         <TextInput
           placeholder="Name"
-          name="name"
-          value={placeData.name}
+          name="placeName"
+          value={placeName}
           onChange={newPlaceDataChange}
         />
       </Cell>
@@ -38,7 +49,7 @@ const EditPlaceRow = ({ placeData, newPlaceDataChange }: EditPlaceRowProps) => {
         <TextInput
           placeholder="Comment"
           name="comment"
-          value={placeData.comment}
+          value={comment}
           onChange={newPlaceDataChange}
         />
       </Cell>
@@ -46,7 +57,7 @@ const EditPlaceRow = ({ placeData, newPlaceDataChange }: EditPlaceRowProps) => {
         <TextInput
           placeholder="Link"
           name="google_maps_link"
-          value={placeData.google_maps_link}
+          value={google_maps_link}
           onChange={newPlaceDataChange}
         />
       </Cell>

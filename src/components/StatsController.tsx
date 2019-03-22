@@ -44,13 +44,15 @@ export const StatsController = ({ userId }: Props) => {
 
   console.log({ sortedRatings });
 
-  const newPlaceInitialState = {
-    name: "",
+  const newPlaceInitialState: Partial<Place> = {
+    placeName: "",
     comment: "",
     google_maps_link: ""
   };
 
-  const [newPlace, setNewPlace] = useState(newPlaceInitialState);
+  const [newPlace, setNewPlace] = useState<Partial<Place>>(
+    newPlaceInitialState
+  );
 
   const [isAddingPlace, toggleIsAddingPlace, setIsAddingPlace] = useBoolean(
     false
@@ -65,16 +67,16 @@ export const StatsController = ({ userId }: Props) => {
   };
 
   const addPlace = () => {
-    // console.log("shuold add place");
-    // try {
-    //   postPlace(newPlace).then((place: Place) => {
-    //     setNewPlace(newPlaceInitialState);
-    //     setIsAddingPlace(false);
-    //     setRatings([...sortedRatings, place]);
-    //   });
-    // } catch (error) {
-    //   console.log("failure posting new place?", error);
-    // }
+    postPlace(newPlace)
+      .then((place: Place) => {
+        setNewPlace(newPlaceInitialState);
+        setIsAddingPlace(false);
+        browserHistory.push(`/${place.placeId}/${place.placeName}`);
+        //setRatings([...sortedRatings, place]);
+      })
+      .catch(e => {
+        console.log("Couldn't post new place", e);
+      });
   };
 
   const handleNewPlaceInput = (event: ChangeEvent<HTMLInputElement>) => {
