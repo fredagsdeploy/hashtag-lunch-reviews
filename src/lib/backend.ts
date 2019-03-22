@@ -1,9 +1,11 @@
 import { Review, Place, Rating } from "../types";
-import { reject } from "q";
 
 const BASE_URL = "http://localhost:4000";
 
-const myFetch = (url: RequestInfo, requestOptions: RequestInit | undefined) => {
+const myFetch = (
+  url: RequestInfo,
+  requestOptions?: RequestInit | undefined
+) => {
   return fetch(url, requestOptions).then(async (r: Response) => {
     const j = await r.json();
     if (r.ok) {
@@ -14,11 +16,11 @@ const myFetch = (url: RequestInfo, requestOptions: RequestInit | undefined) => {
 };
 
 export const getReviewsForPlace = (placeId: string): Promise<Review[]> => {
-  return fetch(BASE_URL + "/reviews").then(r => r.json());
+  return myFetch(BASE_URL + "/reviews");
 };
 
 export const getRatings = (): Promise<Rating[]> => {
-  return fetch(BASE_URL + "/ratings").then(r => r.json());
+  return myFetch(BASE_URL + "/ratings");
 };
 
 export const postPlace = (place: Partial<Place>): Promise<Place> => {
