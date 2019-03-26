@@ -49,6 +49,14 @@ functions:
           path: places
           method: get
 
+  getPlaceById:
+    handler: src/places.getById
+
+    events:
+      - http:
+          path: places/{placeId}
+          method: get
+
   postReviews:
     handler: src/reviews.postReviews
 
@@ -64,6 +72,19 @@ functions:
       - http:
           path: reviews
           method: get
+
+  getReview:
+    handler: src/reviews.getReviewsByPlace
+
+    events:
+      - http:
+          path: reviews/{placeId}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+
 
   postUsers:
     handler: src/users.postUser

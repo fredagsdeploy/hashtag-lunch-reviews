@@ -39,8 +39,9 @@ export const emptyUser = {
   email: "no-mail"
 };
 
-export const newPlace = {
-  name: "",
+export const newPlace: Place = {
+  placeName: "",
+  placeId: "",
   google_maps_link: "",
   comment: ""
 };

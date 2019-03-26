@@ -16,11 +16,15 @@ const myFetch = (
 };
 
 export const getReviewsForPlace = (placeId: string): Promise<Review[]> => {
-  return myFetch(BASE_URL + "/reviews");
+  return myFetch(`${BASE_URL}/reviews/${placeId}`);
 };
 
 export const getRatings = (): Promise<Rating[]> => {
   return myFetch(BASE_URL + "/ratings");
+};
+
+export const getPlaceById = (placeId: string): Promise<Place> => {
+  return myFetch(`${BASE_URL}/places/${placeId}`);
 };
 
 export const postPlace = (place: Partial<Place>): Promise<Place> => {

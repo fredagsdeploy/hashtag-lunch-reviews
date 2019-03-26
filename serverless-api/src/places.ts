@@ -5,7 +5,7 @@ import {
   getAllPlaces,
   savePlace,
   Place,
-  getPlaceByName
+  getPlaceByName, getPlaceById
 } from "./repository/places";
 
 const createPlace = (
@@ -21,12 +21,24 @@ const createPlace = (
 });
 
 export const get = async (event, context) => {
-  var params = {
-    TableName: "Places"
-  };
-
   const places = await getAllPlaces();
   return createResponse(200, { places });
+};
+
+export type GetByIdRequest = {
+  placeId: string
+}
+
+export const getById = async (event, context) => {
+  if(! event.pathParameters || !event.pathParameters.placeId) {
+    return createResponse(400, {message: "Missing path parameter"})
+  }
+
+  const place = await getPlaceById(event.pathParameters.placeId);
+  if (!place) {
+    return createResponse(404, {message: "No place with that id"})
+  }
+  return createResponse(200, place);
 };
 
 export type PlaceInput = Place;
