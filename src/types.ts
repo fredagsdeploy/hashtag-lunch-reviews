@@ -1,12 +1,8 @@
 import { string } from "prop-types";
 
-export interface Rating {
-  placeId: string;
-  name: string;
-  link: string;
+export interface Rating extends Place {
   rating: number;
   normalized_rating: number;
-  comment: string;
   rank: number;
 }
 

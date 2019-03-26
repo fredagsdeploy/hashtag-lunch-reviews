@@ -89,8 +89,8 @@ export const StatsController = ({ userId }: Props) => {
   };
 
   const goToPlacePage = (rating: Rating) => {
-    console.log(`row clicked ${rating.name}`);
-    browserHistory.push(`/${rating.placeId}/${rating.name}`);
+    console.log(`row clicked ${rating.placeName}`);
+    browserHistory.push(`/${rating.placeId}/${rating.placeName}`);
   };
 
   return (

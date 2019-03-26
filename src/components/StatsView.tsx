@@ -84,13 +84,16 @@ export const StatsView = ({
         }}
       >
         <Cell>{rating.rank}</Cell>
-        <Cell>{rating.name}</Cell>
+        <Cell>{rating.placeName}</Cell>
         <StarCell>
-          <StarRating name={`rating-a-${rating.name}`} rating={rating.rating} />
+          <StarRating
+            name={`rating-a-${rating.placeName}`}
+            rating={rating.rating}
+          />
         </StarCell>
         <StarCell>
           <StarRating
-            name={`rating-a-${rating.name}`}
+            name={`rating-a-${rating.placeName}`}
             rating={rating.normalized_rating}
           />
         </StarCell>
@@ -98,7 +101,7 @@ export const StatsView = ({
 
         <Cell>
           {
-            <a href={rating.link}>
+            <a href={rating.google_maps_link}>
               <FontAwesome name="external-link" />
             </a>
           }
