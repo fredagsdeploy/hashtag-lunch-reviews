@@ -18,8 +18,19 @@ provider:
   runtime: nodejs8.10
   region: eu-north-1
   environment:
-    DYNAMODB_URL: ${file(./config.${self:provider.stage}.json):DYNAMODB_URL}
+    STAGE_ENV: ${opt:stage, 'dev'}
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:eu-north-1:*:*"
 # The `functions` block defines what code to deploy
 functions:
   postPlaces:

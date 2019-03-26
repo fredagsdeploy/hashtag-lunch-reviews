@@ -1,5 +1,5 @@
 Resources:
-  placeTable:
+  placesTable:
     Type: AWS::DynamoDB::Table
 
     Properties:
@@ -49,7 +49,7 @@ Resources:
 
         WriteCapacityUnits: 1
 
-  userTable:
+  usersTable:
     Type: AWS::DynamoDB::Table
 
     Properties:
