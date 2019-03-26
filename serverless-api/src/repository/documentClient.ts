@@ -4,7 +4,7 @@ export let dynamodb: AWS.DynamoDB.DocumentClient;
 if (process.env.STAGE_ENV === "dev") {
   dynamodb = new AWS.DynamoDB.DocumentClient({
     region: "localhost",
-    endpoint: process.env.DYNAMODB_URL
+    endpoint: "http://localhost:8000"
   });
 } else if (process.env.STAGE_ENV === "prod") {
   AWS.config.update({ region: "eu-north-1" });
