@@ -38,15 +38,26 @@ Resources:
       AttributeDefinitions:
         - AttributeName: reviewId
           AttributeType: S
+        - AttributeName: placeId
+          AttributeType: S
 
       KeySchema:
         - AttributeName: reviewId
-
           KeyType: HASH
+
+      GlobalSecondaryIndexes:
+        - IndexName: reviewPlaceIdIndex
+          KeySchema:
+            - AttributeName: placeId
+              KeyType: HASH
+          Projection:
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
       ProvisionedThroughput:
         ReadCapacityUnits: 1
-
         WriteCapacityUnits: 1
 
   usersTable:
