@@ -1,29 +1,15 @@
-import React, {Suspense, useEffect, useState} from "react";
-import {getPlaceById, getReviewsForPlace} from "../lib/backend";
-import {PlaceView} from "./PlaceView";
-import {newPlace, Place, Review} from "../types";
+import React from "react";
+import { PlaceView } from "./PlaceView";
+import { RouteChildrenProps } from "react-router";
 
-interface Props {
-  match: any;
-}
+interface Props extends RouteChildrenProps<{ placeId: string }> {}
 
-export const PlaceController = ({match}: Props) => {
-  const [place, setPlace] = useState<Place>(newPlace);
-  const [reviews, setReviews] = useState<Review[]>([]);
+export const PlaceController = ({ match }: Props) => {
+  if (!match) {
+    return null;
+  }
 
-  useEffect(() => {
-    getPlaceById(match.params.placeId)
-      .then(p => setPlace(p))
-      .catch(err => console.log("err", err));
-  }, []);
+  const { placeId } = match.params;
 
-  useEffect(() => {
-    getReviewsForPlace(match.params.placeId)
-      .then(r => setReviews(r))
-      .catch(err => console.log("err", err));
-  }, []);
-
-  return <Suspense fallback={"Loading..."}>
-    <PlaceView reviews={reviews} place={place}/>
-  </Suspense>;
+  return <PlaceView placeId={placeId} />;
 };
