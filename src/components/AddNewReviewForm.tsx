@@ -1,6 +1,7 @@
 import React from "react";
 import { Review } from "../types";
-import { Cell, TextInput, WhiteRow, NumberInput } from "./CommonFormComponents";
+import { Cell, TextInput, WhiteRow, RangeInput } from "./CommonFormComponents";
+import styled from "styled-components";
 
 interface EditReviewRowProps {
   reviewData: Partial<Review>;
@@ -22,9 +23,17 @@ export const AddNewReviewForm = ({
     <WhiteRow>
       <Cell />
       <Cell>
-        <NumberInput
+        <StarDiv
+          style={{ opacity: 0.4, position: "absolute", width: 5 * 28 }}
+        />
+        <StarDiv style={{ width: rating * 28 }} />
+        <RangeInput
           placeholder="Rating"
           name="rating"
+          type="range"
+          min={0}
+          max={5}
+          step={0.1}
           value={rating}
           onChange={newReviewDataChange}
         />
@@ -40,3 +49,9 @@ export const AddNewReviewForm = ({
     </WhiteRow>
   );
 };
+
+const StarDiv = styled.div`
+  background-image: url(https://mdn.mozillademos.org/files/12005/starsolid.gif);
+  background-repeat: repeat-x;
+  height: 28px;
+`;
