@@ -18,11 +18,11 @@ export const StatusBar = ({ logoutClicked }: Props) => {
 
 const Bar = styled.div`
   display: flex;
-  padding: 0.5em;
+  padding: 1em;
   background-color: cornflowerblue;
   align-items: center;
   margin-bottom: 0.5em;
-  grid-area: h;
+  width: 100%;
 `;
 
 const LogoutButton = styled.input`

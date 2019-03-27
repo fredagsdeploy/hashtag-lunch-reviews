@@ -12,6 +12,7 @@ import {
   Table,
   WhiteRow
 } from "./CommonFormComponents";
+import styled from "styled-components";
 
 interface Props {
   ratings: Array<Rating>;
@@ -36,84 +37,87 @@ export const StatsView = ({
 }: Props) => {
   const rows = ratings.map(rating => {
     return (
-      <Row
+      <StatsContainer
         key={rating.placeId}
         onClick={() => {
           placeClicked(rating);
         }}
       >
-        <Cell>{rating.rank}</Cell>
-        <Cell>{rating.placeName}</Cell>
-        <StarCell>
+        <Cell style={{ gridArea: "name" }}>{rating.placeName}</Cell>
+        <StarCell style={{ gridArea: "rating" }}>
           <StarRating rating={rating.rating} />
         </StarCell>
-        <StarCell>
+        <StarCell style={{ gridArea: "normalized-rating" }}>
           <StarRating rating={rating.normalized_rating} />
         </StarCell>
-        <Cell>{rating.comment}</Cell>
+        <Cell style={{ gridArea: "comment" }}>{rating.comment}</Cell>
 
-        <Cell>
+        <LastCell style={{ gridArea: "link" }}>
           {
             <a href={rating.google_maps_link}>
               <FontAwesome name="external-link" />
             </a>
           }
-        </Cell>
-      </Row>
+        </LastCell>
+      </StatsContainer>
     );
   });
 
   return (
-    <Table>
-      <tbody>
-        <Row>
-          <HeaderCell>Rank</HeaderCell>
-          <HeaderCell onClick={() => headerClicked("name")}>Name</HeaderCell>
-          <HeaderCell onClick={() => headerClicked("rating")}>
-            Rating
-          </HeaderCell>
-          <HeaderCell onClick={() => headerClicked("normalized_rating")}>
-            Normalized Rating
-          </HeaderCell>
-          <HeaderCell onClick={() => headerClicked("comment")}>
-            Comment
-          </HeaderCell>
-          <HeaderCell>Link</HeaderCell>
-        </Row>
-        {rows}
+    <>
+      {rows}
 
-        <WhiteRow>
-          <LastCell colSpan={100}>
-            <FontAwesome
-              name="plus"
-              size="2x"
-              onClick={() => addRowPressed()}
-            />
-          </LastCell>
-        </WhiteRow>
-        {isAddingPlace && (
-          <>
-            <AddNewPlaceForm
-              newPlaceDataChange={newPlaceDataChange}
-              placeData={newPlaceData}
-            />
-            <WhiteRow>
-              <LastCell colSpan={100}>
-                <FontAwesome
-                  name="check"
-                  size="2x"
-                  onClick={() => sumbitNewPlace()}
-                />
-                <FontAwesome
-                  name="times"
-                  size="2x"
-                  onClick={() => addRowPressed()}
-                />
-              </LastCell>
-            </WhiteRow>
-          </>
-        )}
-      </tbody>
-    </Table>
+      <WhiteRow>
+        <LastCell>
+          <FontAwesome name="plus" size="2x" onClick={() => addRowPressed()} />
+        </LastCell>
+      </WhiteRow>
+      {isAddingPlace && (
+        <>
+          <AddNewPlaceForm
+            newPlaceDataChange={newPlaceDataChange}
+            placeData={newPlaceData}
+          />
+          <WhiteRow>
+            <LastCell>
+              <FontAwesome
+                name="check"
+                size="2x"
+                onClick={() => sumbitNewPlace()}
+              />
+              <FontAwesome
+                name="times"
+                size="2x"
+                onClick={() => addRowPressed()}
+              />
+            </LastCell>
+          </WhiteRow>
+        </>
+      )}
+    </>
   );
 };
+
+const StatsContainer = styled(Row)`
+  display: grid;
+  @media (min-width: 900px) {
+    grid-template-columns: 16% 15% 15% 50% auto;
+    grid-template-areas: "name rating normalized-rating comment comment link";
+    padding: 2em 5em;
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: auto 30% 30%;
+    grid-template-rows: 50% auto;
+    grid-template-areas:
+      "name rating normalized-rating"
+      "comment comment link";
+    padding: 2em 2em;
+  }
+  align-items: center;
+
+  &:hover {
+    background-color: #ccc;
+    cursor: pointer;
+  }
+`;

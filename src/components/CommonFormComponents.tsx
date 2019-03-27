@@ -1,15 +1,17 @@
 import styled from "styled-components";
 import React from "react";
 
-export const Cell = styled.td`
-  padding: 0px 1em;
+export const Cell = styled.div`
+  padding: 10px 1em;
+  word-break: break-all;
 `;
 
 export const WhiteRow = styled.tr`
   background-color: white;
 `;
-export const LastCell = styled.td`
+export const LastCell = styled.div`
   text-align: center;
+  align-self: flex-end;
 `;
 
 export const StarCell = styled(Cell)`
@@ -26,13 +28,14 @@ export const Table = styled.table`
   width: 50%;
   border-collapse: collapse;
   justify-self: center;
-  grid-area: c;
 `;
 
-export const Row = styled.tr`
-  &:nth-child(2n + 3) {
-    background-color: lightgrey;
-  }
+export const Row = styled.div`
+  width: 60%;
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
+  margin: 1em;
+  background-color: #fff;
+  border-radius: 4px;
 `;
 
 interface TextInputProps {
