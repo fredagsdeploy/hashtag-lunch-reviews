@@ -1,6 +1,11 @@
 import { v1 as uuid } from "uuid";
 import { createResponse, LambdaHandler, parseJSON } from "./common";
-import {getAllReviews, saveReview, Review, getReviewsByPlaceId} from "./repository/reviews";
+import {
+  getAllReviews,
+  saveReview,
+  Review,
+  getReviewsByPlaceId
+} from "./repository/reviews";
 
 export const getReviews: LambdaHandler = async event => {
   const reviews = await getAllReviews();
@@ -9,12 +14,12 @@ export const getReviews: LambdaHandler = async event => {
 };
 
 export const getReviewsByPlace: LambdaHandler = async event => {
-  if(! event.pathParameters || !event.pathParameters.placeId) {
-    return createResponse(400, {message: "Missing path parameter"})
+  if (!event.pathParameters || !event.pathParameters.placeId) {
+    return createResponse(400, { message: "Missing path parameter" });
   }
-  const reviews = await getReviewsByPlaceId(event.pathParameters.placeId)
+  const reviews = await getReviewsByPlaceId(event.pathParameters.placeId);
   return createResponse(200, reviews);
-}
+};
 
 const createReview = (
   reviewId: string,

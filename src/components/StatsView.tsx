@@ -1,9 +1,17 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
-import {Place, Rating} from "../types";
-import {StarRating} from "./StarRating";
-import {AddNewPlaceForm} from "./AddNewPlaceForm";
-import {Cell, HeaderCell, LastCell, Row, StarCell, Table, WhiteRow} from "./CommonFormComponents";
+import { Place, Rating } from "../types";
+import { StarRating } from "./StarRating";
+import { AddNewPlaceForm } from "./AddNewPlaceForm";
+import {
+  Cell,
+  HeaderCell,
+  LastCell,
+  Row,
+  StarCell,
+  Table,
+  WhiteRow
+} from "./CommonFormComponents";
 
 interface Props {
   ratings: Array<Rating>;
@@ -26,7 +34,7 @@ export const StatsView = ({
   sumbitNewPlace,
   placeClicked
 }: Props) => {
-  const rows = ratings.map((rating) => {
+  const rows = ratings.map(rating => {
     return (
       <Row
         key={rating.placeId}
@@ -115,5 +123,3 @@ export const StatsView = ({
     </Table>
   );
 };
-
-

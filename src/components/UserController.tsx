@@ -1,11 +1,9 @@
 import React from "react";
-import { User } from "../types";
+import { useUserContext } from "../customHooks/useUserContext";
 
-interface Props {
-  user: User;
-}
 
-export const UserController = ({ user }: Props) => {
+export const UserController = () => {
+  const user = useUserContext();
   return (
     <>
       {user.fullName}

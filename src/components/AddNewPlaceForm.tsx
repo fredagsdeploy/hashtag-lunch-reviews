@@ -1,15 +1,17 @@
 import React from "react";
-import {Place} from "../types";
-import {Cell, TextInput, WhiteRow} from "./CommonFormComponents";
+import { Place } from "../types";
+import { Cell, TextInput, WhiteRow } from "./CommonFormComponents";
 
 interface EditPlaceRowProps {
   placeData: Partial<Place>;
   newPlaceDataChange: Function;
 }
 
-
-export const AddNewPlaceForm = ({placeData, newPlaceDataChange}: EditPlaceRowProps) => {
-  const {placeName, google_maps_link, comment} = placeData;
+export const AddNewPlaceForm = ({
+  placeData,
+  newPlaceDataChange
+}: EditPlaceRowProps) => {
+  const { placeName, google_maps_link, comment } = placeData;
   if (
     placeName === undefined ||
     google_maps_link === undefined ||
@@ -22,7 +24,7 @@ export const AddNewPlaceForm = ({placeData, newPlaceDataChange}: EditPlaceRowPro
 
   return (
     <WhiteRow>
-      <Cell/>
+      <Cell />
       <Cell>
         <TextInput
           placeholder="Name"
@@ -31,8 +33,8 @@ export const AddNewPlaceForm = ({placeData, newPlaceDataChange}: EditPlaceRowPro
           onChange={newPlaceDataChange}
         />
       </Cell>
-      <Cell/>
-      <Cell/>
+      <Cell />
+      <Cell />
       <Cell>
         <TextInput
           placeholder="Comment"
