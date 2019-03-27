@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React from "react";
 
 export const Cell = styled.td`
-  padding: 8px 4px;
+  padding: 0px 1em;
 `;
 
 export const WhiteRow = styled.tr`
@@ -14,6 +14,7 @@ export const LastCell = styled.td`
 
 export const StarCell = styled(Cell)`
   white-space: nowrap;
+  text-align: center;
 `;
 
 export const HeaderCell = styled.th`

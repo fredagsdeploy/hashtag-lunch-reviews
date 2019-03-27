@@ -6,7 +6,8 @@ import {
   Row,
   Table,
   WhiteRow,
-  LastCell
+  LastCell,
+  StarCell
 } from "./CommonFormComponents";
 import { unstable_createResource } from "react-cache";
 import { getPlaceById } from "../lib/backend";
@@ -50,9 +51,9 @@ export const PlaceView = ({
           <Row key={r.reviewId}>
             <Cell>Todo</Cell>
             {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
-            <Cell>
+            <StarCell>
               <StarRating rating={r.rating} />
-            </Cell>
+            </StarCell>
             <Cell>{r.comment}</Cell>
           </Row>
         ))}
