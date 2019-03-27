@@ -6,12 +6,16 @@ export const Cell = styled.div`
   word-break: break-all;
 `;
 
+export const NameCell = styled(Cell)`
+  font-weight: 500;
+  font-size: 1.2em;
+`;
+
 export const WhiteRow = styled.tr`
   background-color: white;
 `;
 export const LastCell = styled.div`
   text-align: center;
-  align-self: flex-end;
 `;
 
 export const StarCell = styled(Cell)`

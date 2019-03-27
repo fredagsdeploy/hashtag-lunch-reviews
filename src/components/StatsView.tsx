@@ -5,7 +5,7 @@ import { StarRating } from "./StarRating";
 import { AddNewPlaceForm } from "./AddNewPlaceForm";
 import {
   Cell,
-  HeaderCell,
+  NameCell,
   LastCell,
   Row,
   StarCell,
@@ -43,7 +43,7 @@ export const StatsView = ({
           placeClicked(rating);
         }}
       >
-        <Cell style={{ gridArea: "name" }}>{rating.placeName}</Cell>
+        <NameCell style={{ gridArea: "name" }}>{rating.placeName}</NameCell>
         <StarCell style={{ gridArea: "rating" }}>
           <StarRating rating={rating.rating} />
         </StarCell>
