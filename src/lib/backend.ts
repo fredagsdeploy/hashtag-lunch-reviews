@@ -39,3 +39,16 @@ export const postPlace = (place: Partial<Place>): Promise<Place> => {
     body: JSON.stringify(place)
   });
 };
+
+export const postReview = (
+  review: Partial<Review>
+): Promise<{ review: Review }> => {
+  const { userId, placeId, rating, comment } = review;
+  if (!userId || !placeId || !rating || !comment) {
+    throw new Error(`Missing attribute(s) in review ${JSON.stringify(review)}`);
+  }
+  return myFetch(BASE_URL + "/reviews", {
+    method: "post",
+    body: JSON.stringify(review)
+  });
+};

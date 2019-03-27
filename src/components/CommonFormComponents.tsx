@@ -44,3 +44,14 @@ interface TextInputProps {
 export var TextInput: (props: TextInputProps) => any = styled.input`
   width: 100%;
 `;
+
+interface NumberProps {
+  placeholder: string;
+  value: number;
+  onChange: any;
+  name: string;
+}
+
+export var NumberInput: (props: NumberProps) => any = styled.input`
+  width: 100%;
+`;
