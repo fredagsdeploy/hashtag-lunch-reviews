@@ -1,6 +1,6 @@
 import { getAllReviews } from "./repository/reviews";
 import * as _ from "lodash";
-import { createResponse } from "./common";
+import { createResponse, LambdaHandler } from "./common";
 import { getAllPlaces } from "./repository/places";
 
 interface Rating {
@@ -8,7 +8,7 @@ interface Rating {
   rating: number;
 }
 
-export const getPlacesWithRatings = async () => {
+export const getPlacesWithRatings: LambdaHandler = async () => {
   const reviews = await getAllReviews();
   console.log(reviews);
 

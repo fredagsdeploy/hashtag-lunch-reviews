@@ -1,5 +1,4 @@
-import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
-import { Context } from "aws-sdk/clients/costexplorer";
+import { APIGatewayProxyResult, APIGatewayEvent, Context } from "aws-lambda";
 
 export const parseJSON = (input: string | null) => JSON.parse(input || "");
 

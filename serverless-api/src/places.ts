@@ -1,11 +1,12 @@
 import { v1 as uuid } from "uuid";
 import * as AWS from "aws-sdk";
-import { createResponse, parseJSON } from "./common";
+import { createResponse, parseJSON, LambdaHandler } from "./common";
 import {
   getAllPlaces,
   savePlace,
   Place,
-  getPlaceByName, getPlaceById
+  getPlaceByName,
+  getPlaceById
 } from "./repository/places";
 
 const createPlace = (
@@ -20,30 +21,30 @@ const createPlace = (
   google_maps_link
 });
 
-export const get = async (event, context) => {
+export const get: LambdaHandler = async () => {
   const places = await getAllPlaces();
   return createResponse(200, { places });
 };
 
 export type GetByIdRequest = {
-  placeId: string
-}
+  placeId: string;
+};
 
-export const getById = async (event, context) => {
-  if(! event.pathParameters || !event.pathParameters.placeId) {
-    return createResponse(400, {message: "Missing path parameter"})
+export const getById: LambdaHandler = async (event, context) => {
+  if (!event.pathParameters || !event.pathParameters.placeId) {
+    return createResponse(400, { message: "Missing path parameter" });
   }
 
   const place = await getPlaceById(event.pathParameters.placeId);
   if (!place) {
-    return createResponse(404, {message: "No place with that id"})
+    return createResponse(404, { message: "No place with that id" });
   }
   return createResponse(200, place);
 };
 
 export type PlaceInput = Place;
 
-export const post = async (event, context) => {
+export const post: LambdaHandler = async (event, context) => {
   const body = parseJSON(event.body) as Partial<PlaceInput>;
   const { placeName, comment, google_maps_link } = body;
 
