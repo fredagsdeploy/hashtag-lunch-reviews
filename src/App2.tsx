@@ -8,6 +8,8 @@ import { Router, Route, Switch } from "react-router-dom";
 import { PlaceController } from "./components/PlaceController";
 import { UserController } from "./components/UserController";
 import { useGoogleAuth } from "./useGoogleAuth";
+import { User, emptyUser } from "./types";
+import { UserContext } from "./customHooks/useUserContext";
 
 declare global {
   interface Window {
@@ -29,8 +31,8 @@ export const App2: React.FC = () => {
   }
 
   return (
-    <>
-      <StatusBar user={user} logoutClicked={signOut} />
+    <UserContext.Provider value={user}>
+      <StatusBar logoutClicked={signOut} />
       <Router history={browserHistory}>
         <Switch>
           <Route exact path="/" component={StatsController} />
@@ -38,7 +40,7 @@ export const App2: React.FC = () => {
           <Route
             exact
             path="/me"
-            render={() => <UserController user={user} />}
+            component={UserController}
           />
           <Route
             exact
@@ -49,6 +51,6 @@ export const App2: React.FC = () => {
       </Router>
       <NavigationFooter />
       {error && <h2>{error}</h2>}
-    </>
+    </UserContext.Provider>
   );
 };

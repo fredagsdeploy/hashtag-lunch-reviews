@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { User } from "../types";
+import { useUserContext } from "../customHooks/useUserContext";
 
 interface Props {
-  user: User;
   logoutClicked: () => void;
 }
 
-export const StatusBar = ({ user, logoutClicked }: Props) => {
+export const StatusBar = ({ logoutClicked }: Props) => {
+  const user = useUserContext();
   return (
     <Bar>
       Welcome {user.givenName}
