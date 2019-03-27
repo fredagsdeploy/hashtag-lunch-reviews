@@ -52,6 +52,4 @@ interface NumberProps {
   name: string;
 }
 
-export var NumberInput: (props: NumberProps) => any = styled.input`
-  width: 100%;
-`;
+export var NumberInput: (props: NumberProps) => any = styled.input``;

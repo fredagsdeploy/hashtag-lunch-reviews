@@ -18,7 +18,6 @@ const Star = ({ filled }: StarProps) => {
 
 interface Props {
   rating: number;
-  name: string;
 }
 
 export const StarRating = (props: Props) => {

@@ -45,16 +45,10 @@ export const StatsView = ({
         <Cell>{rating.rank}</Cell>
         <Cell>{rating.placeName}</Cell>
         <StarCell>
-          <StarRating
-            name={`rating-a-${rating.placeName}`}
-            rating={rating.rating}
-          />
+          <StarRating rating={rating.rating} />
         </StarCell>
         <StarCell>
-          <StarRating
-            name={`rating-a-${rating.placeName}`}
-            rating={rating.normalized_rating}
-          />
+          <StarRating rating={rating.normalized_rating} />
         </StarCell>
         <Cell>{rating.comment}</Cell>
 

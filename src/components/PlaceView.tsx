@@ -12,6 +12,7 @@ import { unstable_createResource } from "react-cache";
 import { getPlaceById } from "../lib/backend";
 import { AddNewReviewForm } from "./AddNewReviewForm";
 import FontAwesome from "react-fontawesome";
+import { StarRating } from "./StarRating";
 
 const placeResource = unstable_createResource(getPlaceById);
 
@@ -37,58 +38,58 @@ export const PlaceView = ({
   const place = placeResource.read(placeId);
 
   return (
-    <div>
+    <Table>
       <h2>{place.placeName}</h2>
-      <Table>
-        <tbody>
-          <Row>
-            <HeaderCell>Vem</HeaderCell>
-            <HeaderCell>Rating</HeaderCell>
-            <HeaderCell>Comment</HeaderCell>
+      <tbody>
+        <Row>
+          <HeaderCell>Vem</HeaderCell>
+          <HeaderCell>Rating</HeaderCell>
+          <HeaderCell>Comment</HeaderCell>
+        </Row>
+        {reviews.map((r: Review) => (
+          <Row key={r.reviewId}>
+            <Cell>Todo</Cell>
+            {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
+            <Cell>
+              <StarRating rating={r.rating} />
+            </Cell>
+            <Cell>{r.comment}</Cell>
           </Row>
-          {reviews.map((r: Review) => (
-            <Row key={r.reviewId}>
-              <Cell>Todo</Cell>
-              {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
-              <Cell>{r.rating}</Cell>
-              <Cell>{r.comment}</Cell>
-            </Row>
-          ))}
-          {!isAddingReview && (
+        ))}
+        {!isAddingReview && (
+          <WhiteRow>
+            <LastCell colSpan={100}>
+              <FontAwesome
+                name="plus"
+                size="2x"
+                onClick={() => addRowPressed()}
+              />
+            </LastCell>
+          </WhiteRow>
+        )}
+        {isAddingReview && (
+          <>
+            <AddNewReviewForm
+              reviewData={newReviewData}
+              newReviewDataChange={newReviewDataChange}
+            />
             <WhiteRow>
               <LastCell colSpan={100}>
                 <FontAwesome
-                  name="plus"
+                  name="check"
+                  size="2x"
+                  onClick={() => sumbitNewReview()}
+                />
+                <FontAwesome
+                  name="times"
                   size="2x"
                   onClick={() => addRowPressed()}
                 />
               </LastCell>
             </WhiteRow>
-          )}
-          {isAddingReview && (
-            <>
-              <AddNewReviewForm
-                reviewData={newReviewData}
-                newReviewDataChange={newReviewDataChange}
-              />
-              <WhiteRow>
-                <LastCell colSpan={100}>
-                  <FontAwesome
-                    name="check"
-                    size="2x"
-                    onClick={() => sumbitNewReview()}
-                  />
-                  <FontAwesome
-                    name="times"
-                    size="2x"
-                    onClick={() => addRowPressed()}
-                  />
-                </LastCell>
-              </WhiteRow>
-            </>
-          )}
-        </tbody>
-      </Table>
-    </div>
+          </>
+        )}
+      </tbody>
+    </Table>
   );
 };
