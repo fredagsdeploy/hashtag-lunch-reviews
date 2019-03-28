@@ -21,7 +21,6 @@ const Bar = styled.div`
   padding: 1em;
   background-color: cornflowerblue;
   align-items: center;
-  margin-bottom: 0.5em;
   width: 100%;
 `;
 
