@@ -12,7 +12,7 @@ export const StarRating = (props: Props) => {
   return (
     <>
       <StarDiv style={{ width: rating * 28 }} />
-      <EmptyStarDiv style={{ width: 5 * 28 }} />
+      <HollowStarDiv style={{ width: 5 * 28 }} />
     </>
   );
 };
@@ -25,7 +25,7 @@ const StarDiv = styled.div`
   z-index: 1;
 `;
 
-const EmptyStarDiv = styled.div`
+const HollowStarDiv = styled.div`
   background-image: url(/starhollow.svg);
   background-repeat: repeat-x;
   height: 28px;
