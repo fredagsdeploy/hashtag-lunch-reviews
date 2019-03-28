@@ -1,6 +1,6 @@
 import React from "react";
 import { Review } from "../types";
-import { Cell, TextInput, WhiteRow, RangeInput } from "./CommonFormComponents";
+import { Cell, TextInput, WhiteRow } from "./CommonFormComponents";
 import styled from "styled-components";
 import { StarRating } from "./StarRating";
 
@@ -48,7 +48,11 @@ export const AddNewReviewForm = ({
   );
 };
 
-const StarInput = styled(RangeInput)`
+interface InputProps {
+  onChange: any;
+}
+
+const StarInput = styled.input<InputProps>`
   width: 140px;
   height: 28px
   z-index: 2;

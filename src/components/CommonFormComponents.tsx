@@ -45,16 +45,3 @@ interface TextInputProps {
 export var TextInput: (props: TextInputProps) => any = styled.input`
   width: 100%;
 `;
-
-interface RangeProps {
-  placeholder: string;
-  value: number;
-  onChange: any;
-  name: string;
-  type: string;
-  max: number;
-  min: number;
-  step: number;
-}
-
-export var RangeInput = styled.input<RangeProps>``;
