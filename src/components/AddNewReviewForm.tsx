@@ -51,7 +51,7 @@ export const AddNewReviewForm = ({
 const StarInput = styled(RangeInput)`
   width: 140px;
   height: 28px
-  z-index: 1;
+  z-index: 2;
   opacity: 0;
   position: absolute;
 `;
