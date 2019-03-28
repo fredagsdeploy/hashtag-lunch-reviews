@@ -57,4 +57,4 @@ interface RangeProps {
   step: number;
 }
 
-export var RangeInput: (props: RangeProps) => any = styled.input``;
+export var RangeInput = styled.input<RangeProps>``;
