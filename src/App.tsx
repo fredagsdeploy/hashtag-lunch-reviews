@@ -24,7 +24,7 @@ const LayoutGrid = styled.div`
   flex-flow: column;
   align-items: center;
   background-color: #f6f8fa;
-  height: 100%;
+  min-height: 100%;
 `;
 
 const GlobalStyle = createGlobalStyle`
