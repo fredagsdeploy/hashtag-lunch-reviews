@@ -19,7 +19,7 @@ export const StatusBar = ({ logoutClicked }: Props) => {
       <div>
         <NavItem onClick={() => browserHistory.push("/me")}>User</NavItem>
         <NavItem onClick={logoutClicked}>Logout</NavItem>
-        <Name> {user.givenName}</Name>
+        <Name>{user.givenName}</Name>
       </div>
     </Bar>
   );
