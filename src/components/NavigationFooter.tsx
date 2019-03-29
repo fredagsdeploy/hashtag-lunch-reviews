@@ -19,7 +19,7 @@ const Footer = styled.div`
   justify-content: flex-end;
 
   width: 100%;
-  padding: 1em 0em;
+  padding: 1em 0;
 
   background-color: rgb(227, 227, 227);
   color: rgb(155, 155, 155);
