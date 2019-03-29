@@ -20,11 +20,15 @@ export const AddNewReviewForm = ({
     );
   }
 
-  return (
+  return (/*
     <WhiteRow>
       <Cell />
       <Cell>
-        <StarInput
+        <StarInput*/
+    <>
+      <Cell style={{ gridArea: "name" }}>Todo</Cell>
+      <Cell style={{ gridArea: "rating" }}>
+        <NumberInput
           placeholder="Rating"
           name="rating"
           type="range"
@@ -36,7 +40,7 @@ export const AddNewReviewForm = ({
         />
         <StarRating rating={rating} />
       </Cell>
-      <Cell>
+      <Cell style={{ gridArea: "comment" }}>
         <TextInput
           placeholder="Comment"
           name="comment"
@@ -44,7 +48,7 @@ export const AddNewReviewForm = ({
           onChange={newReviewDataChange}
         />
       </Cell>
-    </WhiteRow>
+    </>
   );
 };
 

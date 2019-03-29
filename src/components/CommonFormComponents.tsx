@@ -11,7 +11,7 @@ export const NameCell = styled(Cell)`
   font-size: 1.2em;
 `;
 
-export const WhiteRow = styled.tr`
+export const WhiteRow = styled.div`
   background-color: white;
 `;
 export const LastCell = styled.div`
