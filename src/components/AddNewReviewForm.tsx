@@ -19,9 +19,9 @@ export const AddNewReviewForm = ({
   }
 
   return (
-    <WhiteRow>
-      <Cell />
-      <Cell>
+    <>
+      <Cell style={{ gridArea: "name" }}>Todo</Cell>
+      <Cell style={{ gridArea: "rating" }}>
         <NumberInput
           placeholder="Rating"
           name="rating"
@@ -29,7 +29,7 @@ export const AddNewReviewForm = ({
           onChange={newReviewDataChange}
         />
       </Cell>
-      <Cell>
+      <Cell style={{ gridArea: "comment" }}>
         <TextInput
           placeholder="Comment"
           name="comment"
@@ -37,6 +37,6 @@ export const AddNewReviewForm = ({
           onChange={newReviewDataChange}
         />
       </Cell>
-    </WhiteRow>
+    </>
   );
 };
