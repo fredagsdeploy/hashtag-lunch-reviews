@@ -40,6 +40,7 @@ functions:
       - http:
           path: places
           method: post
+          cors: true
 
   getPlaces:
     handler: src/places.get
@@ -48,6 +49,7 @@ functions:
       - http:
           path: places
           method: get
+          cors: true
 
   getPlaceById:
     handler: src/places.getById
@@ -56,6 +58,7 @@ functions:
       - http:
           path: places/{placeId}
           method: get
+          cors: true
 
   postReviews:
     handler: src/reviews.postReviews
@@ -64,6 +67,7 @@ functions:
       - http:
           path: reviews
           method: post
+          cors: true
 
   getReviews:
     handler: src/reviews.getReviews
@@ -72,6 +76,7 @@ functions:
       - http:
           path: reviews
           method: get
+          cors: true
 
   getReview:
     handler: src/reviews.getReviewsByPlace
@@ -80,6 +85,7 @@ functions:
       - http:
           path: reviews/{placeId}
           method: get
+          cors: true
           request:
             parameters:
               paths:
@@ -93,6 +99,7 @@ functions:
       - http:
           path: users
           method: post
+          cors: true
 
   getRatings:
     handler: src/ratings.getPlacesWithRatings
@@ -101,6 +108,7 @@ functions:
       - http:
           path: ratings
           method: get
+          cors: true
 
 custom:
   dynamodb:
