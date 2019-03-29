@@ -23,7 +23,7 @@ const Footer = styled.div`
 
   background-color: rgb(227, 227, 227);
   color: rgb(155, 155, 155);
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
 `;
 
 const Item = styled(FontAwesome)`
