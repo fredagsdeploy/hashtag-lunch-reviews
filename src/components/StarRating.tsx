@@ -18,19 +18,19 @@ export const StarRating = (props: Props) => {
   );
 };
 
-const StarDiv = styled.div`
-  background-image: url(/starsolid.svg);
+const Star = styled.div`
   background-repeat: repeat-x;
   background-size: 16px;
   height: 16px;
   position: absolute;
+`;
+
+const StarDiv = styled(Star)`
+  background-image: url(/starsolid.svg);
   z-index: 1;
 `;
 
-const HollowStarDiv = styled.div`
+const HollowStarDiv = styled(Star)`
   background-image: url(/starhollow.svg);
-  background-size: 16px;
-  background-repeat: repeat-x;
-  height: 16px;
   z-index: 0;
 `;
