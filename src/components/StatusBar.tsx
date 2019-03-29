@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useUserContext } from "../customHooks/useUserContext";
 import { browserHistory } from "../history";
-import { Button } from "./CommonFormComponents";
 
 interface Props {
   logoutClicked: () => void;
