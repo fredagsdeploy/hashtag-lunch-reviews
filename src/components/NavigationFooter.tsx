@@ -27,7 +27,7 @@ const Footer = styled.div`
 `;
 
 const Item = styled(FontAwesome)`
-  margin: 0em 1em;
+  margin: 0 1em;
 `;
 
 const Link = styled.a`
