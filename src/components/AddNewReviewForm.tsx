@@ -20,15 +20,11 @@ export const AddNewReviewForm = ({
     );
   }
 
-  return (/*
-    <WhiteRow>
-      <Cell />
-      <Cell>
-        <StarInput*/
+  return (
     <>
       <Cell style={{ gridArea: "name" }}>Todo</Cell>
       <Cell style={{ gridArea: "rating" }}>
-        <NumberInput
+        <StarInput
           placeholder="Rating"
           name="rating"
           type="range"
