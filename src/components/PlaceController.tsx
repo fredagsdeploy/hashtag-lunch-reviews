@@ -52,8 +52,6 @@ export const PlaceController = ({ match }: Props) => {
     if (!event.target.name) {
       throw new Error("No name on event.target");
     }
-    console.log(event.target.name);
-    console.log(event.target.value);
     setNewReview({ ...newReview, [event.target.name]: event.target.value });
   };
 
