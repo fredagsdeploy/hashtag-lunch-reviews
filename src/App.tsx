@@ -20,15 +20,10 @@ export const App = () => {
 };
 
 const LayoutGrid = styled.div`
-  display: grid;
-  height: 100vh;
-  grid-template-columns: 10% 1fr 10%;
-  grid-template-rows: 5% 1fr 5%;
-  grid-template-areas:
-    "h h h"
-    "c c c"
-    "f f f";
-  /* grid-template-columns: 1fr; */
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  background-color: #f6f8fa;
 `;
 
 const GlobalStyle = createGlobalStyle`

@@ -14,6 +14,7 @@ import { getPlaceById } from "../lib/backend";
 import { AddNewReviewForm } from "./AddNewReviewForm";
 import FontAwesome from "react-fontawesome";
 import { StarRating } from "./StarRating";
+import styled from "styled-components";
 
 const placeResource = unstable_createResource(getPlaceById);
 
@@ -39,58 +40,61 @@ export const PlaceView = ({
   const place = placeResource.read(placeId);
 
   return (
-    <Table>
+    <>
       <h2>{place.placeName}</h2>
-      <tbody>
-        <Row>
-          <HeaderCell>Vem</HeaderCell>
-          <HeaderCell>Rating</HeaderCell>
-          <HeaderCell>Comment</HeaderCell>
-        </Row>
-        {reviews.map((r: Review) => (
-          <Row key={r.reviewId}>
-            <Cell>Todo</Cell>
-            {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
-            <StarCell>
-              <StarRating rating={r.rating} />
-            </StarCell>
-            <Cell>{r.comment}</Cell>
-          </Row>
-        ))}
-        {!isAddingReview && (
+      {reviews.map((r: Review) => (
+        <PlaceRow key={r.reviewId}>
+          <Cell style={{ gridArea: "name" }}>Todo</Cell>
+          {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
+          <StarCell style={{ gridArea: "rating" }}>
+            <StarRating rating={r.rating} />
+          </StarCell>
+          <Cell style={{ gridArea: "comment" }}>{r.comment}</Cell>
+        </PlaceRow>
+      ))}
+      {!isAddingReview && (
+        <WhiteRow>
+          <LastCell>
+            <FontAwesome
+              name="plus"
+              size="2x"
+              onClick={() => addRowPressed()}
+            />
+          </LastCell>
+        </WhiteRow>
+      )}
+      {isAddingReview && (
+        <>
+          <AddNewReviewForm
+            reviewData={newReviewData}
+            newReviewDataChange={newReviewDataChange}
+          />
           <WhiteRow>
-            <LastCell colSpan={100}>
+            <LastCell>
               <FontAwesome
-                name="plus"
+                name="check"
+                size="2x"
+                onClick={() => sumbitNewReview()}
+              />
+              <FontAwesome
+                name="times"
                 size="2x"
                 onClick={() => addRowPressed()}
               />
             </LastCell>
           </WhiteRow>
-        )}
-        {isAddingReview && (
-          <>
-            <AddNewReviewForm
-              reviewData={newReviewData}
-              newReviewDataChange={newReviewDataChange}
-            />
-            <WhiteRow>
-              <LastCell colSpan={100}>
-                <FontAwesome
-                  name="check"
-                  size="2x"
-                  onClick={() => sumbitNewReview()}
-                />
-                <FontAwesome
-                  name="times"
-                  size="2x"
-                  onClick={() => addRowPressed()}
-                />
-              </LastCell>
-            </WhiteRow>
-          </>
-        )}
-      </tbody>
-    </Table>
+        </>
+      )}
+    </>
   );
 };
+
+const PlaceRow = styled(Row)`
+  display: grid;
+
+  grid-template-columns: 20% 20% auto;
+  grid-template-areas: "name rating comment";
+  padding: 1em 5em;
+
+  align-items: center;
+`;
