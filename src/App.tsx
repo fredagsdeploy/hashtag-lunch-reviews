@@ -24,10 +24,16 @@ const LayoutGrid = styled.div`
   flex-flow: column;
   align-items: center;
   background-color: #f6f8fa;
+  height: 100%;
 `;
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
   }
+
+  html, #root, body {
+    height: 100%;
+  }
+
 `;
