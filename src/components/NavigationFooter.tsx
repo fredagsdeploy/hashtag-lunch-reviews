@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
-import { browserHistory } from "../history";
 
 export const NavigationFooter = () => {
   return (
@@ -20,6 +19,7 @@ const Footer = styled.div`
 
   width: 100%;
   padding: 1em 0;
+  margin-top: 2em;
 
   background-color: rgb(227, 227, 227);
   color: rgb(155, 155, 155);

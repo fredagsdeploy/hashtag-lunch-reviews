@@ -1,13 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
+import star from "../images/starsolid.svg";
+import hollowStar from "../images/starhollow.svg";
 
 interface Props {
   rating: number;
 }
+const starSize = 16;
 
 export const StarRating = (props: Props) => {
-  const starSize = 16;
   const rating = _.min([5, props.rating]) || 0;
 
   return (
@@ -20,17 +22,17 @@ export const StarRating = (props: Props) => {
 
 const Star = styled.div`
   background-repeat: repeat-x;
-  background-size: 16px;
-  height: 16px;
+  background-size: ${starSize}px;
+  height: ${starSize}px;
   position: absolute;
 `;
 
 const StarDiv = styled(Star)`
-  background-image: url(/starsolid.svg);
+  background-image: url(${star});
   z-index: 1;
 `;
 
 const HollowStarDiv = styled(Star)`
-  background-image: url(/starhollow.svg);
+  background-image: url(${hollowStar});
   z-index: 0;
 `;

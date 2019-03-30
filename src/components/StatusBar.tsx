@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useUserContext } from "../customHooks/useUserContext";
-import { browserHistory } from "../history";
+import { Link } from "react-router-dom";
 
 interface Props {
   logoutClicked: () => void;
@@ -12,20 +12,20 @@ export const StatusBar = ({ logoutClicked }: Props) => {
   return (
     <Bar>
       <div>
-        <NavItem onClick={() => browserHistory.push("/ratings")}>
-          All Places
-        </NavItem>
+        <NavItem to={"/ratings"}>All Places</NavItem>
       </div>
       <div>
-        <NavItem onClick={() => browserHistory.push("/me")}>User</NavItem>
-        <NavItem onClick={logoutClicked}>Logout</NavItem>
+        <NavItem to={"/me"}>User</NavItem>
+        <NavItem to={"/"} onClick={logoutClicked}>
+          Logout
+        </NavItem>
         <Name>{user.givenName}</Name>
       </div>
     </Bar>
   );
 };
 
-const NavItem = styled.a`
+const NavItem = styled(Link)`
   color: #fff;
   padding: 1em;
   text-decoration: none;
@@ -35,10 +35,9 @@ const NavItem = styled.a`
   }
 `;
 
-const Name = styled.div`
+const Name = styled.span`
   padding: 1em;
   color: #ccc;
-  display: inline;
 `;
 
 const Bar = styled.div`
