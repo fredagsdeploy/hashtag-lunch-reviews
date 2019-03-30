@@ -10,6 +10,7 @@ import { UserController } from "./components/UserController";
 import { useGoogleAuth } from "./useGoogleAuth";
 import { User, emptyUser } from "./types";
 import { UserContext } from "./customHooks/useUserContext";
+import styled from "styled-components";
 
 declare global {
   interface Window {
@@ -32,25 +33,34 @@ export const App2: React.FC = () => {
 
   return (
     <UserContext.Provider value={user}>
-      <StatusBar logoutClicked={signOut} />
       <Router history={browserHistory}>
-        <Switch>
-          <Route exact path="/" component={StatsController} />
-          <Route exact path="/ratings" component={StatsController} />
-          <Route
-            exact
-            path="/me"
-            component={UserController}
-          />
-          <Route
-            exact
-            path="/:placeId/:placeName"
-            component={PlaceController}
-          />
-        </Switch>
+        <>
+          <StatusBar logoutClicked={signOut} />
+          <ContentContainer>
+            <Switch>
+              <Route exact path="/" component={StatsController} />
+              <Route exact path="/ratings" component={StatsController} />
+              <Route exact path="/me" component={UserController} />
+              <Route
+                exact
+                path="/:placeId/:placeName"
+                component={PlaceController}
+              />
+            </Switch>
+          </ContentContainer>
+        </>
       </Router>
       <NavigationFooter />
       {error && <h2>{error}</h2>}
     </UserContext.Provider>
   );
 };
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  align-items: center;
+  flex: 1;
+  background-color: #f6f8fa;
+`;

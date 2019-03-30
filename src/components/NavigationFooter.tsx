@@ -1,38 +1,37 @@
 import React from "react";
 import styled from "styled-components";
 import FontAwesome from "react-fontawesome";
-import { browserHistory } from "../history";
 
 export const NavigationFooter = () => {
   return (
     <Footer>
-      <NavItem name="table" onClick={() => browserHistory.push("/ratings")} />
-      <LastNavItem name="user" onClick={() => browserHistory.push("/me")} />
+      <Link href="https://github.com/Tejpbit/hashtag-lunch-reviews">
+        <Item name="github" size="2x" />
+      </Link>
     </Footer>
   );
 };
 
 const Footer = styled.div`
   display: flex;
-  grid-area: f;
-  align-items: center;
-  justify-content: center;
-  border-top: 1px solid black;
+  align-items: flex-end;
+  justify-content: flex-end;
+
+  width: 100%;
+  padding: 1em 0;
+  margin-top: 2em;
+
+  background-color: rgb(227, 227, 227);
+  color: rgb(155, 155, 155);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
 `;
 
-const NavItem = styled(FontAwesome)`
-  border-left: 1px solid black;
-  height: 100%;
-  width: 3em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const Item = styled(FontAwesome)`
+  margin: 0 1em;
+`;
 
-  &:hover {
-    opacity: 0.4;
+const Link = styled.a`
+  &:visited {
+    color: rgb(155, 155, 155);
   }
-`;
-
-const LastNavItem = styled(NavItem)`
-  border-right: 1px solid black;
 `;
