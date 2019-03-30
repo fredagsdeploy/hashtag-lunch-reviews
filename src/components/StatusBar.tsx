@@ -27,16 +27,20 @@ export const StatusBar = ({ logoutClicked }: Props) => {
 
 const NavItem = styled(Link)`
   color: #fff;
-  padding: 1em;
+  padding: 0.8em;
   text-decoration: none;
+
   &:hover {
-    background-color: #9fbaec;
+    background-color: #fff2;
     cursor: pointer;
+  }
+  &:first-child {
+    margin-left: 0.2em;
   }
 `;
 
 const Name = styled.span`
-  padding: 1em;
+  padding: 0.8em;
   color: #ccc;
 `;
 
