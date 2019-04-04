@@ -151,7 +151,7 @@ const PlaceBannerContent = styled.div`
 
 const AddReview = styled.div`
   align-self: flex-end;
-  width: 20%;
+  padding-right: 10%;
   margin-top: 1em;
 `;
 

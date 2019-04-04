@@ -142,6 +142,6 @@ const Header = styled.span`
 
 const AddPlaceContainer = styled.div`
   align-self: flex-end;
-  width: 20%;
+  padding-right: 10%;
   margin-top: 1em;
 `;
