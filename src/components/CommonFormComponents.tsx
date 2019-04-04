@@ -4,6 +4,8 @@ import React from "react";
 export const Cell = styled.div`
   padding: 10px 1em;
   word-break: break-all;
+  display: flex;
+  align-items: center;
 `;
 
 export const NameCell = styled(Cell)`
@@ -39,7 +41,7 @@ export const Row = styled.div`
   box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
   margin: 1em;
   background-color: #fff;
-  border-radius: 4px;
+  border-radius: 24px;
 `;
 
 interface TextInputProps {
@@ -51,4 +53,18 @@ interface TextInputProps {
 
 export var TextInput: (props: TextInputProps) => any = styled.input`
   width: 100%;
+`;
+
+export const Button = styled.div`
+  background-color: #fff;
+  padding: 0.3em 1em;
+
+  width: max-content;
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
+  border-radius: 24px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #ccc;
+  }
 `;

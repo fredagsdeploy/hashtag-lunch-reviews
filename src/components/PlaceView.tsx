@@ -7,7 +7,8 @@ import {
   Table,
   WhiteRow,
   LastCell,
-  StarCell
+  StarCell,
+  Button
 } from "./CommonFormComponents";
 import { unstable_createResource } from "react-cache";
 import { getPlaceById } from "../lib/backend";
@@ -62,14 +63,12 @@ export const PlaceView = ({
 
       {!isAddingReview && (
         <AddReview>
-          <AddReviewButton onClick={() => addRowPressed()}>
-            Add Review
-          </AddReviewButton>
+          <Button onClick={() => addRowPressed()}>Add Review</Button>
         </AddReview>
       )}
       {isAddingReview && (
         <>
-          <h3>New review:</h3>
+          <Header>New review</Header>
           <PlaceRow>
             <AddNewReviewForm
               reviewData={newReviewData}
@@ -92,7 +91,7 @@ export const PlaceView = ({
       )}
       {myReview.length > 0 && (
         <>
-          <h3>My reviews:</h3>
+          <Header>My reviews</Header>
           {myReview.map((r: Review) => (
             <PlaceRow key={r.reviewId}>
               <Cell style={{ gridArea: "name" }}>Todo</Cell>
@@ -105,7 +104,7 @@ export const PlaceView = ({
           ))}
         </>
       )}
-      <h3>All reviews:</h3>
+      <Header>All reviews</Header>
       {reviews.map((r: Review) => (
         <PlaceRow key={r.reviewId}>
           <Cell style={{ gridArea: "name" }}>Todo</Cell>
@@ -156,16 +155,10 @@ const AddReview = styled.div`
   margin-top: 1em;
 `;
 
-const AddReviewButton = styled.div`
-  background-color: #fff;
-  padding: 0.3em 1em;
-
-  width: max-content;
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
-  border-radius: 4px;
-
-  &:hover {
-    cursor: pointer;
-    background-color: #ccc;
-  }
+const Header = styled.span`
+  margin-bottom: -0.5em;
+  width: 60%;
+  font-weight: 500;
+  color: #333;
+  margin-top: 2em;
 `;

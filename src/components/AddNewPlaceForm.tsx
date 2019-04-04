@@ -23,9 +23,8 @@ export const AddNewPlaceForm = ({
   }
 
   return (
-    <WhiteRow>
-      <Cell />
-      <Cell>
+    <>
+      <Cell style={{ gridArea: "rating" }}>
         <TextInput
           placeholder="Name"
           name="placeName"
@@ -33,9 +32,7 @@ export const AddNewPlaceForm = ({
           onChange={newPlaceDataChange}
         />
       </Cell>
-      <Cell />
-      <Cell />
-      <Cell>
+      <Cell style={{ gridArea: "comment" }}>
         <TextInput
           placeholder="Comment"
           name="comment"
@@ -43,7 +40,7 @@ export const AddNewPlaceForm = ({
           onChange={newPlaceDataChange}
         />
       </Cell>
-      <Cell>
+      <Cell style={{ gridArea: "normalized-rating" }}>
         <TextInput
           placeholder="Link"
           name="google_maps_link"
@@ -51,6 +48,6 @@ export const AddNewPlaceForm = ({
           onChange={newPlaceDataChange}
         />
       </Cell>
-    </WhiteRow>
+    </>
   );
 };

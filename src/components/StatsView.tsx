@@ -10,7 +10,8 @@ import {
   Row,
   StarCell,
   Table,
-  WhiteRow
+  WhiteRow,
+  Button
 } from "./CommonFormComponents";
 import styled from "styled-components";
 
@@ -37,47 +38,50 @@ export const StatsView = ({
 }: Props) => {
   const rows = ratings.map(rating => {
     return (
-      <StatsContainer
-        key={rating.placeId}
-        onClick={() => {
-          placeClicked(rating);
-        }}
-      >
-        <NameCell style={{ gridArea: "name" }}>{rating.placeName}</NameCell>
-        <StarCell style={{ gridArea: "rating" }}>
-          <StarRating rating={rating.rating} />
-        </StarCell>
-        <StarCell style={{ gridArea: "normalized-rating" }}>
-          <StarRating rating={rating.normalized_rating} />
-        </StarCell>
-        <Cell style={{ gridArea: "comment" }}>{rating.comment}</Cell>
+      <>
+        <Header>{rating.placeName}</Header>
+        <StatsContainer
+          key={rating.placeId}
+          onClick={() => {
+            placeClicked(rating);
+          }}
+        >
+          <StarCell style={{ gridArea: "rating" }}>
+            <StarRating rating={rating.rating} />
+          </StarCell>
+          <StarCell style={{ gridArea: "normalized-rating" }}>
+            <StarRating rating={rating.normalized_rating} />
+          </StarCell>
+          <Cell style={{ gridArea: "comment" }}>{rating.comment}</Cell>
 
-        <LastCell style={{ gridArea: "link" }}>
-          {
-            <a href={rating.google_maps_link}>
-              <FontAwesome name="external-link" />
-            </a>
-          }
-        </LastCell>
-      </StatsContainer>
+          <LastCell style={{ gridArea: "link" }}>
+            {
+              <a href={rating.google_maps_link}>
+                <FontAwesome name="external-link" />
+              </a>
+            }
+          </LastCell>
+        </StatsContainer>
+      </>
     );
   });
 
   return (
     <>
-      {rows}
-
-      <WhiteRow>
-        <LastCell>
-          <FontAwesome name="plus" size="2x" onClick={() => addRowPressed()} />
-        </LastCell>
-      </WhiteRow>
+      {!isAddingPlace && (
+        <AddPlaceContainer>
+          <Button onClick={() => addRowPressed()}>Add new place</Button>
+        </AddPlaceContainer>
+      )}
       {isAddingPlace && (
         <>
-          <AddNewPlaceForm
-            newPlaceDataChange={newPlaceDataChange}
-            placeData={newPlaceData}
-          />
+          <h3>New place:</h3>
+          <StatsContainerNoHover>
+            <AddNewPlaceForm
+              newPlaceDataChange={newPlaceDataChange}
+              placeData={newPlaceData}
+            />
+          </StatsContainerNoHover>
           <WhiteRow>
             <LastCell>
               <FontAwesome
@@ -94,30 +98,50 @@ export const StatsView = ({
           </WhiteRow>
         </>
       )}
+      {rows}
     </>
   );
 };
 
-const StatsContainer = styled(Row)`
+const StatsContainerNoHover = styled(Row)`
   display: grid;
   @media (min-width: 900px) {
-    grid-template-columns: 16% 15% 15% 50% auto;
-    grid-template-areas: "name rating normalized-rating comment comment link";
+    grid-template-columns: 15% 15% 45% auto;
+    grid-template-areas: "rating normalized-rating comment comment link";
     padding: 2em 5em;
   }
 
   @media (max-width: 900px) {
-    grid-template-columns: auto 30% 30%;
+    grid-template-columns: 25% 25% 25% auto;
     grid-template-rows: 50% auto;
     grid-template-areas:
-      "name rating normalized-rating"
-      "comment comment link";
+      "rating rating normalized-rating normalized-rating"
+      "comment comment comment link";
     padding: 2em 2em;
   }
   align-items: center;
+`;
 
+const StatsContainer = styled(StatsContainerNoHover)`
   &:hover {
-    background-color: #ccc;
+    background-color: #eee;
     cursor: pointer;
   }
+`;
+
+const Header = styled.span`
+  margin-bottom: -0.5em;
+  width: 60%;
+  font-weight: 500;
+  color: #333;
+  margin-top: 2em;
+  ${StatsContainer}:hover & {
+    color: #00f;
+  }
+`;
+
+const AddPlaceContainer = styled.div`
+  align-self: flex-end;
+  width: 20%;
+  margin-top: 1em;
 `;
