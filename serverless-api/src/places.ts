@@ -91,7 +91,6 @@ export const post: LambdaHandler = async (event, context) => {
     }
   }
 
-  console.log(placeName, comment, googlePlaceId);
   try {
     const place = await savePlace(
       createPlace(
