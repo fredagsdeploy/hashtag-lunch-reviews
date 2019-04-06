@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Place } from "../types";
 import { Cell, TextInput, WhiteRow } from "./CommonFormComponents";
 import PlacesAutocomplete from "react-places-autocomplete";
+import styled from "styled-components";
 
 interface EditPlaceRowProps {
   placeData: Partial<Place>;
@@ -59,28 +60,19 @@ export const AddNewPlaceForm = ({
                   className: "location-search-input"
                 })}
               />
-              <div className="autocomplete-dropdown-container">
-                {loading && <div>Loading...</div>}
+              <Suggestions>
+                {loading && <SuggestionItem>Loading...</SuggestionItem>}
                 {suggestions.map(suggestion => {
-                  const className = suggestion.active
-                    ? "suggestion-item--active"
-                    : "suggestion-item";
-                  // inline style for demonstration purpose
-                  const style = suggestion.active
-                    ? { backgroundColor: "#fafafa", cursor: "pointer" }
-                    : { backgroundColor: "#ffffff", cursor: "pointer" };
                   return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                        style
-                      })}
+                    <SuggestionItem
+                      key={suggestion.id}
+                      {...getSuggestionItemProps(suggestion)}
                     >
-                      <span>{suggestion.description}</span>
-                    </div>
+                      {suggestion.description}
+                    </SuggestionItem>
                   );
                 })}
-              </div>
+              </Suggestions>
             </div>
           )}
         </PlacesAutocomplete>
@@ -88,3 +80,20 @@ export const AddNewPlaceForm = ({
     </>
   );
 };
+
+const Suggestions = styled.div`
+  position: absolute;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  border-radius: 24px;
+  background-color: #fff;
+`;
+
+const SuggestionItem = styled.div`
+  padding: 0.4em 1em;
+  cursor: pointer;
+  border-radius: 24px;
+
+  &:hover {
+    background-color: #eee;
+  }
+`;

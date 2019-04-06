@@ -26,12 +26,10 @@ export const RollReviews = ({ reviews }: Props) => {
   useEffect(() => {
     const newReview = nonEmptyReviews[i] || emptyReview;
 
-    console.log(newReview);
     let reviewTimeout = setTimeout(() => {
       setReview(newReview);
       setIndex((i + 1) % nonEmptyReviews.length);
       setOpacity(1);
-      console.log("Update review");
     }, 5000);
     let opacityTimeout = setTimeout(() => {
       setOpacity(0);
