@@ -5,7 +5,9 @@
   "license": "MIT",
   "dependencies": {
     "@types/lodash": "^4.14.123",
-    "lodash": "^4.17.11"
+    "@types/node-fetch": "^2.1.7",
+    "lodash": "^4.17.11",
+    "node-fetch": "^2.3.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.23",

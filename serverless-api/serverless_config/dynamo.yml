@@ -10,6 +10,8 @@ Resources:
           AttributeType: S
         - AttributeName: placeName
           AttributeType: S
+        - AttributeName: googlePlaceId
+          AttributeType: S
 
       KeySchema:
         - AttributeName: placeId
@@ -25,6 +27,17 @@ Resources:
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
+
+        - IndexName: placeGoogleIdIndex
+          KeySchema:
+            - AttributeName: googlePlaceId
+              KeyType: HASH
+          Projection:
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1

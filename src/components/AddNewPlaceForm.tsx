@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Place } from "../types";
 import { Cell, TextInput, WhiteRow } from "./CommonFormComponents";
+import PlacesAutocomplete from "react-places-autocomplete";
 
 interface EditPlaceRowProps {
   placeData: Partial<Place>;
@@ -11,12 +12,8 @@ export const AddNewPlaceForm = ({
   placeData,
   newPlaceDataChange
 }: EditPlaceRowProps) => {
-  const { placeName, google_maps_link, comment } = placeData;
-  if (
-    placeName === undefined ||
-    google_maps_link === undefined ||
-    comment === undefined
-  ) {
+  const { placeName, comment } = placeData;
+  if (placeName === undefined) {
     throw new Error(
       `Missing members in place data ${JSON.stringify(placeData)}`
     );
@@ -26,27 +23,67 @@ export const AddNewPlaceForm = ({
     <>
       <Cell style={{ gridArea: "rating" }}>
         <TextInput
-          placeholder="Name"
-          name="placeName"
-          value={placeName}
+          placeholder="Comment"
+          name="comment"
+          value={comment ? comment : ""}
           onChange={newPlaceDataChange}
         />
       </Cell>
       <Cell style={{ gridArea: "comment" }}>
-        <TextInput
-          placeholder="Comment"
-          name="comment"
-          value={comment}
-          onChange={newPlaceDataChange}
-        />
-      </Cell>
-      <Cell style={{ gridArea: "normalized-rating" }}>
-        <TextInput
-          placeholder="Link"
-          name="google_maps_link"
-          value={google_maps_link}
-          onChange={newPlaceDataChange}
-        />
+        <PlacesAutocomplete
+          value={placeName}
+          onChange={value => {
+            newPlaceDataChange({
+              target: { name: "placeName", value: value }
+            });
+          }}
+          onSelect={(placeName, googlePlaceId) => {
+            newPlaceDataChange({
+              target: { name: "googlePlaceId", value: googlePlaceId }
+            });
+            newPlaceDataChange({
+              target: { name: "placeName", value: placeName }
+            });
+          }}
+        >
+          {({
+            getInputProps,
+            suggestions,
+            getSuggestionItemProps,
+            loading
+          }) => (
+            <div>
+              <input
+                {...getInputProps({
+                  placeholder: "Search Places ...",
+                  className: "location-search-input"
+                })}
+              />
+              <div className="autocomplete-dropdown-container">
+                {loading && <div>Loading...</div>}
+                {suggestions.map(suggestion => {
+                  const className = suggestion.active
+                    ? "suggestion-item--active"
+                    : "suggestion-item";
+                  // inline style for demonstration purpose
+                  const style = suggestion.active
+                    ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                    : { backgroundColor: "#ffffff", cursor: "pointer" };
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                        style
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
       </Cell>
     </>
   );

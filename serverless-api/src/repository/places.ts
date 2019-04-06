@@ -4,8 +4,8 @@ import { dynamodb } from "./documentClient";
 export interface Place {
   placeId: string;
   placeName: string;
-  comment: string;
-  google_maps_link: string;
+  comment?: string;
+  googlePlaceId?: string;
 }
 
 export const getPlaceById = async (
@@ -31,6 +31,24 @@ export const getPlaceByName = async (
     IndexName: "placeNameIndex",
     KeyConditionExpression: "placeName = :place_name",
     ExpressionAttributeValues: { ":place_name": placeName }
+  };
+  const res = await dynamodb.query(queryParams).promise();
+
+  if (!res.Items || !res.Items[0]) {
+    return undefined;
+  }
+
+  return res.Items[0] as Place | undefined;
+};
+
+export const getPlaceByGoogleId = async (
+  googlePlaceId: string
+): Promise<Place | undefined> => {
+  const queryParams = {
+    TableName: "Places",
+    IndexName: "placeGoogleIdIndex",
+    KeyConditionExpression: "googlePlaceId = :google_place_id",
+    ExpressionAttributeValues: { ":google_place_id": googlePlaceId }
   };
   const res = await dynamodb.query(queryParams).promise();
 
