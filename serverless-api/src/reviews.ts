@@ -37,7 +37,7 @@ const createReview = (
 
 export interface ReviewInput {
   reviewId: string;
-  name: string;
+  userId: string;
   placeId: string;
   rating: string;
   comment: string;
@@ -46,9 +46,9 @@ export interface ReviewInput {
 export const postReviews: LambdaHandler = async event => {
   const body = parseJSON(event.body) as Partial<ReviewInput>;
 
-  const { name, placeId, rating, comment } = body;
+  const { userId, placeId, rating, comment } = body;
 
-  if (!name || !placeId || !rating || !comment) {
+  if (!userId || !placeId || !rating || !comment) {
     return createResponse(400, { error: "Missing parameters" });
   }
 
@@ -56,7 +56,7 @@ export const postReviews: LambdaHandler = async event => {
 
   try {
     const review = await saveReview(
-      createReview(newUUID, name, placeId, rating, comment)
+      createReview(newUUID, userId, placeId, rating, comment)
     );
     return createResponse(201, { review });
   } catch (error) {

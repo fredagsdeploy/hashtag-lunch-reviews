@@ -40,6 +40,8 @@ Resources:
           AttributeType: S
         - AttributeName: placeId
           AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
 
       KeySchema:
         - AttributeName: reviewId
