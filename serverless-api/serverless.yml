@@ -17,6 +17,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-north-1
+  stage: ${opt:stage, 'dev'}
   environment:
     STAGE_ENV: ${opt:stage, 'dev'}
 
@@ -78,7 +79,7 @@ functions:
           method: get
           cors: true
 
-  getReview:
+  getReviewsByPlace:
     handler: src/reviews.getReviewsByPlace
 
     events:
@@ -90,7 +91,6 @@ functions:
             parameters:
               paths:
                 id: true
-
 
   postUsers:
     handler: src/users.postUser
@@ -126,4 +126,4 @@ custom:
     port: 4000
 
 resources:
-  - ${file(./serverless_config/dynamo.yml)}
+  - ${file(./serverless_config/dynamo-${self:provider.stage}.yml)}
