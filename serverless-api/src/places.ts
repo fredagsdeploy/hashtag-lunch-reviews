@@ -8,6 +8,7 @@ import {
   getPlaceByName,
   getPlaceById
 } from "./repository/places";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 const createPlace = (
   placeId: string,
@@ -21,7 +22,8 @@ const createPlace = (
   google_maps_link
 });
 
-export const get: LambdaHandler = async () => {
+export const get: LambdaHandler = async (event, context) => {
+
   const places = await getAllPlaces();
   return createResponse(200, { places });
 };
@@ -45,23 +47,39 @@ export const getById: LambdaHandler = async (event, context) => {
 export type PlaceInput = Place;
 
 export const post: LambdaHandler = async (event, context) => {
-  const body = parseJSON(event.body) as Partial<PlaceInput>;
-  const { placeName, comment, google_maps_link } = body;
-
-  if (!placeName || !comment || !google_maps_link) {
-    return createResponse(400, { error: "Missing parameters" });
-  }
-
-  const place = await getPlaceByName(placeName);
-  if (place) {
-    return createResponse(409, { error: "placeName already exists" });
+  if (!event.body) {
+    return createResponse(400, { error: "Missing body" });
   }
 
   try {
-    const place = await savePlace(
-      createPlace(uuid(), placeName, comment, google_maps_link)
-    );
-    return createResponse(200, place);
+    const body = JSON.parse(event.body) as Partial<PlaceInput>;
+    //const body = parseJSON(event.body) as Partial<PlaceInput>;
+
+    const { placeName, comment, google_maps_link } = body;
+
+    if (!placeName || !comment || !google_maps_link) {
+      return createResponse(400, {
+        error: "Missing parameters, need placeName, comment, google_maps_link"
+      });
+    }
+
+    try {
+      const place = await getPlaceByName(placeName);
+      if (place) {
+        return createResponse(409, { error: "placeName already exists" });
+      }
+    } catch (error) {
+      return createResponse(400, error);
+    }
+
+    try {
+      const place = await savePlace(
+        createPlace(uuid(), placeName, comment, google_maps_link)
+      );
+      return createResponse(200, place);
+    } catch (error) {
+      return createResponse(400, error);
+    }
   } catch (error) {
     return createResponse(400, error);
   }
