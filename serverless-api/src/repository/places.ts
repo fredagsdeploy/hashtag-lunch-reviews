@@ -52,7 +52,7 @@ export const getPlaceByGoogleId = async (
   };
   const res = await dynamodb.query(queryParams).promise();
 
-  if (!res.Items || !res.Items[0]) {
+  if (!res.Items) {
     return undefined;
   }
 
