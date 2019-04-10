@@ -28,7 +28,6 @@ export const getPlaceById = (placeId: string): Promise<Place> => {
 };
 
 export const postPlace = (place: Partial<Place>): Promise<Place> => {
-  console.log("Posting", place);
   const { placeName } = place;
   if (!placeName) {
     throw new Error(
