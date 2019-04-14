@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import config from "./config";
 import { User } from "./types";
 import { unstable_createResource } from "react-cache";
+import { setToken } from "./lib/backend";
 
 type GoogleAPI = string | { name: string; version: string };
 
@@ -42,6 +43,8 @@ export const useGoogleAuth = () => {
             email: profile.getEmail()
           };
 
+          setToken(currentUser.getAuthResponse().id_token);
+
           setUser(user);
         }
         window.gapi.auth2.getAuthInstance().isSignedIn.listen(console.log);
@@ -49,6 +52,8 @@ export const useGoogleAuth = () => {
         window.gapi.auth2
           .getAuthInstance()
           .currentUser.listen((currentUser: any) => {
+            setToken(currentUser.getAuthResponse().id_token);
+
             const profile = currentUser.getBasicProfile();
             const user = {
               id: profile.getId(),

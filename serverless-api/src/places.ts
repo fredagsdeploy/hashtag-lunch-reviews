@@ -9,7 +9,11 @@ import {
   getPlaceById,
   getPlaceByGoogleId
 } from "./repository/places";
+<<<<<<< HEAD
 import { getGooglePlace } from "./googlePlaces/googlePlaces";
+=======
+import { JsonWebTokenError } from "jsonwebtoken";
+>>>>>>> master
 
 const createPlace = (
   placeId: string,
@@ -23,7 +27,8 @@ const createPlace = (
   googlePlaceId
 });
 
-export const get: LambdaHandler = async () => {
+export const get: LambdaHandler = async (event, context) => {
+
   const places = await getAllPlaces();
   return createResponse(200, { places });
 };
@@ -56,46 +61,54 @@ export const getById: LambdaHandler = async (event, context) => {
 export type PlaceInput = Place;
 
 export const post: LambdaHandler = async (event, context) => {
-  const body = parseJSON(event.body) as Partial<PlaceInput>;
-  const { comment, googlePlaceId } = body;
-  let { placeName } = body;
-
-  if (googlePlaceId) {
-    const place = await getPlaceByGoogleId(googlePlaceId);
-    if (place) {
-      return createResponse(409, {
-        error: "Place with googlePlaceId already exists"
-      });
-    } else {
-      const googlePlace = await getGooglePlace(googlePlaceId).then(r =>
-        r.json()
-      );
-
-      placeName = googlePlace.result.name;
-    }
-  }
-
-  if (!placeName) {
-    return createResponse(400, { error: "Missing parameters" });
-  }
-
-  if (placeName) {
-    const place = await getPlaceByName(placeName);
-    if (place) {
-      return createResponse(409, { error: "placeName already exists" });
-    }
+  if (!event.body) {
+    return createResponse(400, { error: "Missing body" });
   }
 
   try {
-    const place = await savePlace(
-      createPlace(
-        uuid(),
-        placeName,
-        comment ? comment : " ",
-        googlePlaceId ? googlePlaceId : " "
-      )
-    );
-    return createResponse(200, place);
+    const body = parseJSON(event.body) as Partial<PlaceInput>;
+    const { comment, googlePlaceId } = body;
+    let { placeName } = body;
+
+    if (googlePlaceId) {
+      const place = await getPlaceByGoogleId(googlePlaceId);
+      if (place) {
+        return createResponse(409, {
+          error: "Place with googlePlaceId already exists"
+        });
+      } else {
+        const googlePlace = await getGooglePlace(googlePlaceId).then(r =>
+          r.json()
+        );
+
+        placeName = googlePlace.result.name;
+      }
+    }
+
+    if (!placeName) {
+      return createResponse(400, { error: "Missing parameters" });
+    }
+
+    if (placeName) {
+      const place = await getPlaceByName(placeName);
+      if (place) {
+        return createResponse(409, { error: "placeName already exists" });
+      }
+    }
+
+    try {
+      const place = await savePlace(
+        createPlace(
+          uuid(),
+          placeName,
+          comment ? comment : " ",
+          googlePlaceId ? googlePlaceId : " "
+        )
+      );
+      return createResponse(200, place);
+    } catch (error) {
+      return createResponse(400, error);
+    }
   } catch (error) {
     return createResponse(400, error);
   }

@@ -2,11 +2,23 @@ import { Review, Place, Rating } from "../types";
 
 const BASE_URL = "http://localhost:4000";
 
+let token: string = "unset";
+
+export const setToken = (newToken: string) => {
+  token = newToken;
+};
+
 const myFetch = (
   url: RequestInfo,
-  requestOptions?: RequestInit | undefined
+  requestOptions: RequestInit | undefined = {}
 ) => {
-  return fetch(url, requestOptions).then(async (r: Response) => {
+  return fetch(url, {
+    ...requestOptions,
+    headers: {
+      ...requestOptions.headers,
+      Authorization: token
+    }
+  }).then(async (r: Response) => {
     const j = await r.json();
     if (r.ok) {
       return j;
