@@ -50,16 +50,17 @@ export const PlaceView = ({
     </PlaceBannerContent>
   );
 
-  const banner = place.googlePlace ? (
-    <PlaceBanner
-      key={place.googlePlace.photos[0].photo_reference}
-      url={getPhotoUrl(place.googlePlace)}
-    >
-      {bannerContent}
-    </PlaceBanner>
-  ) : (
-    <PlaceBanner>{bannerContent}</PlaceBanner>
-  );
+  const banner =
+    place.googlePlace && place.googlePlace.photos ? (
+      <PlaceBanner
+        key={place.googlePlace.photos[0].photo_reference}
+        url={getPhotoUrl(place.googlePlace)}
+      >
+        {bannerContent}
+      </PlaceBanner>
+    ) : (
+      <PlaceBanner>{bannerContent}</PlaceBanner>
+    );
 
   return (
     <>
