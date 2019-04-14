@@ -51,7 +51,7 @@ export const PlaceView = ({
     </PlaceBannerContent>
   );
 
-  const banner = place.googlePlace ? (
+  const banner = place.googlePlace && place.googlePlace.photos ? (
     <PlaceBanner
       key={place.googlePlace.photos[0].photo_reference}
       url={getPhotoUrl(place.googlePlace)}
@@ -59,8 +59,8 @@ export const PlaceView = ({
       {bannerContent}
     </PlaceBanner>
   ) : (
-    <PlaceBanner>{bannerContent}</PlaceBanner>
-  );
+      <PlaceBanner>{bannerContent}</PlaceBanner>
+    );
 
   return (
     <>
@@ -71,28 +71,28 @@ export const PlaceView = ({
           <Button onClick={() => addRowPressed()}>Add Review</Button>
         </AddReview>
       ) : (
-        <>
-          <Header>New review</Header>
-          <PlaceRow>
-            <AddNewReviewForm
-              reviewData={newReviewData}
-              newReviewDataChange={newReviewDataChange}
-            />
-          </PlaceRow>
-          <LastCell>
-            <FontAwesome
-              name="check"
-              size="2x"
-              onClick={() => sumbitNewReview()}
-            />
-            <FontAwesome
-              name="times"
-              size="2x"
-              onClick={() => addRowPressed()}
-            />
-          </LastCell>
-        </>
-      )}
+          <>
+            <Header>New review</Header>
+            <PlaceRow>
+              <AddNewReviewForm
+                reviewData={newReviewData}
+                newReviewDataChange={newReviewDataChange}
+              />
+            </PlaceRow>
+            <LastCell>
+              <FontAwesome
+                name="check"
+                size="2x"
+                onClick={() => sumbitNewReview()}
+              />
+              <FontAwesome
+                name="times"
+                size="2x"
+                onClick={() => addRowPressed()}
+              />
+            </LastCell>
+          </>
+        )}
       {myReview.length > 0 && (
         <>
           <Header>My reviews</Header>
