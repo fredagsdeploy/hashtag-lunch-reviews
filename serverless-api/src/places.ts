@@ -34,6 +34,8 @@ export type GetByIdRequest = {
 };
 
 export const getById: LambdaHandler = async (event, context) => {
+  console.log(`Get place by id ${JSON.stringify(event)} ${JSON.stringify(context)}`);
+
   if (!event.pathParameters || !event.pathParameters.placeId) {
     return createResponse(400, { message: "Missing path parameter" });
   }
