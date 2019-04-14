@@ -9,7 +9,7 @@ import { StarRating } from "./StarRating";
 import styled from "styled-components";
 import { RollReviews } from "./ReviewRoll";
 import { useUserContext } from "../customHooks/useUserContext";
-import config from "../config";
+import { getPhotoUrl } from "../googlePlaces/googlePlaces";
 
 const placeResource = unstable_createResource(getPlaceById);
 
@@ -54,9 +54,7 @@ export const PlaceView = ({
   const banner = place.googlePlace ? (
     <PlaceBanner
       key={place.googlePlace.photos[0].photo_reference}
-      url={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photoreference=${
-        place.googlePlace.photos[0].photo_reference
-      }&key=${config.apiKey}`}
+      url={getPhotoUrl(place.googlePlace)}
     >
       {bannerContent}
     </PlaceBanner>

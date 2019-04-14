@@ -1,6 +1,5 @@
 import { v1 as uuid } from "uuid";
 import * as AWS from "aws-sdk";
-import fetch from "node-fetch";
 import { createResponse, parseJSON, LambdaHandler } from "./common";
 import {
   getAllPlaces,
@@ -10,7 +9,7 @@ import {
   getPlaceById,
   getPlaceByGoogleId
 } from "./repository/places";
-import config from "../config";
+import { getGooglePlace } from "./googlePlaces/googlePlaces";
 
 const createPlace = (
   placeId: string,
@@ -44,11 +43,9 @@ export const getById: LambdaHandler = async (event, context) => {
   }
 
   if (place.googlePlaceId) {
-    const googlePlace = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
-        place.googlePlaceId
-      }&key=${config.googlePlacesApiKey}`
-    ).then(r => r.json());
+    const googlePlace = await getGooglePlace(place.googlePlaceId).then(r =>
+      r.json()
+    );
 
     return createResponse(200, { ...place, googlePlace: googlePlace.result });
   }
@@ -70,11 +67,9 @@ export const post: LambdaHandler = async (event, context) => {
         error: "Place with googlePlaceId already exists"
       });
     } else {
-      const googlePlace = await fetch(
-        `https://maps.googleapis.com/maps/api/place/details/json?placeid=${googlePlaceId}&key=${
-          config.googlePlacesApiKey
-        }`
-      ).then(r => r.json());
+      const googlePlace = await getGooglePlace(googlePlaceId).then(r =>
+        r.json()
+      );
 
       placeName = googlePlace.result.name;
     }

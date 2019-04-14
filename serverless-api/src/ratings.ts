@@ -2,8 +2,7 @@ import { getAllReviews } from "./repository/reviews";
 import * as _ from "lodash";
 import { createResponse, LambdaHandler } from "./common";
 import { getAllPlaces } from "./repository/places";
-import fetch from "node-fetch";
-import config from "../config";
+import { getGooglePlace } from "./googlePlaces/googlePlaces";
 
 interface Rating {
   placeId: string;
@@ -30,11 +29,9 @@ export const getPlacesWithRatings: LambdaHandler = async () => {
         };
 
         if (place.googlePlaceId) {
-          const googlePlace = await fetch(
-            `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
-              place.googlePlaceId
-            }&key=${config.googlePlacesApiKey}`
-          ).then(r => r.json());
+          const googlePlace = await getGooglePlace(place.googlePlaceId).then(
+            r => r.json()
+          );
 
           return {
             ...rating,
