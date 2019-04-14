@@ -9,11 +9,7 @@ import {
   getPlaceById,
   getPlaceByGoogleId
 } from "./repository/places";
-<<<<<<< HEAD
 import { getGooglePlace } from "./googlePlaces/googlePlaces";
-=======
-import { JsonWebTokenError } from "jsonwebtoken";
->>>>>>> master
 
 const createPlace = (
   placeId: string,
