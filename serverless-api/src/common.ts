@@ -16,7 +16,11 @@ export const createResponse = (
   };
 };
 
+interface AuthorizedContext extends Context {
+  userId: string
+}
+
 export type LambdaHandler = (
   event: APIGatewayEvent,
-  context: Context
+  context: AuthorizedContext
 ) => Promise<APIGatewayProxyResult>;
