@@ -83,14 +83,11 @@ export const StatsController = ({ userId }: Props) => {
     if (!event.target || !event.target.name) {
       throw new Error("No name on event.target");
     }
-    if (event.persist) {
-      event.persist();
-    }
-    console.log(event.target.name);
-    console.log(event.target.value);
+    const name = event.target.name;
+    const value = event.target.value;
     setNewPlace(newPlace => ({
       ...newPlace,
-      [event.target.name]: event.target.value
+      [name]: value
     }));
   };
 

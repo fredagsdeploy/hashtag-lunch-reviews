@@ -12,7 +12,6 @@ interface Rating {
 
 export const getPlacesWithRatings: LambdaHandler = async () => {
   const reviews = await getAllReviews();
-  console.log(reviews);
 
   const places = await getAllPlaces();
 
