@@ -3,7 +3,11 @@ import React, { useState, Suspense } from "react";
 import { unstable_createResource } from "react-cache";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faHashtag } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faHashtag,
+  faUtensils
+} from "@fortawesome/free-solid-svg-icons";
 
 import { useUserContext } from "../../customHooks/useUserContext";
 import { getPhotoUrl } from "../../googlePlaces/googlePlaces";
@@ -39,7 +43,8 @@ const RatingDisplay = ({ placeId }: { placeId: string }) => {
 };
 
 const formatter = new Intl.NumberFormat("sv-se", {
-  maximumFractionDigits: 2
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2
 });
 interface Props {
   placeId: string;
@@ -51,7 +56,10 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
     <PlaceRow>
       <PlaceImage
         url={place.googlePlace ? getPhotoUrl(place.googlePlace) : undefined}
-      />
+      >
+        <FontAwesomeIcon icon={faUtensils} size={"3x"} />
+      </PlaceImage>
+
       <PlaceContent>
         <MetaData>
           <NameComment>
@@ -81,6 +89,15 @@ const PlaceImage = styled.div<{ url?: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
+
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > svg {
+    display: ${props => (props.url ? "none" : "default")};
+  }
 `;
 
 const PlaceRow = styled.div`
