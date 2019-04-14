@@ -1,15 +1,6 @@
 import React from "react";
 import { Review } from "../types";
-import {
-  Cell,
-  HeaderCell,
-  Row,
-  Table,
-  WhiteRow,
-  LastCell,
-  StarCell,
-  Button
-} from "./CommonFormComponents";
+import { Cell, Row, LastCell, StarCell, Button } from "./CommonFormComponents";
 import { unstable_createResource } from "react-cache";
 import { getPlaceById } from "../lib/backend";
 import { AddNewReviewForm } from "./AddNewReviewForm";
@@ -18,6 +9,7 @@ import { StarRating } from "./StarRating";
 import styled from "styled-components";
 import { RollReviews } from "./ReviewRoll";
 import { useUserContext } from "../customHooks/useUserContext";
+import { getPhotoUrl } from "../googlePlaces/googlePlaces";
 
 const placeResource = unstable_createResource(getPlaceById);
 
@@ -49,24 +41,36 @@ export const PlaceView = ({
 
   const myReview = reviews.filter(review => review.userId == user.id);
 
+  const bannerContent = (
+    <PlaceBannerContent>
+      <h2>{place.placeName}</h2>
+      <StarCell>
+        <StarRating rating={rating} />
+      </StarCell>
+      <RollReviews reviews={reviews} />
+    </PlaceBannerContent>
+  );
+
+  const banner = place.googlePlace ? (
+    <PlaceBanner
+      key={place.googlePlace.photos[0].photo_reference}
+      url={getPhotoUrl(place.googlePlace)}
+    >
+      {bannerContent}
+    </PlaceBanner>
+  ) : (
+    <PlaceBanner>{bannerContent}</PlaceBanner>
+  );
+
   return (
     <>
-      <PlaceBanner>
-        <PlaceBannerContent>
-          <h2>{place.placeName}</h2>
-          <StarCell>
-            <StarRating rating={rating} />
-          </StarCell>
-          <RollReviews reviews={reviews} />
-        </PlaceBannerContent>
-      </PlaceBanner>
+      {banner}
 
-      {!isAddingReview && (
+      {!isAddingReview ? (
         <AddReview>
           <Button onClick={() => addRowPressed()}>Add Review</Button>
         </AddReview>
-      )}
-      {isAddingReview && (
+      ) : (
         <>
           <Header>New review</Header>
           <PlaceRow>
@@ -129,7 +133,7 @@ const PlaceRow = styled(Row)`
   align-items: center;
 `;
 
-const PlaceBanner = styled.div`
+const PlaceBanner = styled.div<{ url?: string }>`
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -138,8 +142,16 @@ const PlaceBanner = styled.div`
   width: 100%;
   height: 15em;
 
-  background-color: #fff;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+
+  text-shadow: -1px 0 2px white, 0 1px 2px white, 1px 0 2px white,
+    0 -1px 2px white;
+  font-weight: 500;
+
+  background: ${props => (props.url ? `url(${props.url})` : "#fff")};
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 `;
 
 const PlaceBannerContent = styled.div`

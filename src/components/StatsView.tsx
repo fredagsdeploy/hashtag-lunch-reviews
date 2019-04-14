@@ -5,11 +5,9 @@ import { StarRating } from "./StarRating";
 import { AddNewPlaceForm } from "./AddNewPlaceForm";
 import {
   Cell,
-  NameCell,
   LastCell,
   Row,
   StarCell,
-  Table,
   WhiteRow,
   Button
 } from "./CommonFormComponents";
@@ -54,13 +52,15 @@ export const StatsView = ({
           </StarCell>
           <Cell style={{ gridArea: "comment" }}>{rating.comment}</Cell>
 
-          <LastCell style={{ gridArea: "link" }}>
-            {
-              <a href={rating.google_maps_link}>
-                <FontAwesome name="external-link" />
-              </a>
-            }
-          </LastCell>
+          {rating.googlePlace && (
+            <LastCell style={{ gridArea: "link" }}>
+              {
+                <a href={rating.googlePlace.url}>
+                  <FontAwesome name="external-link" />
+                </a>
+              }
+            </LastCell>
+          )}
         </StatsContainer>
       </>
     );

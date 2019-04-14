@@ -11,6 +11,7 @@ plugins:
   - serverless-plugin-typescript
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-dotenv-plugin
 
 # The `provider` block defines where your service will be deployed
 provider:

@@ -17,6 +17,8 @@ export interface Review {
 export interface Place {
   placeId: string;
   placeName: string;
+  googlePlaceId?: string;
+  googlePlace?: any;
   google_maps_link: string;
   comment: string;
 }

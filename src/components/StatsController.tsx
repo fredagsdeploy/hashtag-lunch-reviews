@@ -47,7 +47,7 @@ export const StatsController = ({ userId }: Props) => {
   const newPlaceInitialState: Partial<Place> = {
     placeName: "",
     comment: "",
-    google_maps_link: ""
+    googlePlaceId: ""
   };
 
   const [newPlace, setNewPlace] = useState<Partial<Place>>(
@@ -80,16 +80,18 @@ export const StatsController = ({ userId }: Props) => {
   };
 
   const handleNewPlaceInput = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.name) {
+    if (!event.target || !event.target.name) {
       throw new Error("No name on event.target");
     }
-    console.log(event.target.name);
-    console.log(event.target.value);
-    setNewPlace({ ...newPlace, [event.target.name]: event.target.value });
+    const name = event.target.name;
+    const value = event.target.value;
+    setNewPlace(newPlace => ({
+      ...newPlace,
+      [name]: value
+    }));
   };
 
   const goToPlacePage = (rating: Rating) => {
-    console.log(`row clicked ${rating.placeName}`);
     browserHistory.push(`/${rating.placeId}/${rating.placeName}`);
   };
 

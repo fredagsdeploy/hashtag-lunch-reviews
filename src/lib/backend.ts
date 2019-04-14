@@ -40,8 +40,8 @@ export const getPlaceById = (placeId: string): Promise<Place> => {
 };
 
 export const postPlace = (place: Partial<Place>): Promise<Place> => {
-  const { placeName, google_maps_link, comment } = place;
-  if (!placeName || !google_maps_link || !comment) {
+  const { placeName } = place;
+  if (!placeName) {
     throw new Error(
       `Missing attribute(s) in place ${JSON.stringify(placeName)}`
     );

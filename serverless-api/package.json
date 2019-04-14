@@ -9,7 +9,8 @@
     "@types/node-fetch": "^2.3.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.3.0",
+    "serverless-dotenv-plugin": "^2.0.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.23",
