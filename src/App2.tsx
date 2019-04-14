@@ -8,7 +8,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import { PlaceController } from "./components/PlaceController";
 import { UserController } from "./components/UserController";
 import { useGoogleAuth } from "./useGoogleAuth";
-import { User, emptyUser } from "./types";
+import { GoogleUser, emptyUser } from "./types";
 import { UserContext } from "./customHooks/useUserContext";
 import styled from "styled-components";
 
@@ -20,9 +20,9 @@ declare global {
 
 export const App2: React.FC = () => {
   const [error, setError] = useState<Error | null | string>(null);
-  const { user, signOut, authorize } = useGoogleAuth();
+  const { googleUser, user, signOut, authorize } = useGoogleAuth();
 
-  if (!user) {
+  if (!googleUser || !user) {
     return (
       <>
         <h1>Authorise google to use this page.</h1>

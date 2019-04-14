@@ -26,7 +26,7 @@ export interface Place {
   comment: string;
 }
 
-export interface User {
+export interface GoogleUser {
   id: string;
   fullName: string;
   givenName: string;
@@ -35,13 +35,16 @@ export interface User {
   email: string;
 }
 
-export const emptyUser = {
-  id: "no-id",
-  fullName: "no-fullName",
-  givenName: "no-givenName",
-  familyName: "no-familyName",
+export interface User {
+  googleUserId: string,
+  displayName: string,
+  imageUrl: string
+}
+
+export const emptyUser: User = {
+  googleUserId: "no-id",
+  displayName: "no-displayName",
   imageUrl: "no-imageUrl",
-  email: "no-mail"
 };
 
 export const newPlace: Place = {

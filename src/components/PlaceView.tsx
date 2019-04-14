@@ -38,7 +38,7 @@ export const PlaceView = ({
 
   const user = useUserContext();
 
-  const myReview = reviews.filter(review => review.userId == user.id);
+  const myReview = reviews.filter(review => review.userId == user.googleUserId);
 
   const bannerContent = (
     <PlaceBannerContent>

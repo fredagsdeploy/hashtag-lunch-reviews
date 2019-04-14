@@ -1,4 +1,4 @@
-import { Review, Place, Rating } from "../types";
+import { Review, Place, Rating, User } from "../types";
 
 const BASE_URL = "http://localhost:4000";
 
@@ -33,6 +33,17 @@ export const getReviewsForPlace = (placeId: string): Promise<Review[]> => {
 
 export const getRatings = (): Promise<Rating[]> => {
   return myFetch(BASE_URL + "/ratings");
+};
+
+export const getUser = (googleUserId: string): Promise<User> => {
+  return myFetch(`${BASE_URL}/users/${googleUserId}`);
+};
+
+export const putUser = (user: Partial<User>): Promise<User> => {
+  return myFetch(`${BASE_URL}/users/${user.googleUserId}`, {
+    method: "put",
+    body: JSON.stringify(user)
+  });
 };
 
 export const getPlaceById = (placeId: string): Promise<Place> => {

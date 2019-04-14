@@ -8,7 +8,7 @@ import { postReview, getReviewsForPlace } from "../lib/backend";
 import { browserHistory } from "../history";
 import { unstable_createResource } from "react-cache";
 
-interface Props extends RouteChildrenProps<{ placeId: string }> {}
+interface Props extends RouteChildrenProps<{ placeId: string }> { }
 
 const reviewsResource = unstable_createResource(getReviewsForPlace);
 
@@ -29,7 +29,7 @@ export const PlaceController = ({ match }: Props) => {
   const newReviewInitalState: Partial<Review> = {
     rating: 0,
     comment: "",
-    userId: user.id,
+    userId: user.googleUserId,
     placeId: placeId
   };
 
