@@ -1,4 +1,4 @@
-import { Review, Place, Rating, User } from "../types";
+import { Review, Place, Rating, User, NewReview } from "../types";
 
 const BASE_URL = "http://localhost:4000";
 
@@ -64,8 +64,8 @@ export const postPlace = (place: Partial<Place>): Promise<Place> => {
 };
 
 export const postReview = (
-  review: Partial<Review>
-): Promise<{ review: Review }> => {
+  review: NewReview
+): Promise<Review> => {
   const { userId, placeId, rating, comment } = review;
   if (!userId || !placeId || !rating || !comment) {
     throw new Error(`Missing attribute(s) in review ${JSON.stringify(review)}`);

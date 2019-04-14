@@ -25,7 +25,7 @@ const RatingDisplay = ({ placeId }: { placeId: string }) => {
 
   const user = useUserContext();
 
-  const myReview = reviews.filter(review => review.userId == user.googleUserId)[0];
+  const myReview = reviews.filter(review => review.user.googleUserId == user.googleUserId)[0];
 
   const [recentlySaved, setRecentlySaved] = useFadeState(false, 3000);
 

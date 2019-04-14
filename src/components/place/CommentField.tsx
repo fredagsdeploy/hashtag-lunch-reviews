@@ -76,8 +76,8 @@ const NewCommentForm = ({
   const addReview = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     postReview(newReview)
-      .then((response: { review: Review }) => {
-        afterSubmit(response.review);
+      .then((review: Review) => {
+        afterSubmit(review);
       })
       .catch(e => {
         console.log("Couldn't post new review", e);

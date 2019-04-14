@@ -5,7 +5,6 @@ import { StatusBar } from "./components/StatusBar";
 import { NavigationFooter } from "./components/NavigationFooter";
 import { browserHistory } from "./history";
 import { Router, Route, Switch } from "react-router-dom";
-import { PlaceController } from "./components/PlaceController";
 import { UserController } from "./components/UserController";
 import { useGoogleAuth } from "./useGoogleAuth";
 import { GoogleUser, emptyUser } from "./types";
@@ -41,11 +40,6 @@ export const App2: React.FC = () => {
               <Route exact path="/" component={StatsController} />
               <Route exact path="/ratings" component={StatsController} />
               <Route exact path="/me" component={UserController} />
-              <Route
-                exact
-                path="/:placeId/:placeName"
-                component={PlaceController}
-              />
             </Switch>
           </ContentContainer>
         </>
