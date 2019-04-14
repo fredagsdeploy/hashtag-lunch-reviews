@@ -40,10 +40,6 @@ export const StatsController = ({ userId }: Props) => {
 
   const sortedRatings = useSorting(ratings, sortedBy, ascending);
 
-  console.log("userId", userId);
-
-  console.log({ sortedRatings });
-
   const newPlaceInitialState: Partial<Place> = {
     placeName: "",
     comment: "",
@@ -98,8 +94,7 @@ export const StatsController = ({ userId }: Props) => {
   return (
     <StatsView
       ratings={sortedRatings}
-      headerClicked={sortBy}
-      addRowPressed={() => toggleIsAddingPlace()}
+      addRowPressed={toggleIsAddingPlace}
       isAddingPlace={isAddingPlace}
       newPlaceData={newPlace}
       newPlaceDataChange={handleNewPlaceInput}

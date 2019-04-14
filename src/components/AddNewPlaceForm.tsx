@@ -23,11 +23,6 @@ export const AddNewPlaceForm = ({
   newPlaceDataChange
 }: EditPlaceRowProps) => {
   const { placeName, comment } = placeData;
-  if (placeName === undefined) {
-    throw new Error(
-      `Missing members in place data ${JSON.stringify(placeData)}`
-    );
-  }
 
   return (
     <>

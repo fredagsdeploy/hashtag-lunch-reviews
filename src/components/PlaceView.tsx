@@ -4,8 +4,7 @@ import { Cell, Row, LastCell, StarCell, Button } from "./CommonFormComponents";
 import { unstable_createResource } from "react-cache";
 import { getPlaceById } from "../lib/backend";
 import { AddNewReviewForm } from "./AddNewReviewForm";
-import FontAwesome from "react-fontawesome";
-import { StarRating } from "./StarRating";
+import { StarRatingView } from "./StarRating";
 import styled from "styled-components";
 import { RollReviews } from "./ReviewRoll";
 import { useUserContext } from "../customHooks/useUserContext";
@@ -45,20 +44,21 @@ export const PlaceView = ({
     <PlaceBannerContent>
       <h2>{place.placeName}</h2>
       <StarCell>
-        <StarRating rating={rating} />
+        <StarRatingView rating={rating} />
       </StarCell>
       <RollReviews reviews={reviews} />
     </PlaceBannerContent>
   );
 
-  const banner = place.googlePlace && place.googlePlace.photos ? (
-    <PlaceBanner
-      key={place.googlePlace.photos[0].photo_reference}
-      url={getPhotoUrl(place.googlePlace)}
-    >
-      {bannerContent}
-    </PlaceBanner>
-  ) : (
+  const banner =
+    place.googlePlace && place.googlePlace.photos ? (
+      <PlaceBanner
+        key={place.googlePlace.photos[0].photo_reference}
+        url={getPhotoUrl(place.googlePlace)}
+      >
+        {bannerContent}
+      </PlaceBanner>
+    ) : (
       <PlaceBanner>{bannerContent}</PlaceBanner>
     );
 
@@ -71,28 +71,20 @@ export const PlaceView = ({
           <Button onClick={() => addRowPressed()}>Add Review</Button>
         </AddReview>
       ) : (
-          <>
-            <Header>New review</Header>
-            <PlaceRow>
-              <AddNewReviewForm
-                reviewData={newReviewData}
-                newReviewDataChange={newReviewDataChange}
-              />
-            </PlaceRow>
-            <LastCell>
-              <FontAwesome
-                name="check"
-                size="2x"
-                onClick={() => sumbitNewReview()}
-              />
-              <FontAwesome
-                name="times"
-                size="2x"
-                onClick={() => addRowPressed()}
-              />
-            </LastCell>
-          </>
-        )}
+        <>
+          <Header>New review</Header>
+          <PlaceRow>
+            <AddNewReviewForm
+              reviewData={newReviewData}
+              newReviewDataChange={newReviewDataChange}
+            />
+          </PlaceRow>
+          <LastCell>
+            <div onClick={() => sumbitNewReview()}>OK</div>
+            <div onClick={() => addRowPressed()}>NEJ </div>
+          </LastCell>
+        </>
+      )}
       {myReview.length > 0 && (
         <>
           <Header>My reviews</Header>
@@ -101,7 +93,7 @@ export const PlaceView = ({
               <Cell style={{ gridArea: "name" }}>Todo</Cell>
               {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
               <StarCell style={{ gridArea: "rating" }}>
-                <StarRating rating={r.rating} />
+                <StarRatingView rating={r.rating} />
               </StarCell>
               <Cell style={{ gridArea: "comment" }}>{r.comment}</Cell>
             </PlaceRow>
@@ -114,7 +106,7 @@ export const PlaceView = ({
           <Cell style={{ gridArea: "name" }}>Todo</Cell>
           {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
           <StarCell style={{ gridArea: "rating" }}>
-            <StarRating rating={r.rating} />
+            <StarRatingView rating={r.rating} />
           </StarCell>
           <Cell style={{ gridArea: "comment" }}>{r.comment}</Cell>
         </PlaceRow>

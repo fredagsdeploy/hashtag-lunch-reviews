@@ -1,11 +1,12 @@
 import { string } from "prop-types";
 
+export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+
 export interface Rating extends Place {
   rating: number;
   normalized_rating: number;
   rank: number;
 }
-
 export interface Review {
   reviewId: string;
   userId: string;
@@ -13,6 +14,8 @@ export interface Review {
   rating: number;
   comment: string;
 }
+
+export type NewReview = Omit<Review, "reviewId">;
 
 export interface Place {
   placeId: string;
