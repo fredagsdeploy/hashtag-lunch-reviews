@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { Place, Rating } from "../types";
 import { StarRating } from "./StarRating";
 import { AddNewPlaceForm } from "./AddNewPlaceForm";
@@ -15,18 +15,16 @@ import { PlaceRowView } from "./place/PlaceRowView";
 
 interface Props {
   ratings: Array<Rating>;
-  headerClicked: Function;
-  addRowPressed: Function;
+  addRowPressed: () => void;
   newPlaceData: Partial<Place>;
-  newPlaceDataChange: Function;
+  newPlaceDataChange: (event: ChangeEvent<HTMLInputElement>) => void;
   isAddingPlace: boolean;
-  sumbitNewPlace: Function;
-  placeClicked: Function;
+  sumbitNewPlace: () => void;
+  placeClicked: (rating: Rating) => void;
 }
 
 export const StatsView = ({
   ratings,
-  headerClicked,
   addRowPressed,
   newPlaceData,
   newPlaceDataChange,
@@ -34,19 +32,11 @@ export const StatsView = ({
   sumbitNewPlace,
   placeClicked
 }: Props) => {
-  const rows = ratings.map(rating => {
-    return (
-      <>
-        <PlaceRowView placeId={rating.placeId} />
-      </>
-    );
-  });
-
   return (
     <>
       {!isAddingPlace && (
         <AddPlaceContainer>
-          <Button onClick={() => addRowPressed()}>Add new place</Button>
+          <Button onClick={addRowPressed}>Add new place</Button>
         </AddPlaceContainer>
       )}
       {isAddingPlace && (
@@ -60,13 +50,19 @@ export const StatsView = ({
           </StatsContainerNoHover>
           <WhiteRow>
             <LastCell>
-              <div onClick={() => sumbitNewPlace()}>OK</div>
-              <div onClick={() => addRowPressed()}>NEJ</div>
+              <div onClick={sumbitNewPlace}>OK</div>
+              <div onClick={addRowPressed}>NEJ</div>
             </LastCell>
           </WhiteRow>
         </>
       )}
-      {rows[0]}
+      {ratings.map(rating => (
+        <PlaceRowView
+          key={rating.placeId}
+          rating={rating}
+          placeId={rating.placeId}
+        />
+      ))}
     </>
   );
 };

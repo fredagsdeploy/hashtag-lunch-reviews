@@ -44,7 +44,7 @@ export const PlaceController = ({ match }: Props) => {
         setReviews([...reviews, response.review]);
       })
       .catch(e => {
-        console.log("Couldn't post new place", e);
+        console.log("Couldn't post new review", e);
       });
   };
 

@@ -4,7 +4,7 @@ import { Cell, Row, LastCell, StarCell, Button } from "./CommonFormComponents";
 import { unstable_createResource } from "react-cache";
 import { getPlaceById } from "../lib/backend";
 import { AddNewReviewForm } from "./AddNewReviewForm";
-import { StarRating } from "./StarRating";
+import { StarRatingView } from "./StarRating";
 import styled from "styled-components";
 import { RollReviews } from "./ReviewRoll";
 import { useUserContext } from "../customHooks/useUserContext";
@@ -44,7 +44,7 @@ export const PlaceView = ({
     <PlaceBannerContent>
       <h2>{place.placeName}</h2>
       <StarCell>
-        <StarRating rating={rating} />
+        <StarRatingView rating={rating} />
       </StarCell>
       <RollReviews reviews={reviews} />
     </PlaceBannerContent>
@@ -92,7 +92,7 @@ export const PlaceView = ({
               <Cell style={{ gridArea: "name" }}>Todo</Cell>
               {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
               <StarCell style={{ gridArea: "rating" }}>
-                <StarRating rating={r.rating} />
+                <StarRatingView rating={r.rating} />
               </StarCell>
               <Cell style={{ gridArea: "comment" }}>{r.comment}</Cell>
             </PlaceRow>
@@ -105,7 +105,7 @@ export const PlaceView = ({
           <Cell style={{ gridArea: "name" }}>Todo</Cell>
           {/* TODO Fixa så vi har user id och users. Just nu är det bara ett nick fält i reviews objektet.*/}
           <StarCell style={{ gridArea: "rating" }}>
-            <StarRating rating={r.rating} />
+            <StarRatingView rating={r.rating} />
           </StarCell>
           <Cell style={{ gridArea: "comment" }}>{r.comment}</Cell>
         </PlaceRow>

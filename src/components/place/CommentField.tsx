@@ -1,26 +1,117 @@
-import React, { useState } from "react";
-import { Review } from "../../types";
+import React, {
+  useState,
+  ChangeEvent,
+  MouseEventHandler,
+  FormEvent
+} from "react";
+import { Review, NewReview, Omit } from "../../types";
 import styled from "styled-components";
-import { StarRating } from "../StarRating";
+import { StarRating, StarRatingView } from "../StarRating";
+import { useUserContext } from "../../customHooks/useUserContext";
+import { postReview } from "../../lib/backend";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface Props {
-  review: Review;
+  review?: Review;
+  placeId: string;
+  afterSubmit: (review: Review) => void;
+  recentlySaved: boolean;
 }
-export const CommentField = ({ review }: Props) => {
-  const [expanded, setexpanded] = useState(false);
-  const toggleExpanded = () => {
-    setexpanded(!expanded);
-  };
 
+export const CommentField = ({
+  review,
+  placeId,
+  afterSubmit,
+  recentlySaved
+}: Props) => {
   return (
     <CommentContainer>
       <UserImage />
       <SpeakTriangle />
-      <RatingConainer>
-        <StarRating rating={review.rating} />
-        <Comment>{review.comment}</Comment>
-      </RatingConainer>
+      <RatingContainer>
+        {review ? (
+          <CommentOnly review={review} recentlySaved={recentlySaved} />
+        ) : (
+          <NewCommentForm placeId={placeId} afterSubmit={afterSubmit} />
+        )}
+      </RatingContainer>
     </CommentContainer>
+  );
+};
+
+interface CommentOnlyProps {
+  review: Review;
+  recentlySaved: boolean;
+}
+
+const CommentOnly = ({ review, recentlySaved }: CommentOnlyProps) => {
+  return (
+    <>
+      <StarRatingView rating={review.rating} />
+      <Comment>{review.comment}</Comment>
+      {recentlySaved && (
+        <FontAwesomeIcon icon={faCheckCircle} color={"#6495ed"} />
+      )}
+    </>
+  );
+};
+
+const NewCommentForm = ({
+  placeId,
+  afterSubmit
+}: Pick<Props, "placeId" | "afterSubmit">) => {
+  const user = useUserContext();
+  const newReviewInitalState: NewReview = {
+    rating: 0,
+    comment: "",
+    userId: user.id,
+    placeId: placeId
+  };
+
+  const [newReview, setNewReview] = useState(newReviewInitalState);
+
+  const addReview = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    postReview(newReview)
+      .then((response: { review: Review }) => {
+        afterSubmit(response.review);
+      })
+      .catch(e => {
+        console.log("Couldn't post new review", e);
+      });
+  };
+
+  const handleNewReviewInput = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.name) {
+      throw new Error("No name on event.target");
+    }
+    const { name, value } = event.target;
+    setNewReview(newReview => ({
+      ...newReview,
+      [name]: value
+    }));
+  };
+
+  const ratingChangeHandler = (rating: number) => {
+    setNewReview(newReview => ({
+      ...newReview,
+      rating
+    }));
+  };
+
+  return (
+    <CommentForm onSubmit={addReview}>
+      <StarRating rating={newReview.rating} onChange={ratingChangeHandler} />
+      <Comment>
+        <CommentInput
+          value={newReview.comment}
+          placeholder={"Lägg till omdöme"}
+          name={"comment"}
+          onChange={handleNewReviewInput}
+        />
+      </Comment>
+    </CommentForm>
   );
 };
 
@@ -41,7 +132,7 @@ const UserImage = styled.div<{ url?: string }>`
   border-radius: 50%;
 `;
 
-const RatingConainer = styled.div`
+const RatingContainer = styled.div`
   background-color: #efefef;
   border-radius: 5px;
 
@@ -66,9 +157,26 @@ const SpeakTriangle = styled.div`
 `;
 
 const Comment = styled.div`
-  margin-left: 100px;
+  margin-left: 1em;
   /* white-space: nowrap; */
 
   overflow: hidden;
   text-overflow: ellipsis;
+
+  color: #5d5d5d;
+  font-style: italic;
+
+  flex: 1;
+`;
+
+const CommentInput = styled.input`
+  background-color: transparent;
+
+  border: 0;
+  width: 100%;
+`;
+
+const CommentForm = styled.form`
+  display: flex;
+  align-items: center;
 `;

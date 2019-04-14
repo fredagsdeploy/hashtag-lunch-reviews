@@ -94,8 +94,7 @@ export const StatsController = ({ userId }: Props) => {
   return (
     <StatsView
       ratings={sortedRatings}
-      headerClicked={sortBy}
-      addRowPressed={() => toggleIsAddingPlace()}
+      addRowPressed={toggleIsAddingPlace}
       isAddingPlace={isAddingPlace}
       newPlaceData={newPlace}
       newPlaceDataChange={handleNewPlaceInput}

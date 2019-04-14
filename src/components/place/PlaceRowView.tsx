@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 
 import { unstable_createResource } from "react-cache";
 import styled from "styled-components";
@@ -9,16 +9,13 @@ import { useUserContext } from "../../customHooks/useUserContext";
 import { getPhotoUrl } from "../../googlePlaces/googlePlaces";
 import { getPlaceById, getReviewsForPlace } from "../../lib/backend";
 import { CommentField } from "./CommentField";
+import { Review, Rating } from "../../types";
+import { useFadeState } from "../../customHooks/useFadeState";
+import { Spinner } from "../Spinner";
 
-const placeResource = unstable_createResource(getPlaceById);
 const reviewsResource = unstable_createResource(getReviewsForPlace);
 
-interface Props {
-  placeId: string;
-}
-
-export const PlaceRowView = ({ placeId }: Props) => {
-  const place = placeResource.read(placeId);
+const RatingDisplay = ({ placeId }: { placeId: string }) => {
   const reviewsFromServer = reviewsResource.read(placeId);
   const [reviews, setReviews] = useState(reviewsFromServer);
 
@@ -28,24 +25,36 @@ export const PlaceRowView = ({ placeId }: Props) => {
   const user = useUserContext();
 
   const myReview = reviews.filter(review => review.userId == user.id)[0];
-  const displayReview = myReview
-    ? myReview
-    : reviews[2]
-    ? reviews[2]
-    : undefined;
 
-  const image = place.googlePlace ? (
-    <PlaceImage
-      key={place.googlePlace.photos[0].photo_reference}
-      url={getPhotoUrl(place.googlePlace)}
-    />
-  ) : (
-    <PlaceImage />
-  );
+  const [recentlySaved, setRecentlySaved] = useFadeState(false, 3000);
 
   return (
+    <CommentField
+      review={myReview}
+      placeId={placeId}
+      afterSubmit={(review: Review) => {
+        setReviews(reviews => [...reviews, review]);
+        setRecentlySaved(true);
+      }}
+      recentlySaved={recentlySaved}
+    />
+  );
+};
+
+const formatter = new Intl.NumberFormat("sv-se", {
+  maximumFractionDigits: 2
+});
+interface Props {
+  placeId: string;
+  rating: Rating;
+}
+
+export const PlaceRowView = ({ placeId, rating: place }: Props) => {
+  return (
     <PlaceRow>
-      {image}
+      <PlaceImage
+        url={place.googlePlace ? getPhotoUrl(place.googlePlace) : undefined}
+      />
       <PlaceContent>
         <MetaData>
           <NameComment>
@@ -54,12 +63,14 @@ export const PlaceRowView = ({ placeId }: Props) => {
           </NameComment>
           <PlaceRatings>
             <Blue icon={faHashtag} />
-            {rating}
+            {formatter.format(place.rating)}
             <Yellow icon={faStar} />
-            {rating}
+            {formatter.format(place.rating)}
           </PlaceRatings>
         </MetaData>
-        {displayReview && <CommentField review={displayReview} />}
+        <Suspense fallback={<Spinner />}>
+          <RatingDisplay placeId={placeId} />
+        </Suspense>
       </PlaceContent>
     </PlaceRow>
   );
@@ -84,6 +95,8 @@ const PlaceRow = styled.div`
 
   align-items: stretch;
   width: 80%;
+
+  margin: 1em;
 `;
 
 const PlaceContent = styled.div`
@@ -111,6 +124,7 @@ const NameComment = styled.div``;
 
 const PlaceRatings = styled.div`
   font-size: 1.4em;
+  width: 9em;
 `;
 
 const Yellow = styled(FontAwesomeIcon)`
