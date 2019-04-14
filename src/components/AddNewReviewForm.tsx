@@ -54,7 +54,7 @@ interface InputProps {
 
 const StarInput = styled.input<InputProps>`
   width: 80px;
-  height: 16px
+  height: 16px;
   z-index: 2;
   opacity: 0;
   position: absolute;

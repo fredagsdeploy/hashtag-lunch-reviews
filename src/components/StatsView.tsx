@@ -56,16 +56,25 @@ export const StatsView = ({
           </WhiteRow>
         </>
       )}
-      {ratings.map(rating => (
-        <PlaceRowView
-          key={rating.placeId}
-          rating={rating}
-          placeId={rating.placeId}
-        />
-      ))}
+      <RatingsListContainer>
+        {ratings.map(rating => (
+          <PlaceRowView
+            key={rating.placeId}
+            rating={rating}
+            placeId={rating.placeId}
+          />
+        ))}
+      </RatingsListContainer>
     </>
   );
 };
+
+const RatingsListContainer = styled.div`
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: minmax(1fr, 800px);
+  grid-column-gap: 10px;
+`;
 
 const StatsContainerNoHover = styled(Row)`
   display: grid;
@@ -84,24 +93,6 @@ const StatsContainerNoHover = styled(Row)`
     padding: 2em 2em;
   }
   align-items: center;
-`;
-
-const StatsContainer = styled(StatsContainerNoHover)`
-  &:hover {
-    background-color: #eee;
-    cursor: pointer;
-  }
-`;
-
-const Header = styled.span`
-  margin-bottom: -0.5em;
-  width: 60%;
-  font-weight: 500;
-  color: #333;
-  margin-top: 2em;
-  ${StatsContainer}:hover & {
-    color: #00f;
-  }
 `;
 
 const AddPlaceContainer = styled.div`

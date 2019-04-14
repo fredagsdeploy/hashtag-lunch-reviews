@@ -30,13 +30,15 @@ export const CommentField = ({
   return (
     <CommentContainer>
       <UserImage url={user.imageUrl} active={Boolean(review)} />
-      <SpeakTriangle />
+      <div style={{ height: "2em", display: "flex", alignItems: "center" }}>
+        <SpeakTriangle />
+      </div>
       <RatingContainer>
         {review ? (
           <CommentOnly review={review} recentlySaved={recentlySaved} />
         ) : (
-            <NewCommentForm placeId={placeId} afterSubmit={afterSubmit} />
-          )}
+          <NewCommentForm placeId={placeId} afterSubmit={afterSubmit} />
+        )}
       </RatingContainer>
     </CommentContainer>
   );
@@ -120,6 +122,9 @@ const NewCommentForm = ({
 const CommentContainer = styled.div`
   display: flex;
   align-items: center;
+  @media screen and (max-width: 600px) {
+    align-items: stretch;
+  }
 `;
 
 const UserImage = styled.div<{ url?: string; active: boolean }>`
@@ -183,5 +188,11 @@ const CommentInput = styled.input`
 
 const CommentForm = styled.form`
   display: flex;
+  flex: 1;
   align-items: center;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
