@@ -87,7 +87,7 @@ export const postReviews: LambdaHandler = async event => {
       createReview(newUUID, userId, placeId, rating, comment)
     );
     const expandedReview = await expandReview(review);
-    return createResponse(201, expandReview);
+    return createResponse(201, expandedReview);
   } catch (error) {
     return createResponse(400, { error: error.message });
   }
