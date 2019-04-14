@@ -80,25 +80,16 @@ Resources:
       TableName: Users
 
       AttributeDefinitions:
-        - AttributeName: userId
+        - AttributeName: googleUserId
           AttributeType: S
-        - AttributeName: googleId
-          AttributeType: S
+        # - AttributeName: imageUrl
+        #   AttributeType: S
+        # - AttributeName: displayName
+        #   AttributeType: S
 
       KeySchema:
-        - AttributeName: userId
+        - AttributeName: googleUserId
           KeyType: HASH
-
-      GlobalSecondaryIndexes:
-        - IndexName: googleIdIndex
-          KeySchema:
-            - AttributeName: googleId
-              KeyType: HASH
-          Projection:
-            ProjectionType: KEYS_ONLY
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
 
       ProvisionedThroughput:
         ReadCapacityUnits: 1

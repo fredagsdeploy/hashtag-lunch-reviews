@@ -2,7 +2,10 @@ import * as jwt from "jsonwebtoken";
 import { createResponse, LambdaHandler } from "./common";
 import fetch from "node-fetch";
 
+
 import { APIGatewayEvent, Context } from "aws-lambda";
+import { dynamodb } from "./repository/documentClient";
+import { getUserById, saveUser } from "./repository/users";
 
 const decodeJwt = async (id_token: string) => {
   const pemResp = await fetch(
@@ -17,13 +20,35 @@ const decodeJwt = async (id_token: string) => {
   return null;
 };
 
-export const verify = (event: any, context: Context, callback) => {
-  var token = event.authorizationToken;
+
+interface DecodedJWT {
+  sub: string,
+  name: string,
+  picture: string,
+}
+
+const checkUser = async (decodedJwt: DecodedJWT) => {
+
+  const maybeUser = await getUserById(decodedJwt.sub);
+  if (!maybeUser) {
+    console.log(`Creating new user for googleUserId ${decodedJwt.sub}`);
+
+    await saveUser({
+      googleUserId: decodedJwt.sub,
+      imageUrl: decodedJwt.picture,
+      displayName: decodedJwt.name
+    })
+  }
+
+}
+
+export const verify = async (event: any, context: Context) => {
+  const token = event.authorizationToken;
   console.log(`Entered jwt verify ${JSON.stringify(event)}   Context: ${JSON.stringify(context)}`);
 
   if (!token) {
     console.log("Token missing");
-    callback("Unauthorized");
+    throw new Error("Unauthorized");
     return;
   }
   console.log(`Token found: ${token}`);
@@ -31,38 +56,33 @@ export const verify = (event: any, context: Context, callback) => {
   const arnParts = event.methodArn.split("/");
   const resourceArn = arnParts.slice(0, arnParts.length - 2).join("/") + "/*";
 
-
-  decodeJwt(token).then(
-    valid => {
-      if (valid && typeof valid !== "string") {
-        console.log("Return Allow");
-
-        callback(
-          null,
-          generatePolicy((valid as any).sub, "Allow", resourceArn)
-        );
-      } else {
-        console.log("Return Deny, not valid");
-        callback(null, generatePolicy("invalid_user", "Deny", resourceArn));
-      }
-    },
-    (err: Error) => {
-      console.log(`Return Deny, error ${err}`);
-      callback(null, generatePolicy("invalid_user", "Deny", resourceArn));
+  try {
+    const valid = await decodeJwt(token);
+    if (valid && typeof valid !== "string") {
+      console.log("Return Allow");
+      const decoded = valid as DecodedJWT;
+      await checkUser(decoded);
+      return generatePolicy(decoded.sub, "Allow", resourceArn)
+    } else {
+      console.log("Return Deny, not valid");
+      return generatePolicy("invalid_user", "Deny", resourceArn);
     }
-  );
+  } catch (err) {
+    console.log(`Return Deny, error ${err}`);
+    return generatePolicy("invalid_user", "Deny", resourceArn);
+  }
 };
 
 // Help function to generate an IAM policy
-var generatePolicy = function (principalId: string, effect: any, resource: any) {
-  var authResponse: any = {};
+const generatePolicy = function (principalId: string, effect: any, resource: any) {
+  const authResponse: any = {};
 
   authResponse.principalId = principalId;
   if (effect && resource) {
-    var policyDocument: any = {};
+    const policyDocument: any = {};
     policyDocument.Version = "2012-10-17";
     policyDocument.Statement = [];
-    var statementOne: any = {};
+    const statementOne: any = {};
     statementOne.Action = "execute-api:Invoke";
     statementOne.Effect = effect;
     statementOne.Resource = resource;

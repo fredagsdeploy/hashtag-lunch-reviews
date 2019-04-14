@@ -1,60 +1,39 @@
-import uuid = require("uuid");
-import * as AWS from "aws-sdk";
-import { createResponse } from "./common";
+import { createResponse, LambdaHandler, parseJSON } from "./common";
+import { User, updateUser, getUserById } from "./repository/users";
 
-let dynamodb = new AWS.DynamoDB.DocumentClient({
-  region: "localhost",
-  endpoint: "http://localhost:8000",
-  accessKeyId: "DEFAULT_ACCESS_KEY", // needed if you don't have aws credentials at all in env
-  secretAccessKey: "DEFAULT_SECRET" // needed if you don't have aws credentials at all in env
-});
 
-export const postUser = async (event, context) => {
-  const newUUID = uuid();
-  const googleId = event.queryStringParameters.googleId;
-  console.log("google_id", googleId);
-
-  const userFromGoogleId = await getUserByGoogleId(googleId);
-  if (userFromGoogleId) {
-    return createResponse(400, {
-      error: "A user with that googleId already exists"
-    });
+export const getUser: LambdaHandler = async (event, context) => {
+  if (!event.pathParameters || !event.pathParameters.googleUserId) {
+    return createResponse(400, { message: "Missing path parameter" });
   }
 
-  var params = {
-    TableName: "Users",
-    Item: {
-      userId: newUUID,
-      googleId
-    }
-  };
 
-  await dynamodb.put(params).promise();
+  const user = await getUserById(event.pathParameters.googleUserId);
+  if (!user) {
+    return createResponse(404, { message: `No user for id ${event.pathParameters.googleUserId}` })
+  }
+  return createResponse(200, user)
+}
 
-  const getParams = {
-    TableName: "Users",
-    Key: {
-      userId: newUUID
-    }
-  };
+export const putUser: LambdaHandler = async (event, context) => {
+  const user: Partial<User> = parseJSON(event.body);
 
-  const response = await dynamodb.get(getParams).promise();
-
-  return createResponse(201, { user: response.Item });
-};
-
-const getUserByGoogleId = async (googleId: string): Promise<any> => {
-  const queryParams = {
-    TableName: "Users",
-    IndexName: "googleIdIndex",
-    KeyConditionExpression: "googleId = :google_id",
-    ExpressionAttributeValues: { ":google_id": googleId }
-  };
-  const res = await dynamodb.query(queryParams).promise();
-
-  if (!res.Items || res.Items.length == 0) {
-    return undefined;
+  if (!event.pathParameters || !event.pathParameters.googleUserId) {
+    return createResponse(400, { message: "Missing path parameter" });
   }
 
-  return res.Items[0];
-};
+  if (event.pathParameters.googleUserId !== context.userId) {
+    return createResponse(400, { message: "Mismatching user id in path and calling user" });
+  }
+
+
+  if (user.googleUserId && user.googleUserId !== context.userId) {
+    return createResponse(400, { message: "Mismatching user id in body and calling user" });
+  }
+
+
+  const updatedUser = await updateUser(context.userId, user);
+  return createResponse(200, updatedUser)
+
+
+}
