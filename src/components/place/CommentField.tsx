@@ -35,8 +35,8 @@ export const CommentField = ({
         {review ? (
           <CommentOnly review={review} recentlySaved={recentlySaved} />
         ) : (
-          <NewCommentForm placeId={placeId} afterSubmit={afterSubmit} />
-        )}
+            <NewCommentForm placeId={placeId} afterSubmit={afterSubmit} />
+          )}
       </RatingContainer>
     </CommentContainer>
   );
@@ -67,7 +67,7 @@ const NewCommentForm = ({
   const newReviewInitalState: NewReview = {
     rating: 0,
     comment: "",
-    userId: user.id,
+    userId: user.googleUserId,
     placeId: placeId
   };
 
