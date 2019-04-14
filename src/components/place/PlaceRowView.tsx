@@ -77,7 +77,7 @@ const PlaceImage = styled.div<{ url?: string }>`
   width: 13em;
   height: 10em;
 
-  background: ${props => (props.url ? `url(${props.url})` : "#aaf")};
+  background: ${props => (props.url ? `url(${props.url})` : "#6495ed")};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
