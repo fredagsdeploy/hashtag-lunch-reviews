@@ -24,6 +24,21 @@ interface Props {
   placeClicked: Function;
 }
 
+import places from "../seeds/places.json";
+import { postPlace } from "../lib/backend";
+
+const seed = () => {
+  console.log(places);
+  places.filter(place => place.googlePlaceId).forEach(place => {
+    postPlace({
+      googlePlaceId: place.googlePlaceId,
+      comment: place.comment,
+      placeName: place.placeName
+    })
+  });
+
+}
+
 export const StatsView = ({
   ratings,
   headerClicked,
@@ -71,6 +86,7 @@ export const StatsView = ({
       {!isAddingPlace && (
         <AddPlaceContainer>
           <Button onClick={() => addRowPressed()}>Add new place</Button>
+          <Button onClick={() => seed()}>Seed</Button>
         </AddPlaceContainer>
       )}
       {isAddingPlace && (
