@@ -40,10 +40,6 @@ export const StatsController = ({ userId }: Props) => {
 
   const sortedRatings = useSorting(ratings, sortedBy, ascending);
 
-  console.log("userId", userId);
-
-  console.log({ sortedRatings });
-
   const newPlaceInitialState: Partial<Place> = {
     placeName: "",
     comment: "",

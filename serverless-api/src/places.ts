@@ -24,7 +24,6 @@ const createPlace = (
 });
 
 export const get: LambdaHandler = async (event, context) => {
-
   const places = await getAllPlaces();
   return createResponse(200, { places });
 };

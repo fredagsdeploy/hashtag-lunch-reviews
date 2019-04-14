@@ -4,7 +4,6 @@ import { Cell, Row, LastCell, StarCell, Button } from "./CommonFormComponents";
 import { unstable_createResource } from "react-cache";
 import { getPlaceById } from "../lib/backend";
 import { AddNewReviewForm } from "./AddNewReviewForm";
-import FontAwesome from "react-fontawesome";
 import { StarRating } from "./StarRating";
 import styled from "styled-components";
 import { RollReviews } from "./ReviewRoll";
@@ -80,16 +79,8 @@ export const PlaceView = ({
             />
           </PlaceRow>
           <LastCell>
-            <FontAwesome
-              name="check"
-              size="2x"
-              onClick={() => sumbitNewReview()}
-            />
-            <FontAwesome
-              name="times"
-              size="2x"
-              onClick={() => addRowPressed()}
-            />
+            <div onClick={() => sumbitNewReview()}>OK</div>
+            <div onClick={() => addRowPressed()}>NEJ </div>
           </LastCell>
         </>
       )}

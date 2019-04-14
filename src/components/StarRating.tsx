@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import _ from "lodash";
-import star from "../images/starsolid.svg";
-import hollowStar from "../images/starhollow.svg";
+import star from "../images/star-solid.svg";
+import hollowStar from "../images/star-regular.svg";
 
 interface Props {
   rating: number;
@@ -25,6 +25,7 @@ const Star = styled.div`
   background-size: ${starSize}px;
   height: ${starSize}px;
   position: absolute;
+  color: #f8c51c;
 `;
 
 const StarDiv = styled(Star)`

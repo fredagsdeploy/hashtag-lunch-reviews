@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import FontAwesome from "react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 export const NavigationFooter = () => {
   return (
     <Footer>
       <Link href="https://github.com/Tejpbit/hashtag-lunch-reviews">
-        <Item name="github" size="2x" />
+        <Item icon={faGithub} size="2x" />
       </Link>
     </Footer>
   );
@@ -26,7 +27,7 @@ const Footer = styled.div`
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
 `;
 
-const Item = styled(FontAwesome)`
+const Item = styled(FontAwesomeIcon)`
   margin: 0 1em;
 `;
 

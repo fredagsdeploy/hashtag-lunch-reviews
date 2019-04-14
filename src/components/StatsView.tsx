@@ -1,5 +1,4 @@
 import React from "react";
-import FontAwesome from "react-fontawesome";
 import { Place, Rating } from "../types";
 import { StarRating } from "./StarRating";
 import { AddNewPlaceForm } from "./AddNewPlaceForm";
@@ -12,6 +11,7 @@ import {
   Button
 } from "./CommonFormComponents";
 import styled from "styled-components";
+import { PlaceRowView } from "./place/PlaceRowView";
 
 interface Props {
   ratings: Array<Rating>;
@@ -37,31 +37,7 @@ export const StatsView = ({
   const rows = ratings.map(rating => {
     return (
       <>
-        <Header>{rating.placeName}</Header>
-        <StatsContainer
-          key={rating.placeId}
-          onClick={() => {
-            placeClicked(rating);
-          }}
-        >
-          <StarCell style={{ gridArea: "rating" }}>
-            <StarRating rating={rating.rating} />
-          </StarCell>
-          <StarCell style={{ gridArea: "normalized-rating" }}>
-            <StarRating rating={rating.normalized_rating} />
-          </StarCell>
-          <Cell style={{ gridArea: "comment" }}>{rating.comment}</Cell>
-
-          {rating.googlePlace && (
-            <LastCell style={{ gridArea: "link" }}>
-              {
-                <a href={rating.googlePlace.url}>
-                  <FontAwesome name="external-link" />
-                </a>
-              }
-            </LastCell>
-          )}
-        </StatsContainer>
+        <PlaceRowView placeId={rating.placeId} />
       </>
     );
   });
@@ -84,21 +60,13 @@ export const StatsView = ({
           </StatsContainerNoHover>
           <WhiteRow>
             <LastCell>
-              <FontAwesome
-                name="check"
-                size="2x"
-                onClick={() => sumbitNewPlace()}
-              />
-              <FontAwesome
-                name="times"
-                size="2x"
-                onClick={() => addRowPressed()}
-              />
+              <div onClick={() => sumbitNewPlace()}>OK</div>
+              <div onClick={() => addRowPressed()}>NEJ</div>
             </LastCell>
           </WhiteRow>
         </>
       )}
-      {rows}
+      {rows[0]}
     </>
   );
 };
