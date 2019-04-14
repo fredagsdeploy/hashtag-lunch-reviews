@@ -25,9 +25,11 @@ export const CommentField = ({
   afterSubmit,
   recentlySaved
 }: Props) => {
+  const user = useUserContext();
+
   return (
     <CommentContainer>
-      <UserImage />
+      <UserImage url={user.imageUrl} active={Boolean(review)} />
       <SpeakTriangle />
       <RatingContainer>
         {review ? (
@@ -120,7 +122,7 @@ const CommentContainer = styled.div`
   align-items: center;
 `;
 
-const UserImage = styled.div<{ url?: string }>`
+const UserImage = styled.div<{ url?: string; active: boolean }>`
   height: 2em;
   width: 2em;
 
@@ -130,6 +132,9 @@ const UserImage = styled.div<{ url?: string }>`
   background-position: center center;
 
   border-radius: 50%;
+
+  filter: ${props => (props.active ? "grayscale(0)" : "grayscale(100%)")};
+  transition: filter 3000ms;
 `;
 
 const RatingContainer = styled.div`

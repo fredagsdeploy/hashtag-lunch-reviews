@@ -19,9 +19,6 @@ const RatingDisplay = ({ placeId }: { placeId: string }) => {
   const reviewsFromServer = reviewsResource.read(placeId);
   const [reviews, setReviews] = useState(reviewsFromServer);
 
-  const sum = reviews.reduce((sum, review) => review.rating + sum, 0);
-  const rating = sum / reviews.length;
-
   const user = useUserContext();
 
   const myReview = reviews.filter(review => review.userId == user.id)[0];
@@ -94,7 +91,7 @@ const PlaceRow = styled.div`
   background-color: #fff;
 
   align-items: stretch;
-  width: 80%;
+  width: 60em;
 
   margin: 1em;
 `;
@@ -115,7 +112,7 @@ const MetaData = styled.div`
 `;
 
 const PlaceName = styled.div`
-  font-weight: 500;
+  font-weight: 600;
   padding-bottom: 5px;
 `;
 
@@ -124,7 +121,7 @@ const NameComment = styled.div``;
 
 const PlaceRatings = styled.div`
   font-size: 1.4em;
-  width: 9em;
+  display: flex;
 `;
 
 const Yellow = styled(FontAwesomeIcon)`

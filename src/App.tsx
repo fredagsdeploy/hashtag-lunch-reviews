@@ -35,6 +35,8 @@ const GlobalStyle = createGlobalStyle`
 
   html, #root, body {
     height: 100%;
+    color: #5d5d5d;
+    font-family: 'Roboto', sans-serif;
   }
 
 `;
