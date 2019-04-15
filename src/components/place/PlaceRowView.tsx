@@ -16,12 +16,13 @@ import { CommentField } from "./CommentField";
 import { Review, Rating } from "../../types";
 import { useFadeState } from "../../customHooks/useFadeState";
 import { Spinner } from "../Spinner";
+import { formatStarRating } from "../utils/formatter";
 
 const reviewsResource = unstable_createResource(getReviewsForPlace);
 
 const RatingDisplay = ({ placeId }: { placeId: string }) => {
   const reviewsFromServer = reviewsResource.read(placeId);
-  const [reviews, setReviews] = useState(reviewsFromServer);
+  const [reviews, setReviews] = useState<Review[]>(reviewsFromServer);
 
   const user = useUserContext();
 
@@ -42,10 +43,6 @@ const RatingDisplay = ({ placeId }: { placeId: string }) => {
   );
 };
 
-const formatter = new Intl.NumberFormat("sv-se", {
-  maximumFractionDigits: 2,
-  minimumFractionDigits: 2
-});
 interface Props {
   placeId: string;
   rating: Rating;
@@ -68,9 +65,9 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
           </NameComment>
           <PlaceRatings>
             <Blue icon={faHashtag} />
-            {formatter.format(place.rating)}
+            {formatStarRating(place.rating)}
             <Yellow icon={faStar} />
-            {formatter.format(place.rating)}
+            {formatStarRating(place.rating)}
           </PlaceRatings>
         </MetaData>
         <Suspense fallback={<Spinner />}>
@@ -82,7 +79,8 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
 };
 
 const PlaceImage = styled.div<{ url?: string }>`
-  width: 13em;
+  flex: 1;
+  max-width: 13em;
   height: 10em;
 
   background: ${props => (props.url ? `url(${props.url})` : "#6495ed")};
@@ -96,7 +94,12 @@ const PlaceImage = styled.div<{ url?: string }>`
   align-items: center;
 
   & > svg {
-    display: ${props => (props.url ? "none" : "default")};
+    display: ${props => (props.url ? "none" : "initial")};
+  }
+
+  @media screen and (max-width: 600px) {
+    max-width: initial;
+    flex: initial;
   }
 `;
 
@@ -108,9 +111,12 @@ const PlaceRow = styled.div`
   background-color: #fff;
 
   align-items: stretch;
-  width: 60em;
 
   margin: 1em;
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const PlaceContent = styled.div`
@@ -126,6 +132,9 @@ const MetaData = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const PlaceName = styled.div`
@@ -139,6 +148,12 @@ const NameComment = styled.div``;
 const PlaceRatings = styled.div`
   font-size: 1.4em;
   display: flex;
+
+  @media screen and (max-width: 600px) {
+    justify-content: center;
+    font-size: 2.5em;
+    margin: 1em 0;
+  }
 `;
 
 const Yellow = styled(FontAwesomeIcon)`
