@@ -22,17 +22,29 @@ export const putUser: LambdaHandler = async (event, context) => {
     return createResponse(400, { message: "Missing path parameter" });
   }
 
+<<<<<<< HEAD
   if (event.pathParameters.googleUserId !== context.userId) {
+=======
+  if (event.pathParameters.googleUserId !== event.requestContext.authorizer.userId) {
+>>>>>>> master
     return createResponse(400, { message: "Mismatching user id in path and calling user" });
   }
 
 
+<<<<<<< HEAD
   if (user.googleUserId && user.googleUserId !== context.userId) {
+=======
+  if (user.googleUserId && user.googleUserId !== event.requestContext.authorizer.userId) {
+>>>>>>> master
     return createResponse(400, { message: "Mismatching user id in body and calling user" });
   }
 
 
+<<<<<<< HEAD
   const updatedUser = await updateUser(context.userId, user);
+=======
+  const updatedUser = await updateUser(event.requestContext.authorizer.userId, user);
+>>>>>>> master
   return createResponse(200, updatedUser)
 
 

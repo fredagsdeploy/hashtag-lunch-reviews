@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import config from "./config";
-import { User } from "./types";
+import { GoogleUser, User } from "./types";
 import { unstable_createResource } from "react-cache";
-import { setToken } from "./lib/backend";
+import { setToken, getUser } from "./lib/backend";
 
 type GoogleAPI = string | { name: string; version: string };
 
@@ -18,8 +18,15 @@ export const googleApiFetcher = unstable_createResource(
 );
 
 export const useGoogleAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
+  const [lunchUser, setLunchUser] = useState<User | null>(null);
   googleApiFetcher.read("client:auth2");
+
+  useEffect(() => {
+    if (googleUser) {
+      getUser(googleUser.id).then(setLunchUser)
+    }
+  }, [googleUser])
 
   useEffect(() => {
     window.gapi.auth2
@@ -45,7 +52,7 @@ export const useGoogleAuth = () => {
 
           setToken(currentUser.getAuthResponse().id_token);
 
-          setUser(user);
+          setGoogleUser(user);
         }
         window.gapi.auth2.getAuthInstance().isSignedIn.listen(console.log);
 
@@ -64,7 +71,7 @@ export const useGoogleAuth = () => {
               email: profile.getEmail()
             };
 
-            setUser(user);
+            setGoogleUser(user);
           });
       });
   }, []);
@@ -77,11 +84,12 @@ export const useGoogleAuth = () => {
     window.gapi.auth2
       .getAuthInstance()
       .signOut()
-      .then(() => setUser(null));
+      .then(() => setGoogleUser(null));
   }, []);
 
   return {
-    user,
+    googleUser,
+    user: lunchUser,
     signOut,
     authorize
   };

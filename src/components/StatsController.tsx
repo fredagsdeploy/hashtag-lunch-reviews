@@ -40,10 +40,6 @@ export const StatsController = ({ userId }: Props) => {
 
   const sortedRatings = useSorting(ratings, sortedBy, ascending);
 
-  console.log("userId", userId);
-
-  console.log({ sortedRatings });
-
   const newPlaceInitialState: Partial<Place> = {
     placeName: "",
     comment: "",
@@ -71,8 +67,6 @@ export const StatsController = ({ userId }: Props) => {
       .then((place: Place) => {
         setNewPlace(newPlaceInitialState);
         setIsAddingPlace(false);
-        browserHistory.push(`/${place.placeId}/${place.placeName}`);
-        //setRatings([...sortedRatings, place]);
       })
       .catch(e => {
         console.log("Couldn't post new place", e);
@@ -98,8 +92,7 @@ export const StatsController = ({ userId }: Props) => {
   return (
     <StatsView
       ratings={sortedRatings}
-      headerClicked={sortBy}
-      addRowPressed={() => toggleIsAddingPlace()}
+      addRowPressed={toggleIsAddingPlace}
       isAddingPlace={isAddingPlace}
       newPlaceData={newPlace}
       newPlaceDataChange={handleNewPlaceInput}

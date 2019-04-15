@@ -1,4 +1,4 @@
-import { Review, Place, Rating } from "../types";
+import { Review, Place, Rating, User, NewReview } from "../types";
 
 const BASE_URL = "http://localhost:4000";
 
@@ -35,6 +35,17 @@ export const getRatings = (): Promise<Rating[]> => {
   return myFetch(BASE_URL + "/ratings");
 };
 
+export const getUser = (googleUserId: string): Promise<User> => {
+  return myFetch(`${BASE_URL}/users/${googleUserId}`);
+};
+
+export const putUser = (user: Partial<User>): Promise<User> => {
+  return myFetch(`${BASE_URL}/users/${user.googleUserId}`, {
+    method: "put",
+    body: JSON.stringify(user)
+  });
+};
+
 export const getPlaceById = (placeId: string): Promise<Place> => {
   return myFetch(`${BASE_URL}/places/${placeId}`);
 };
@@ -53,8 +64,8 @@ export const postPlace = (place: Partial<Place>): Promise<Place> => {
 };
 
 export const postReview = (
-  review: Partial<Review>
-): Promise<{ review: Review }> => {
+  review: NewReview
+): Promise<Review> => {
   const { userId, placeId, rating, comment } = review;
   if (!userId || !placeId || !rating || !comment) {
     throw new Error(`Missing attribute(s) in review ${JSON.stringify(review)}`);

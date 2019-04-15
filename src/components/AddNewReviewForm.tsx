@@ -2,7 +2,7 @@ import React from "react";
 import { Review } from "../types";
 import { Cell, TextInput } from "./CommonFormComponents";
 import styled from "styled-components";
-import { StarRating } from "./StarRating";
+import { StarRatingView } from "./StarRating";
 
 interface EditReviewRowProps {
   reviewData: Partial<Review>;
@@ -34,7 +34,7 @@ export const AddNewReviewForm = ({
           value={rating}
           onChange={newReviewDataChange}
         />
-        <StarRating rating={rating} />
+        <StarRatingView rating={rating} />
       </Cell>
       <Cell style={{ gridArea: "comment" }}>
         <TextInput

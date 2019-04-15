@@ -61,7 +61,17 @@ export const verify = async (event: any, context: Context) => {
     if (valid && typeof valid !== "string") {
       console.log("Return Allow");
       const decoded = valid as DecodedJWT;
+<<<<<<< HEAD
       await checkUser(decoded);
+=======
+      try {
+        await checkUser(decoded);
+
+      } catch (error) {
+        console.log("Error on checkUser", error);
+        throw error;
+      }
+>>>>>>> master
       return generatePolicy(decoded.sub, "Allow", resourceArn)
     } else {
       console.log("Return Deny, not valid");

@@ -1,18 +1,23 @@
 import { string } from "prop-types";
 
+export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+
 export interface Rating extends Place {
   rating: number;
   normalized_rating: number;
   rank: number;
 }
-
 export interface Review {
   reviewId: string;
-  userId: string;
+  user: User;
   placeId: string;
   rating: number;
   comment: string;
 }
+
+export interface NewReview extends Omit<Review, "reviewId" | "user"> {
+  userId: string;
+};
 
 export interface Place {
   placeId: string;
@@ -23,7 +28,7 @@ export interface Place {
   comment: string;
 }
 
-export interface User {
+export interface GoogleUser {
   id: string;
   fullName: string;
   givenName: string;
@@ -32,13 +37,16 @@ export interface User {
   email: string;
 }
 
-export const emptyUser = {
-  id: "no-id",
-  fullName: "no-fullName",
-  givenName: "no-givenName",
-  familyName: "no-familyName",
+export interface User {
+  googleUserId: string,
+  displayName: string,
+  imageUrl: string
+}
+
+export const emptyUser: User = {
+  googleUserId: "no-id",
+  displayName: "no-displayName",
   imageUrl: "no-imageUrl",
-  email: "no-mail"
 };
 
 export const newPlace: Place = {

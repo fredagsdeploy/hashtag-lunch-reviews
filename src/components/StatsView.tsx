@@ -1,5 +1,4 @@
-import React from "react";
-import FontAwesome from "react-fontawesome";
+import React, { ChangeEvent } from "react";
 import { Place, Rating } from "../types";
 import { StarRating } from "./StarRating";
 import { AddNewPlaceForm } from "./AddNewPlaceForm";
@@ -12,16 +11,16 @@ import {
   Button
 } from "./CommonFormComponents";
 import styled from "styled-components";
+import { PlaceRowView } from "./place/PlaceRowView";
 
 interface Props {
   ratings: Array<Rating>;
-  headerClicked: Function;
-  addRowPressed: Function;
+  addRowPressed: () => void;
   newPlaceData: Partial<Place>;
-  newPlaceDataChange: Function;
+  newPlaceDataChange: (event: ChangeEvent<HTMLInputElement>) => void;
   isAddingPlace: boolean;
-  sumbitNewPlace: Function;
-  placeClicked: Function;
+  sumbitNewPlace: () => void;
+  placeClicked: (rating: Rating) => void;
 }
 
 import places from "../seeds/places.json";
@@ -41,7 +40,6 @@ const seed = () => {
 
 export const StatsView = ({
   ratings,
-  headerClicked,
   addRowPressed,
   newPlaceData,
   newPlaceDataChange,
@@ -49,43 +47,11 @@ export const StatsView = ({
   sumbitNewPlace,
   placeClicked
 }: Props) => {
-  const rows = ratings.map(rating => {
-    return (
-      <>
-        <Header>{rating.placeName}</Header>
-        <StatsContainer
-          key={rating.placeId}
-          onClick={() => {
-            placeClicked(rating);
-          }}
-        >
-          <StarCell style={{ gridArea: "rating" }}>
-            <StarRating rating={rating.rating} />
-          </StarCell>
-          <StarCell style={{ gridArea: "normalized-rating" }}>
-            <StarRating rating={rating.normalized_rating} />
-          </StarCell>
-          <Cell style={{ gridArea: "comment" }}>{rating.comment}</Cell>
-
-          {rating.googlePlace && (
-            <LastCell style={{ gridArea: "link" }}>
-              {
-                <a href={rating.googlePlace.url}>
-                  <FontAwesome name="external-link" />
-                </a>
-              }
-            </LastCell>
-          )}
-        </StatsContainer>
-      </>
-    );
-  });
-
   return (
     <>
       {!isAddingPlace && (
         <AddPlaceContainer>
-          <Button onClick={() => addRowPressed()}>Add new place</Button>
+          <Button onClick={addRowPressed}>Add new place</Button>
           <Button onClick={() => seed()}>Seed</Button>
         </AddPlaceContainer>
       )}
@@ -100,21 +66,19 @@ export const StatsView = ({
           </StatsContainerNoHover>
           <WhiteRow>
             <LastCell>
-              <FontAwesome
-                name="check"
-                size="2x"
-                onClick={() => sumbitNewPlace()}
-              />
-              <FontAwesome
-                name="times"
-                size="2x"
-                onClick={() => addRowPressed()}
-              />
+              <div onClick={sumbitNewPlace}>OK</div>
+              <div onClick={addRowPressed}>NEJ</div>
             </LastCell>
           </WhiteRow>
         </>
       )}
-      {rows}
+      {ratings.map(rating => (
+        <PlaceRowView
+          key={rating.placeId}
+          rating={rating}
+          placeId={rating.placeId}
+        />
+      ))}
     </>
   );
 };
