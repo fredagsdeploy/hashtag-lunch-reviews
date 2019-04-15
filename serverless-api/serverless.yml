@@ -172,19 +172,5 @@ functions:
           
 
 custom:
-  dynamodb:
-    start:
-      seed: true
-      migrate: true
-    seed:
-      domain:
-        sources:
-          - table: Places
-            sources: [./seeds/places.json]
-          - table: Reviews
-            sources: [./seeds/reviews.json]
   serverless-offline:
     port: 4000
-
-resources:
-  - ${file(./serverless_config/dynamo-${self:provider.stage}.yml)}
