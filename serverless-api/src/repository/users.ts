@@ -50,3 +50,13 @@ export const updateUser = async (googleUserId: string, userInput: Partial<User>)
 
     return (await getUserById(googleUserId))!;
 }
+
+export const getAllUsers = async (): Promise<User[]> => {
+    var params = {
+        TableName: "Users"
+    };
+
+    const response = await dynamodb.scan(params).promise();
+
+    return (response.Items || []) as User[];
+}

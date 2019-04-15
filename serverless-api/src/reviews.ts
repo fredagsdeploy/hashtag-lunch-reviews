@@ -6,7 +6,7 @@ import {
   Review,
   getReviewsByPlaceId
 } from "./repository/reviews";
-import { getUserById, User } from "./repository/users";
+import { getUserById, User, getAllUsers } from "./repository/users";
 
 const createReview = (
   reviewId: string,
@@ -87,11 +87,35 @@ export const postReviews: LambdaHandler = async event => {
       createReview(newUUID, userId, placeId, rating, comment)
     );
     const expandedReview = await expandReview(review);
-<<<<<<< HEAD
-    return createResponse(201, expandReview);
-=======
     return createResponse(201, expandedReview);
->>>>>>> master
+  } catch (error) {
+    return createResponse(400, { error: error.message });
+  }
+};
+
+
+export const postMigrateReview: LambdaHandler = async event => {
+  const body = parseJSON(event.body) as Partial<ReviewInput & { nick: string }>;
+
+  const { userId, placeId, rating, comment, nick } = body;
+
+  if (!userId || !placeId || !rating || !comment || !nick) {
+    return createResponse(400, { error: "Missing parameters" });
+  }
+
+  const users = await getAllUsers();
+  const maybeUser = users.find(user => user.displayName.toLowerCase() === nick.toLowerCase())
+  if (!maybeUser) {
+    return createResponse(400, { message: `Can't find user with nick ${nick}` })
+  }
+
+  const newUUID = uuid();
+  const newReview = createReview(newUUID, maybeUser.googleUserId, placeId, rating, comment);
+
+  try {
+    const review = await saveReview(newReview);
+    const expandedReview = await expandReview(review);
+    return createResponse(201, expandedReview);
   } catch (error) {
     return createResponse(400, { error: error.message });
   }

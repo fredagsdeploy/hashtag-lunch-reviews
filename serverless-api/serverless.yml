@@ -86,6 +86,18 @@ functions:
           method: post
           cors: true
 
+  postMigratedReview:
+    handler: src/reviews.postMigratedReview
+
+    events:
+      - http:
+          authorizer:
+            name: jwtVerify
+            identitySource: method.request.header.Authorization
+          path: reviews/migrated
+          method: post
+          cors: true
+
   getReviews:
     handler: src/reviews.getReviews
 
