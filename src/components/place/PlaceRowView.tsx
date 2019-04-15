@@ -55,7 +55,7 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   return (
     <PlaceRow>
       <PlaceImage
-        url={place.googlePlace ? getPhotoUrl(place.googlePlace) : undefined}
+        url={place.googlePlace && place.googlePlace.photos ? getPhotoUrl(place.googlePlace) : undefined}
       >
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
