@@ -94,11 +94,12 @@ const PlaceImage = styled.div<{ url?: string }>`
   align-items: center;
 
   & > svg {
-    display: ${props => (props.url ? "none" : "default")};
+    display: ${props => (props.url ? "none" : "initial")};
   }
 
   @media screen and (max-width: 600px) {
     max-width: initial;
+    flex: initial;
   }
 `;
 

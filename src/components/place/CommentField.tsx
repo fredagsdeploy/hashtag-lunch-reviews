@@ -153,7 +153,10 @@ const RatingContainer = styled.div`
 
   flex: 1;
 
-  overflow: "eclipsis";
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const SpeakTriangle = styled.div`
