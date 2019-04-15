@@ -9,13 +9,15 @@ export interface Rating extends Place {
 }
 export interface Review {
   reviewId: string;
-  userId: string;
+  user: User;
   placeId: string;
   rating: number;
   comment: string;
 }
 
-export type NewReview = Omit<Review, "reviewId">;
+export interface NewReview extends Omit<Review, "reviewId" | "user"> {
+  userId: string;
+};
 
 export interface Place {
   placeId: string;

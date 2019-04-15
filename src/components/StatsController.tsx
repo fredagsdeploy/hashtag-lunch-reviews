@@ -67,8 +67,6 @@ export const StatsController = ({ userId }: Props) => {
       .then((place: Place) => {
         setNewPlace(newPlaceInitialState);
         setIsAddingPlace(false);
-        browserHistory.push(`/${place.placeId}/${place.placeName}`);
-        //setRatings([...sortedRatings, place]);
       })
       .catch(e => {
         console.log("Couldn't post new place", e);
