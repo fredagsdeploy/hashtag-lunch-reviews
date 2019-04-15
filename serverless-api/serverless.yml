@@ -171,6 +171,8 @@ custom:
             sources: [./seeds/places.json]
           - table: Reviews
             sources: [./seeds/reviews.json]
+          - table: Users
+            sources: [./seeds/users.json]
   serverless-offline:
     port: 4000
 
