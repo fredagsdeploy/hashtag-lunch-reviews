@@ -1,22 +1,21 @@
 import React, {
+  DetailedHTMLProps,
+  HTMLAttributes,
   MouseEvent,
   TouchEvent,
-  useRef,
   useEffect,
-  HTMLAttributes,
-  DetailedHTMLProps
+  useRef
 } from "react";
 import styled from "styled-components";
-import _ from "lodash";
-import star from "../images/star-solid.svg";
+import { useMedia } from "../customHooks/useMedia";
 import hollowStar from "../images/star-regular.svg";
+import star from "../images/star-solid.svg";
 import { formatStarRating } from "./utils/formatter";
 
 interface Props {
   rating: number;
   onChange: (rating: number) => void;
 }
-const starSize = window.innerWidth > 600 ? 16 : 32;
 
 const clamp = (num: number, max: number, min: number) =>
   Math.max(min, Math.min(max, num));
@@ -75,6 +74,9 @@ export const StarRatingView = ({
   showValue = false,
   ...props
 }: StarRatingViewProps & DivProps) => {
+
+  const starSize = useMedia(['(max-width: 600px)'], [32], 16)
+
   return (
     <div
       style={{
@@ -87,18 +89,18 @@ export const StarRatingView = ({
         style={{ width: 5 * starSize, height: starSize, touchAction: "none" }}
         {...props}
       >
-        <StarDiv style={{ width: rating * starSize }} />
-        <HollowStarDiv style={{ width: 5 * starSize }} />
+        <StarDiv style={{ width: rating * starSize }} size={starSize} />
+        <HollowStarDiv style={{ width: 5 * starSize }} size={starSize} />
       </div>
       {showValue && formatStarRating(rating)}
     </div>
   );
 };
 
-const Star = styled.div`
+const Star = styled.div<{ size: number }>`
   background-repeat: repeat-x;
-  background-size: ${starSize}px;
-  height: ${starSize}px;
+  background-size: ${props => props.size}px;
+  height: ${props => props.size}px;
   position: absolute;
   color: #f8c51c;
 `;
