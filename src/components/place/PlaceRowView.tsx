@@ -17,6 +17,7 @@ import { Review, Rating } from "../../types";
 import { useFadeState } from "../../customHooks/useFadeState";
 import { Spinner } from "../Spinner";
 import { formatStarRating } from "../utils/formatter";
+import { SpiderWebChart, getRandomData } from "../SpiderWebChart";
 
 const reviewsResource = unstable_createResource(getReviewsForPlace);
 
@@ -26,7 +27,9 @@ const RatingDisplay = ({ placeId }: { placeId: string }) => {
 
   const user = useUserContext();
 
-  const myReview = reviews.filter(review => review.user.googleUserId == user.googleUserId)[0];
+  const myReview = reviews.filter(
+    review => review.user.googleUserId == user.googleUserId
+  )[0];
 
   const [recentlySaved, setRecentlySaved] = useFadeState(false, 3000);
 
@@ -52,7 +55,11 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   return (
     <PlaceRow>
       <PlaceImage
-        url={place.googlePlace && place.googlePlace.photos ? getPhotoUrl(place.googlePlace) : undefined}
+        url={
+          place.googlePlace && place.googlePlace.photos
+            ? getPhotoUrl(place.googlePlace)
+            : undefined
+        }
       >
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
@@ -74,6 +81,7 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
           <RatingDisplay placeId={placeId} />
         </Suspense>
       </PlaceContent>
+      <SpiderWebChart data={getRandomData(5)} />
     </PlaceRow>
   );
 };
