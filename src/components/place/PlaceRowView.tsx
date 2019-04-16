@@ -16,6 +16,7 @@ import { Rating, Review } from "../../types";
 import { Spinner } from "../Spinner";
 import { formatStarRating } from "../utils/formatter";
 import { CommentField } from "./CommentField";
+import { SpiderWebChart, getRandomData } from "../SpiderWebChart";
 
 const RatingDisplay = ({ placeId }: { placeId: string }) => {
   const reviewsFromServer = useReviewsByPlaceId(placeId);
@@ -77,6 +78,7 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
           <RatingDisplay placeId={placeId} />
         </Suspense>
       </PlaceContent>
+      <SpiderWebChart data={getRandomData(5)} />
     </PlaceRow>
   );
 };
