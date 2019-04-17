@@ -1,23 +1,15 @@
 import _ from "lodash";
-import React, { ChangeEvent, useEffect, useState, useMemo } from "react";
+import React, { ChangeEvent, useMemo, useState } from "react";
+import { useRatings } from "../customHooks/api";
 import { useBoolean } from "../customHooks/useBoolean";
-import { getRatings, postPlace } from "../lib/backend";
-import { Rating, Place } from "../types";
-import { StatsView } from "./StatsView";
 import { browserHistory } from "../history";
-import { unstable_createResource } from "react-cache";
-
-const tableResource = unstable_createResource(getRatings);
+import { postPlace } from "../lib/backend";
+import { Place, Rating } from "../types";
+import { StatsView } from "./StatsView";
 
 interface Props {
   userId: string;
 }
-
-const useRatings = () => {
-  const ratings = tableResource.read(0);
-
-  return ratings;
-};
 
 const useSorting = <T extends {}>(
   array: T[],

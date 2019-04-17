@@ -1,32 +1,45 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import config from "./config";
+import { getUser, setToken } from "./lib/backend";
 import { GoogleUser, User } from "./types";
-import { unstable_createResource } from "react-cache";
-import { setToken, getUser } from "./lib/backend";
 
-type GoogleAPI = string | { name: string; version: string };
+let promiseCache: null | Promise<any> = null;
+let resolved: boolean = false;
 
-export const googleApiFetcher = unstable_createResource(
-  (libName: GoogleAPI) =>
-    new Promise(resolve => {
-      if (typeof libName === "string") {
-        window.gapi.load(libName, resolve);
-      } else {
-        window.gapi.load(libName.name, libName.version, resolve);
-      }
+const useGoogleClientAuthApi = (): unknown => {
+  if (!promiseCache) {
+    promiseCache = new Promise(resolve => {
+      window.gapi.load("client:auth2", resolve);
     })
-);
+      .catch(error => {
+        console.error(error);
+      })
+      .finally(() => {
+        resolved = true;
+      });
+  }
+
+  if (!resolved) {
+    throw promiseCache;
+  }
+
+  return resolved;
+};
 
 export const useGoogleAuth = () => {
   const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
   const [lunchUser, setLunchUser] = useState<User | null>(null);
-  googleApiFetcher.read("client:auth2");
 
-  useEffect(() => {
-    if (googleUser) {
-      getUser(googleUser.id).then(setLunchUser)
-    }
-  }, [googleUser])
+  useGoogleClientAuthApi();
+
+  useEffect(
+    () => {
+      if (googleUser) {
+        getUser(googleUser.id).then(setLunchUser);
+      }
+    },
+    [googleUser]
+  );
 
   useEffect(() => {
     window.gapi.auth2

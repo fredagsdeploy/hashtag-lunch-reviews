@@ -1,32 +1,31 @@
-import React, { useState, Suspense } from "react";
-
-import { unstable_createResource } from "react-cache";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faStar,
   faHashtag,
+  faStar,
   faUtensils
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { Suspense, useState } from "react";
+
+import styled from "styled-components";
+import { useReviewsByPlaceId } from "../../customHooks/api";
+import { useFadeState } from "../../customHooks/useFadeState";
 
 import { useUserContext } from "../../customHooks/useUserContext";
 import { getPhotoUrl } from "../../googlePlaces/googlePlaces";
-import { getPlaceById, getReviewsForPlace } from "../../lib/backend";
-import { CommentField } from "./CommentField";
-import { Review, Rating } from "../../types";
-import { useFadeState } from "../../customHooks/useFadeState";
+import { Rating, Review } from "../../types";
 import { Spinner } from "../Spinner";
 import { formatStarRating } from "../utils/formatter";
-
-const reviewsResource = unstable_createResource(getReviewsForPlace);
+import { CommentField } from "./CommentField";
 
 const RatingDisplay = ({ placeId }: { placeId: string }) => {
-  const reviewsFromServer = reviewsResource.read(placeId);
+  const reviewsFromServer = useReviewsByPlaceId(placeId);
   const [reviews, setReviews] = useState<Review[]>(reviewsFromServer);
 
   const user = useUserContext();
 
-  const myReview = reviews.filter(review => review.user.googleUserId == user.googleUserId)[0];
+  const myReview = reviews.filter(
+    review => review.user.googleUserId == user.googleUserId
+  )[0];
 
   const [recentlySaved, setRecentlySaved] = useFadeState(false, 3000);
 
@@ -52,7 +51,11 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   return (
     <PlaceRow>
       <PlaceImage
-        url={place.googlePlace && place.googlePlace.photos ? getPhotoUrl(place.googlePlace) : undefined}
+        url={
+          place.googlePlace && place.googlePlace.photos
+            ? getPhotoUrl(place.googlePlace)
+            : undefined
+        }
       >
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
