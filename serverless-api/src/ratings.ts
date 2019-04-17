@@ -60,7 +60,7 @@ export const getPlacesWithRatings: LambdaHandler = async () => {
   return createResponse(200, rankedRatings);
 };
 
-export const getPlaceWithRatings: LambdaHandler = async (event) => {
+export const getPlaceWithRating: LambdaHandler = async (event) => {
   if (!event.pathParameters) {
     return createResponse(400, { message: "Missing placeId path parameter" })
   }
