@@ -1,13 +1,11 @@
 import React, { FormEvent, useState, ChangeEvent } from "react";
-import { Review, NewReview, Rating } from "../../types";
+import { NewReview } from "../../types";
 import styled from "styled-components";
 import { StarRating } from "../StarRating";
 import { useUserContext } from "../../customHooks/useUserContext";
-import { postReview, getPlaceById } from "../../lib/backend";
+import { postReview } from "../../lib/backend";
 import { RouteChildrenProps } from "react-router";
-import { unstable_createResource } from "react-cache";
-
-const placeResource = unstable_createResource(getPlaceById);
+import { usePlaceById } from "../../customHooks/api";
 
 interface Props
   extends RouteChildrenProps<{
@@ -21,7 +19,7 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
     throw new Error("No such place");
   }
   const { placeId } = match.params;
-  const place = placeResource.read(placeId);
+  const place = usePlaceById(placeId);
 
   const user = useUserContext();
   const newReviewInitalState: NewReview = {
@@ -70,7 +68,7 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
         rating={newReview.rating}
         onChange={ratingChangeHandler}
         defaultSize={48}
-        mediaSize={48}
+        mobileSize={48}
       />
       <Comment>
         <CommentInput

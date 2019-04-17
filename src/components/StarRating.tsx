@@ -16,7 +16,7 @@ interface Props {
   rating: number;
   onChange: (rating: number) => void;
   defaultSize?: number;
-  mediaSize?: number;
+  mobileSize?: number;
 }
 
 const clamp = (num: number, max: number, min: number) =>
@@ -26,7 +26,7 @@ export const StarRating = ({
   rating,
   onChange,
   defaultSize,
-  mediaSize
+  mobileSize
 }: Props) => {
   const mouseDown = useRef(false);
 
@@ -62,7 +62,7 @@ export const StarRating = ({
       onTouchMove={e => mouseDown.current && starClickHandler(e)}
       rating={rating}
       defaultSize={defaultSize}
-      mediaSize={mediaSize}
+      mobileSize={mobileSize}
       showValue
     />
   );
@@ -77,17 +77,17 @@ interface StarRatingViewProps {
   rating: number;
   showValue?: boolean;
   defaultSize?: number;
-  mediaSize?: number;
+  mobileSize?: number;
 }
 
 export const StarRatingView = ({
   rating,
   showValue = false,
   defaultSize = 16,
-  mediaSize = 32,
+  mobileSize = 32,
   ...props
 }: StarRatingViewProps & DivProps) => {
-  const starSize = useMedia(["(max-width: 600px)"], [mediaSize], defaultSize);
+  const starSize = useMedia(["(max-width: 600px)"], [mobileSize], defaultSize);
 
   return (
     <div
