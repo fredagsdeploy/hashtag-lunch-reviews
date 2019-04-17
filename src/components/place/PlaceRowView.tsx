@@ -13,12 +13,16 @@ import { useFadeState } from "../../customHooks/useFadeState";
 import { useUserContext } from "../../customHooks/useUserContext";
 import { getPhotoUrl } from "../../googlePlaces/googlePlaces";
 import { Rating, Review } from "../../types";
+import { SpiderWebChart } from "../SpiderWebChart";
 import { Spinner } from "../Spinner";
 import { formatStarRating } from "../utils/formatter";
 import { CommentField } from "./CommentField";
-import { SpiderWebChart, getRandomData } from "../SpiderWebChart";
 
-const RatingDisplay = ({ placeId }: { placeId: string }) => {
+interface RatingDisplayProps {
+  placeId: string;
+}
+
+const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const reviewsFromServer = useReviewsByPlaceId(placeId);
   const [reviews, setReviews] = useState<Review[]>(reviewsFromServer);
 
@@ -40,6 +44,24 @@ const RatingDisplay = ({ placeId }: { placeId: string }) => {
       }}
       recentlySaved={recentlySaved}
     />
+  );
+};
+
+const ChartDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
+  const reviewsFromServer = useReviewsByPlaceId(placeId);
+
+  const chartData = reviewsFromServer.map(review => ({
+    value: review.rating,
+    max: 5
+  }));
+
+  const data =
+    chartData.length === 1 ? [...chartData, { value: 0, max: 5 }] : chartData;
+
+  return (
+    <ChartRow>
+      <SpiderWebChart data={data} />
+    </ChartRow>
   );
 };
 
@@ -78,7 +100,9 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
           <RatingDisplay placeId={placeId} />
         </Suspense>
       </PlaceContent>
-      <SpiderWebChart data={getRandomData(5)} />
+      <Suspense fallback={<Spinner />}>
+        <ChartDisplay placeId={placeId} />
+      </Suspense>
     </PlaceRow>
   );
 };
@@ -139,6 +163,13 @@ const MetaData = styled.div`
   justify-content: space-between;
   @media screen and (max-width: 600px) {
     flex-direction: column;
+  }
+`;
+
+const ChartRow = styled.div`
+  display: flex;
+  @media screen and (max-width: 600px) {
+    justify-content: center;
   }
 `;
 

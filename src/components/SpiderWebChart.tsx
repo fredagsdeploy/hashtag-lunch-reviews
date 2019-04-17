@@ -129,12 +129,14 @@ export const SpiderWebChart: React.FC<Props> = ({
           fill="none"
         />
       ))}
-      <animated.polyline
+      <animated.polygon
         points={interpolate([spring.xs, spring.ys], ((
           xx: number[],
           yy: number[]
         ) => joinPoints(zip(xx, yy) as [number, number][])) as any)}
         fill={areaColor}
+        strokeWidth={3}
+        stroke={lineColor}
       />
     </svg>
   );
