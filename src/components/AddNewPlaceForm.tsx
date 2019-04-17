@@ -9,14 +9,15 @@ interface EditPlaceRowProps {
   newPlaceDataChange: Function;
 }
 
-// @ts-ignore
-const gothenburgCoords = new window.google.maps.LatLng(57.7052778, 11.9648333);
+const getGothenburgCoords = () =>
+  // @ts-ignore
+  new window.google.maps.LatLng(57.7052778, 11.9648333);
 
-const searchOptions = {
-  location: gothenburgCoords,
+const getSearchOptions = () => ({
+  location: getGothenburgCoords(),
   radius: 2000,
   types: ["establishment"]
-};
+});
 
 export const AddNewPlaceForm = ({
   placeData,
@@ -37,7 +38,7 @@ export const AddNewPlaceForm = ({
       <Cell style={{ gridArea: "comment" }}>
         <PlacesAutocomplete
           value={placeName}
-          searchOptions={searchOptions}
+          searchOptions={getSearchOptions()}
           onChange={value => {
             newPlaceDataChange({
               target: { name: "placeName", value: value }
