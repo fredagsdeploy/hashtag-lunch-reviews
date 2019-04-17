@@ -15,12 +15,19 @@ import { formatStarRating } from "./utils/formatter";
 interface Props {
   rating: number;
   onChange: (rating: number) => void;
+  defaultSize?: number;
+  mediaSize?: number;
 }
 
 const clamp = (num: number, max: number, min: number) =>
   Math.max(min, Math.min(max, num));
 
-export const StarRating = ({ rating, onChange }: Props) => {
+export const StarRating = ({
+  rating,
+  onChange,
+  defaultSize,
+  mediaSize
+}: Props) => {
   const mouseDown = useRef(false);
 
   const starClickHandler = (
@@ -54,6 +61,8 @@ export const StarRating = ({ rating, onChange }: Props) => {
       onTouchStart={() => (mouseDown.current = true)}
       onTouchMove={e => mouseDown.current && starClickHandler(e)}
       rating={rating}
+      defaultSize={defaultSize}
+      mediaSize={mediaSize}
       showValue
     />
   );
@@ -67,15 +76,18 @@ type DivProps = DetailedHTMLProps<
 interface StarRatingViewProps {
   rating: number;
   showValue?: boolean;
+  defaultSize?: number;
+  mediaSize?: number;
 }
 
 export const StarRatingView = ({
   rating,
   showValue = false,
+  defaultSize = 16,
+  mediaSize = 32,
   ...props
 }: StarRatingViewProps & DivProps) => {
-
-  const starSize = useMedia(['(max-width: 600px)'], [32], 16)
+  const starSize = useMedia(["(max-width: 600px)"], [mediaSize], defaultSize);
 
   return (
     <div

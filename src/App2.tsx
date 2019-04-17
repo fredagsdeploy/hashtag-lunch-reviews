@@ -10,6 +10,7 @@ import { useGoogleAuth } from "./useGoogleAuth";
 import { GoogleUser, emptyUser } from "./types";
 import { UserContext } from "./customHooks/useUserContext";
 import styled from "styled-components";
+import { AddNewReviewForm } from "./components/review/AddNewReviewForm";
 
 declare global {
   interface Window {
@@ -30,6 +31,15 @@ export const App2: React.FC = () => {
     );
   }
 
+  const goBack = () => {
+    // This doesn't work but I couldn't figure it out
+    if (browserHistory.length > 0) {
+      browserHistory.goBack();
+    } else {
+      browserHistory.push("/");
+    }
+  };
+
   return (
     <UserContext.Provider value={user}>
       <Router history={browserHistory}>
@@ -40,6 +50,12 @@ export const App2: React.FC = () => {
               <Route exact path="/" component={StatsController} />
               <Route exact path="/ratings" component={StatsController} />
               <Route exact path="/me" component={UserController} />
+              <Route
+                path="/newreview/:placeId"
+                render={props => (
+                  <AddNewReviewForm {...props} onClose={goBack} />
+                )}
+              />
             </Switch>
           </ContentContainer>
         </>
