@@ -38,18 +38,21 @@ export interface ReviewOutput {
   comment: string;
 }
 
-const expandReview = async ({ userId, ...rest }: Review): Promise<ReviewOutput> => {
+const expandReview = async ({
+  userId,
+  ...rest
+}: Review): Promise<ReviewOutput> => {
   const user = (await getUserById(userId))!;
 
   return {
     ...rest,
     user
-  }
-}
+  };
+};
 
 const expandReviews = async (reviews: Review[]): Promise<ReviewOutput[]> => {
   return Promise.all(reviews.map(expandReview));
-}
+};
 
 export const getReviews: LambdaHandler = async event => {
   const reviews = await getAllReviews();
@@ -70,13 +73,12 @@ export const getReviewsByPlace: LambdaHandler = async event => {
   return createResponse(200, extendedReviews);
 };
 
-
 export const postReviews: LambdaHandler = async event => {
   const body = parseJSON(event.body) as Partial<ReviewInput>;
 
   const { userId, placeId, rating, comment } = body;
 
-  if (!userId || !placeId || !rating || !comment) {
+  if (!userId || !placeId || !rating) {
     return createResponse(400, { error: "Missing parameters" });
   }
 
@@ -84,7 +86,7 @@ export const postReviews: LambdaHandler = async event => {
 
   try {
     const review = await saveReview(
-      createReview(newUUID, userId, placeId, rating, comment)
+      createReview(newUUID, userId, placeId, rating, comment ? comment : " ")
     );
     const expandedReview = await expandReview(review);
     return createResponse(201, expandedReview);
