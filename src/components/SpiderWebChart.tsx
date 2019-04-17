@@ -44,11 +44,11 @@ interface Props {
 }
 
 export const SpiderWebChart: React.FC<Props> = ({
-  lineColor = "#FF776F",
-  areaColor = "#33B8BA55",
-  radius = 40,
-  width = 200,
-  height = 200,
+  lineColor = "#5D5D5F",
+  areaColor = "#6495ed55",
+  radius = 60,
+  width = 160,
+  height = 160,
   data
 }) => {
   const centerX = width / 2;
@@ -95,7 +95,7 @@ export const SpiderWebChart: React.FC<Props> = ({
   });
 
   return (
-    <svg width={width} height={height} viewBox="0 0 200 200">
+    <svg width={width} height={height} viewBox="0 0 160 160">
       {outterPoints.map(([x, y], index) => (
         <line
           key={index}
