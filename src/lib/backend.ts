@@ -78,8 +78,8 @@ export const postPlace = (place: Partial<Place>): Promise<Place> => {
 };
 
 export const postReview = (review: NewReview): Promise<Review> => {
-  const { userId, placeId, rating, comment } = review;
-  if (!userId || !placeId || !rating || !comment) {
+  const { userId, placeId, rating } = review;
+  if (!userId || !placeId || !rating) {
     throw new Error(`Missing attribute(s) in review ${JSON.stringify(review)}`);
   }
   return myFetch(BASE_URL + "/reviews", {
