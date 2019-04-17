@@ -33,11 +33,7 @@ export const App2: React.FC = () => {
 
   const goBack = () => {
     // This doesn't work but I couldn't figure it out
-    if (browserHistory.length > 0) {
-      browserHistory.goBack();
-    } else {
-      browserHistory.push("/");
-    }
+    browserHistory.push("/");
   };
 
   return (
