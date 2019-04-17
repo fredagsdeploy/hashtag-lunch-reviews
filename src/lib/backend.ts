@@ -1,4 +1,4 @@
-import { Review, Place, Rating, User, NewReview } from "../types";
+import { NewReview, Place, Rating, Review, User } from "../types";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -8,46 +8,60 @@ export const setToken = (newToken: string) => {
   token = newToken;
 };
 
-const myFetch = (
+const handleResponse = async (r: Response): Promise<any> => {
+  const j = await r.json();
+  if (r.ok) {
+    return j;
+  }
+  throw j;
+};
+
+export const myFetch = (
   url: RequestInfo,
   requestOptions: RequestInit | undefined = {}
-) => {
-  return fetch(url, {
+) =>
+  fetch(url, {
     ...requestOptions,
     headers: {
       ...requestOptions.headers,
       Authorization: token
     }
-  }).then(async (r: Response) => {
-    const j = await r.json();
-    if (r.ok) {
-      return j;
-    }
-    throw j;
   });
-};
+
+export const getReviewsByPlaceIdUrl = (placeId: string): string =>
+  `${BASE_URL}/places/${placeId}/reviews`;
+
+export const getRatingsUrl = () => BASE_URL + "/ratings";
+
+export const getUserByUserIdUrl = (googleUserId: string) =>
+  `${BASE_URL}/users/${googleUserId}`;
+
+export const getPlaceByPlaceIdUrl = (placeId: string) =>
+  `${BASE_URL}/places/${placeId}`;
 
 export const getReviewsForPlace = (placeId: string): Promise<Review[]> => {
-  return myFetch(`${BASE_URL}/reviews/${placeId}`);
+  return myFetch(getReviewsByPlaceIdUrl(placeId)).then(handleResponse);
 };
 
 export const getRatings = (): Promise<Rating[]> => {
-  return myFetch(BASE_URL + "/ratings");
+  return myFetch(getRatingsUrl()).then(handleResponse);
 };
 
 export const getUser = (googleUserId: string): Promise<User> => {
-  return myFetch(`${BASE_URL}/users/${googleUserId}`);
+  return myFetch(getUserByUserIdUrl(googleUserId)).then(handleResponse);
 };
 
-export const putUser = (user: Partial<User>): Promise<User> => {
-  return myFetch(`${BASE_URL}/users/${user.googleUserId}`, {
+export const putUser = (
+  user: Partial<User> & Pick<User, "googleUserId">
+): Promise<User> => {
+  return myFetch(getUserByUserIdUrl(user.googleUserId), {
     method: "put",
     body: JSON.stringify(user)
-  });
+  }).then(handleResponse);
 };
 
 export const getPlaceById = (placeId: string): Promise<Place> => {
-  return myFetch(`${BASE_URL}/places/${placeId}`);
+  return myFetch(getPlaceByPlaceIdUrl(placeId)).then(handleResponse);
 };
 
 export const postPlace = (place: Partial<Place>): Promise<Place> => {
@@ -60,7 +74,7 @@ export const postPlace = (place: Partial<Place>): Promise<Place> => {
   return myFetch(BASE_URL + "/places", {
     method: "post",
     body: JSON.stringify(place)
-  });
+  }).then(handleResponse);
 };
 
 export const postReview = (review: NewReview): Promise<Review> => {
@@ -71,5 +85,5 @@ export const postReview = (review: NewReview): Promise<Review> => {
   return myFetch(BASE_URL + "/reviews", {
     method: "post",
     body: JSON.stringify(review)
-  });
+  }).then(handleResponse);
 };

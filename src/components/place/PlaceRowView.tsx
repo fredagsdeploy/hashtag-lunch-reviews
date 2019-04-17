@@ -1,32 +1,36 @@
-import React, { useState, Suspense } from "react";
-
-import { unstable_createResource } from "react-cache";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faStar,
   faHashtag,
+  faStar,
   faUtensils
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { Suspense, useState } from "react";
+
+import styled from "styled-components";
+import { useReviewsByPlaceId } from "../../customHooks/api";
+import { useFadeState } from "../../customHooks/useFadeState";
 
 import { useUserContext } from "../../customHooks/useUserContext";
 import { getPhotoUrl } from "../../googlePlaces/googlePlaces";
-import { getPlaceById, getReviewsForPlace } from "../../lib/backend";
-import { CommentField } from "./CommentField";
-import { Review, Rating } from "../../types";
-import { useFadeState } from "../../customHooks/useFadeState";
+import { Rating, Review } from "../../types";
+import { SpiderWebChart } from "../SpiderWebChart";
 import { Spinner } from "../Spinner";
 import { formatStarRating } from "../utils/formatter";
+import { CommentField } from "./CommentField";
 
-const reviewsResource = unstable_createResource(getReviewsForPlace);
+interface RatingDisplayProps {
+  placeId: string;
+}
 
-const RatingDisplay = ({ placeId }: { placeId: string }) => {
-  const reviewsFromServer = reviewsResource.read(placeId);
+const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
+  const reviewsFromServer = useReviewsByPlaceId(placeId);
   const [reviews, setReviews] = useState<Review[]>(reviewsFromServer);
 
   const user = useUserContext();
 
-  const myReview = reviews.filter(review => review.user.googleUserId == user.googleUserId)[0];
+  const myReview = reviews.filter(
+    review => review.user.googleUserId == user.googleUserId
+  )[0];
 
   const [recentlySaved, setRecentlySaved] = useFadeState(false, 3000);
 
@@ -43,6 +47,24 @@ const RatingDisplay = ({ placeId }: { placeId: string }) => {
   );
 };
 
+const ChartDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
+  const reviewsFromServer = useReviewsByPlaceId(placeId);
+
+  const chartData = reviewsFromServer.map(review => ({
+    value: review.rating,
+    max: 5
+  }));
+
+  const data =
+    chartData.length === 1 ? [...chartData, { value: 0, max: 5 }] : chartData;
+
+  return (
+    <ChartRow>
+      <SpiderWebChart data={data} />
+    </ChartRow>
+  );
+};
+
 interface Props {
   placeId: string;
   rating: Rating;
@@ -52,7 +74,11 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   return (
     <PlaceRow>
       <PlaceImage
-        url={place.googlePlace && place.googlePlace.photos ? getPhotoUrl(place.googlePlace) : undefined}
+        url={
+          place.googlePlace && place.googlePlace.photos
+            ? getPhotoUrl(place.googlePlace)
+            : undefined
+        }
       >
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
@@ -74,6 +100,9 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
           <RatingDisplay placeId={placeId} />
         </Suspense>
       </PlaceContent>
+      <Suspense fallback={<Spinner />}>
+        <ChartDisplay placeId={placeId} />
+      </Suspense>
     </PlaceRow>
   );
 };
@@ -134,6 +163,13 @@ const MetaData = styled.div`
   justify-content: space-between;
   @media screen and (max-width: 600px) {
     flex-direction: column;
+  }
+`;
+
+const ChartRow = styled.div`
+  display: flex;
+  @media screen and (max-width: 600px) {
+    justify-content: center;
   }
 `;
 

@@ -106,7 +106,7 @@ functions:
           authorizer:
             name: jwtVerify
             identitySource: method.request.header.Authorization
-          path: reviews/{placeId}
+          path: places/{placeId}/reviews
           method: get
           cors: true
           request:
@@ -157,6 +157,22 @@ functions:
           path: ratings
           method: get
           cors: true
+
+  getPlaceWithRatingsByPlaceId:
+    handler: src/ratings.getPlaceWithRating
+
+    events:
+      - http:
+          authorizer:
+            name: jwtVerify
+            identitySource: method.request.header.Authorization
+          path: places/{placeId}/rating
+          method: get
+          cors: true  
+          request:
+            parameters:
+              paths:
+                id: true      
           
 
 custom:
