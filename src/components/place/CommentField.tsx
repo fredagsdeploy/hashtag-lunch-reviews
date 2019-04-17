@@ -64,9 +64,7 @@ const CommentOnly = ({ review, recentlySaved }: CommentOnlyProps) => {
 
 const NewCommentForm = ({ placeId }: Pick<Props, "placeId">) => {
   return (
-    <CommentLink to={`/newreview/${placeId}`}>
-      {"Lägg till omdömme"}
-    </CommentLink>
+    <CommentLink to={`/newreview/${placeId}`}>{"Lägg till omdöme"}</CommentLink>
   );
 };
 
