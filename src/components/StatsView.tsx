@@ -24,15 +24,32 @@ interface Props {
 }
 
 import places from "../seeds/places.json";
-import { postPlace } from "../lib/backend";
+import reviews from "../seeds/reviews.json";
+import { postPlace, postMigrateReview } from "../lib/backend";
 
 const seed = () => {
   console.log(places);
-  places.filter(place => place.googlePlaceId).forEach(place => {
+
+  const placesWithReview = places.filter(place => place.googlePlaceId).map(place => {
+    const reviewsForPlace = reviews.filter(review => review.placeId === place.placeId);
+    return {
+      ...place,
+      reviews: reviewsForPlace
+    }
+  });
+
+
+
+  placesWithReview.forEach(place => {
     postPlace({
       googlePlaceId: place.googlePlaceId,
       comment: place.comment,
       placeName: place.placeName
+    }).then(placeEntity => {
+      place.reviews.forEach(review => {
+        const { nick, comment, rating } = review;
+        postMigrateReview({ nick, comment: (comment || " "), userId: " ", rating, placeId: placeEntity.placeId })
+      })
     })
   });
 

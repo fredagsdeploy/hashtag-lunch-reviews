@@ -75,3 +75,17 @@ export const postReview = (
     body: JSON.stringify(review)
   });
 };
+
+export const postMigrateReview = (
+  review: NewReview & { nick: string }
+): Promise<Review> => {
+  const { userId, placeId, rating, comment
+  } = review;
+  if (!userId || !placeId || !rating || !comment) {
+    throw new Error(`Missing attribute(s) in review ${JSON.stringify(review)}`);
+  }
+  return myFetch(BASE_URL + "/reviews/migrated", {
+    method: "post",
+    body: JSON.stringify(review)
+  });
+};

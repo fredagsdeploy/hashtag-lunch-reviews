@@ -87,7 +87,7 @@ functions:
           cors: true
 
   postMigratedReview:
-    handler: src/reviews.postMigratedReview
+    handler: src/reviews.postMigrateReview
 
     events:
       - http:
