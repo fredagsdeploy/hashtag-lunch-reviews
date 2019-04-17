@@ -28,7 +28,7 @@ const myFetch = (
 };
 
 export const getReviewsForPlace = (placeId: string): Promise<Review[]> => {
-  return myFetch(`${BASE_URL}/reviews/${placeId}`);
+  return myFetch(`${BASE_URL}/places/${placeId}/reviews`);
 };
 
 export const getRatings = (): Promise<Rating[]> => {

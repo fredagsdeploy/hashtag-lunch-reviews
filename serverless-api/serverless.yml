@@ -106,7 +106,7 @@ functions:
           authorizer:
             name: jwtVerify
             identitySource: method.request.header.Authorization
-          path: reviews/{placeId}
+          path: place/{placeId}/reviews
           method: get
           cors: true
           request:
