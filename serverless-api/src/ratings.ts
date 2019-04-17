@@ -59,3 +59,21 @@ export const getPlacesWithRatings: LambdaHandler = async () => {
 
   return createResponse(200, rankedRatings);
 };
+
+export const getPlaceWithRatings: LambdaHandler = async (event) => {
+  if (!event.pathParameters) {
+    return createResponse(400, { message: "Missing placeId path parameter" })
+  }
+  const placeId = event.pathParameters.placeId;
+
+  const reviewsForPlace = await getReviewsByPlaceId(placeId);
+
+  const place = await getPlaceById(placeId)
+  if (!place) {
+    return createResponse(404, { message: `there's no place like ${placeId}` });
+  }
+
+  const rating = await decoratePlace(place, reviewsForPlace)
+
+  return createResponse(200, rating);
+};
