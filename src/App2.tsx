@@ -51,10 +51,7 @@ export const App2: React.FC = () => {
 };
 
 const ContentContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  width: 100%;
-  align-items: center;
-  flex: 1;
-  background-color: #f6f8fa;
+  display: grid;
+  grid-template-columns: minmax(auto, 800px);
+  justify-content: center;
 `;

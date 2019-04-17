@@ -23,7 +23,6 @@ export const App = () => {
 const LayoutGrid = styled.div`
   display: flex;
   flex-flow: column;
-  align-items: center;
   background-color: #f6f8fa;
   min-height: 100%;
 `;
