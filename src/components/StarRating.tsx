@@ -1,6 +1,7 @@
 import React, {
   DetailedHTMLProps,
   HTMLAttributes,
+  KeyboardEventHandler,
   MouseEvent,
   TouchEvent,
   useEffect,
@@ -46,6 +47,17 @@ export const StarRating = ({
     }
   };
 
+  const handleKeyDown: KeyboardEventHandler = e => {
+    switch (e.key) {
+      case "ArrowLeft":
+        onChange(clamp(rating - 0.1, 5, 0));
+        break;
+      case "ArrowRight":
+        onChange(clamp(rating + 0.1, 5, 0));
+        break;
+    }
+  };
+
   useEffect(() => {
     const handler = () => (mouseDown.current = false);
     window.addEventListener("mouseup", handler);
@@ -59,6 +71,7 @@ export const StarRating = ({
   return (
     <StarRatingView
       onClick={starClickHandler}
+      onKeyDown={handleKeyDown}
       onMouseDown={() => (mouseDown.current = true)}
       onMouseMove={e => mouseDown.current && starClickHandler(e)}
       onTouchStart={() => (mouseDown.current = true)}
@@ -103,6 +116,7 @@ export const StarRatingView = ({
     >
       <div
         style={{ width: 5 * starSize, height: starSize, touchAction: "none" }}
+        tabIndex={0}
         {...props}
       >
         <StarDiv style={{ width: rating * starSize }} size={starSize} />
