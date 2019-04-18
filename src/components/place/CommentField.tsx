@@ -69,11 +69,9 @@ const NewCommentForm = ({ placeId }: Pick<Props, "placeId">) => {
 };
 
 const CommentContainer = styled.div`
+  grid-area: comments;
   display: flex;
-  align-items: center;
-  @media screen and (max-width: 600px) {
-    align-items: stretch;
-  }
+  padding: 0.5em;
 `;
 
 const UserImage = styled.div<{ url?: string; active: boolean }>`
@@ -98,7 +96,6 @@ const RatingContainer = styled.div`
   padding: 1em;
 
   display: flex;
-  align-items: center;
 
   flex: 1;
 

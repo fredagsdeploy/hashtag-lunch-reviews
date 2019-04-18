@@ -73,7 +73,7 @@ const RatingsListContainer = styled.div`
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: minmax(1fr, 800px);
-  grid-column-gap: 10px;
+  grid-gap: 1em;
 `;
 
 const StatsContainerNoHover = styled(Row)`
