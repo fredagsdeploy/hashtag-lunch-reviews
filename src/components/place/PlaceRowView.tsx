@@ -5,7 +5,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Suspense, useState } from "react";
-
 import styled from "styled-components";
 import { useReviewsByPlaceId } from "../../customHooks/api";
 import { useFadeState } from "../../customHooks/useFadeState";
@@ -82,25 +81,45 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
       >
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
+      <Suspense
+        fallback={
+          <>
+            <PlaceContent>
+              <MetaData>
+                <NameComment>
+                  <PlaceName>{place.placeName}</PlaceName>
+                  <PlaceComment>{place.comment}</PlaceComment>
+                </NameComment>
+                <PlaceRatings>
+                  <Blue icon={faHashtag} />
+                  {formatStarRating(place.rating)}
+                  <Yellow icon={faStar} />
+                  {formatStarRating(place.rating)}
+                </PlaceRatings>
+              </MetaData>
 
-      <PlaceContent>
-        <MetaData>
-          <NameComment>
-            <PlaceName>{place.placeName}</PlaceName>
-            <PlaceComment>{place.comment}</PlaceComment>
-          </NameComment>
-          <PlaceRatings>
-            <Blue icon={faHashtag} />
-            {formatStarRating(place.rating)}
-            <Yellow icon={faStar} />
-            {formatStarRating(place.rating)}
-          </PlaceRatings>
-        </MetaData>
-        <Suspense fallback={<Spinner />}>
+              <Spinner />
+            </PlaceContent>
+            <div style={{ width: 160 }} />
+          </>
+        }
+      >
+        <PlaceContent>
+          <MetaData>
+            <NameComment>
+              <PlaceName>{place.placeName}</PlaceName>
+              <PlaceComment>{place.comment}</PlaceComment>
+            </NameComment>
+            <PlaceRatings>
+              <Blue icon={faHashtag} />
+              {formatStarRating(place.rating)}
+              <Yellow icon={faStar} />
+              {formatStarRating(place.rating)}
+            </PlaceRatings>
+          </MetaData>
+
           <RatingDisplay placeId={placeId} />
-        </Suspense>
-      </PlaceContent>
-      <Suspense fallback={<Spinner />}>
+        </PlaceContent>
         <ChartDisplay placeId={placeId} />
       </Suspense>
     </PlaceRow>

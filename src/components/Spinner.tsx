@@ -19,7 +19,7 @@ export const Spinner = ({ size = "small" }: Props) => {
       <FontAwesomeIcon
         icon={faUtensilSpoon}
         spin
-        size={size == "large" ? "3x" : "1x"}
+        size={size === "large" ? "6x" : "2x"}
         color={"#5d5d5d"}
       />
     </div>
