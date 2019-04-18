@@ -120,28 +120,15 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
 
 const PlaceImage = styled.div<{ url?: string }>`
   grid-area: img;
-  /*flex: 1;
-  max-width: 13em;
-  height: 10em; */
 
   background: ${props => (props.url ? `url(${props.url})` : "#6495ed")};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
 
-  /* color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
-
   & > svg {
     display: ${props => (props.url ? "none" : "initial")};
   }
-
-  /* @media screen and (max-width: 600px) {
-    max-width: initial;
-    flex: initial;
-  } */
 `;
 
 const PlaceRow = styled.div`
@@ -163,24 +150,6 @@ const PlaceRow = styled.div`
       "place"
       "rating"
       "comments";
-  }
-`;
-
-const PlaceContent = styled.div`
-  padding: 1em;
-  flex: 1;
-
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-around;
-`;
-
-const MetaData = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  @media screen and (max-width: 600px) {
-    flex-direction: column;
   }
 `;
 
