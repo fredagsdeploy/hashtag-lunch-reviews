@@ -1,7 +1,7 @@
 import * as AWS from "aws-sdk";
-import {getPlaceById, Place} from "./places";
+import { getPlaceById, Place } from "./places";
 import { dynamodb } from "./documentClient";
-import {createResponse} from "../common";
+import { createResponse } from "../common";
 
 export interface Review {
   reviewId: string;

@@ -4,7 +4,8 @@ import {
   getAllReviews,
   saveReview,
   Review,
-  getReviewsByPlaceId
+  getReviewsByPlaceId,
+  getReviewById
 } from "./repository/reviews";
 import { getUserById, User } from "./repository/users";
 
@@ -90,6 +91,38 @@ export const postReviews: LambdaHandler = async event => {
     );
     const expandedReview = await expandReview(review);
     return createResponse(201, expandedReview);
+  } catch (error) {
+    return createResponse(400, { error: error.message });
+  }
+};
+
+export const putReview: LambdaHandler = async event => {
+  const body = parseJSON(event.body) as Partial<ReviewInput>;
+
+  if (!event.pathParameters || !event.pathParameters.reviewId) {
+    return createResponse(400, { message: "Missing path parameter reviewId" })
+  }
+
+  const reviewId = event.pathParameters.reviewId;
+  const oldReview = await getReviewById(reviewId);
+
+  if (!oldReview) {
+    return createResponse(404, { message: `No review with id ${reviewId}` })
+  }
+
+  const { userId, placeId, rating, comment } = body;
+
+  if (!userId || !placeId || !rating) {
+    return createResponse(400, { error: "Missing parameters" });
+  }
+
+
+  try {
+    const review = await saveReview(
+      createReview(oldReview.reviewId, userId, placeId, rating, comment ? comment : " ")
+    );
+    const expandedReview = await expandReview(review);
+    return createResponse(200, expandedReview);
   } catch (error) {
     return createResponse(400, { error: error.message });
   }
