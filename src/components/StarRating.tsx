@@ -100,10 +100,10 @@ export const StarRatingView = ({
         alignItems: "center",
         userSelect: "none"
       }}
-      {...props}
     >
       <div
         style={{ width: 5 * starSize, height: starSize, touchAction: "none" }}
+        {...props}
       >
         <StarDiv style={{ width: rating * starSize }} size={starSize} />
         <HollowStarDiv style={{ width: 5 * starSize }} size={starSize} />
