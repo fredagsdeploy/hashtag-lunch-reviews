@@ -8,6 +8,8 @@ import {
   getReviewById
 } from "./repository/reviews";
 import { getUserById, User } from "./repository/users";
+import { getPlaceById } from "./repository/places";
+import { decoratePlace } from "./ratings";
 
 const createReview = (
   reviewId: string,
@@ -86,11 +88,20 @@ export const postReviews: LambdaHandler = async event => {
   const newUUID = uuid();
 
   try {
-    const review = await saveReview(
+    await saveReview(
       createReview(newUUID, userId, placeId, rating, comment ? comment : " ")
     );
-    const expandedReview = await expandReview(review);
-    return createResponse(201, expandedReview);
+
+    const reviewsForPlace = await getReviewsByPlaceId(placeId);
+
+    const place = await getPlaceById(placeId)
+    if (!place) {
+      return createResponse(404, { message: `there's no place like ${placeId}` });
+    }
+
+    const updatedRating = await decoratePlace(place, reviewsForPlace)
+    return createResponse(200, updatedRating);
+
   } catch (error) {
     return createResponse(400, { error: error.message });
   }

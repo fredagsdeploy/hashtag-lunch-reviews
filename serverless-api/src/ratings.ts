@@ -29,7 +29,7 @@ const getGooglePlaceInfo = async (place) => {
   }
 }
 
-const decoratePlace = async (place, reviews) => {
+export const decoratePlace = async (place, reviews) => {
   const rating = calculateRating(place, reviews)
   const googlePlace = await getGooglePlaceInfo(place);
 
