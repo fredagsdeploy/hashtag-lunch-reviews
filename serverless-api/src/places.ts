@@ -10,6 +10,7 @@ import {
   getPlaceByGoogleId
 } from "./repository/places";
 import { getGooglePlace } from "./googlePlaces/googlePlaces";
+import { decoratePlace } from "./ratings";
 
 const createPlace = (
   placeId: string,
@@ -102,7 +103,9 @@ export const post: LambdaHandler = async (event, context) => {
           googlePlaceId ? googlePlaceId : " "
         )
       );
-      return createResponse(200, place);
+
+      const rating = await decoratePlace(place, [])
+      return createResponse(200, rating);
     } catch (error) {
       return createResponse(400, error);
     }
