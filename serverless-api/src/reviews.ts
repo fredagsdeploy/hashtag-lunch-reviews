@@ -88,7 +88,7 @@ export const postReviews: LambdaHandler = async event => {
   const newUUID = uuid();
 
   try {
-    await saveReview(
+    const newReview = await saveReview(
       createReview(newUUID, userId, placeId, rating, comment ? comment : " ")
     );
 
@@ -100,7 +100,7 @@ export const postReviews: LambdaHandler = async event => {
     }
 
     const updatedRating = await decoratePlace(place, reviewsForPlace)
-    return createResponse(200, updatedRating);
+    return createResponse(200, { rating: updatedRating, review: newReview });
 
   } catch (error) {
     return createResponse(400, { error: error.message });
