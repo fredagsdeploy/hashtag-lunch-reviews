@@ -149,8 +149,8 @@ const PlaceRow = styled.div`
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
   background-color: #fff;
 
-  grid-template-columns: 1fr 2fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 200px auto auto 160px;
+  grid-template-rows: auto auto;
   grid-template-areas:
     "img place rating chart"
     "img comments comments chart";
@@ -158,7 +158,13 @@ const PlaceRow = styled.div`
 
   margin: 1em; */
   @media screen and (max-width: 600px) {
-    flex-direction: column;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(4, auto);
+    grid-template-areas:
+      "img"
+      "place"
+      "rating"
+      "comments";
   }
 `;
 
@@ -182,10 +188,9 @@ const MetaData = styled.div`
 
 const ChartRow = styled.div`
   grid-area: chart;
-  /* display: flex;
   @media screen and (max-width: 600px) {
-    justify-content: center;
-  } */
+    grid-area: img;
+  }
 `;
 
 const PlaceName = styled.div`
@@ -194,18 +199,23 @@ const PlaceName = styled.div`
 `;
 
 const PlaceComment = styled.div``;
-const NameComment = styled.div``;
+
+const NameComment = styled.div`
+  padding: 0.5em;
+`;
 
 const PlaceRatings = styled.div`
   grid-area: rating;
-  /* font-size: 1.4em;
+  font-size: 1.4em;
   display: flex;
+  justify-content: right;
+  padding: 0.5em;
 
   @media screen and (max-width: 600px) {
     justify-content: center;
     font-size: 2.5em;
-    margin: 1em 0;
-  } */
+    /* margin: 1em 0; */
+  }
 `;
 
 const Yellow = styled(FontAwesomeIcon)`
