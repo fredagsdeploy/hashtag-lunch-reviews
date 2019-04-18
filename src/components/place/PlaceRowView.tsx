@@ -92,7 +92,7 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
                 </NameComment>
                 <PlaceRatings>
                   <Blue icon={faHashtag} />
-                  {formatStarRating(place.rating)}
+                  {formatStarRating(place.normalizedRating)}
                   <Yellow icon={faStar} />
                   {formatStarRating(place.rating)}
                 </PlaceRatings>
@@ -112,7 +112,7 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
             </NameComment>
             <PlaceRatings>
               <Blue icon={faHashtag} />
-              {formatStarRating(place.rating)}
+              {formatStarRating(place.normalizedRating)}
               <Yellow icon={faStar} />
               {formatStarRating(place.rating)}
             </PlaceRatings>

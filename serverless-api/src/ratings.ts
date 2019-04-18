@@ -1,7 +1,7 @@
-import { getAllReviews, getReviewsByPlaceId } from "./repository/reviews";
+import { getAllReviews, getReviewsByPlaceId, Review } from "./repository/reviews";
 import * as _ from "lodash";
 import { createResponse, LambdaHandler } from "./common";
-import { getAllPlaces, getPlaceByGoogleId, getPlaceById } from "./repository/places";
+import { getAllPlaces, getPlaceByGoogleId, getPlaceById, Place } from "./repository/places";
 import { getGooglePlace } from "./googlePlaces/googlePlaces";
 import { getReviewsByPlace } from "./reviews";
 
@@ -10,7 +10,7 @@ interface Rating {
   rating: number;
 }
 
-const calculateRating = (place, reviews) => {
+const calculateRating = (reviews: Review[]): number => {
   if (!_.isEmpty(reviews)) {
     const sum = reviews.reduce((sum, review) => review.rating + sum, 0);
 
@@ -18,6 +18,25 @@ const calculateRating = (place, reviews) => {
   }
 
   return 0;
+}
+
+const calculateNormalizedRating = async (place: Place): Promise<number> => {
+  const allReviews = await getAllReviews();
+  const reviewByUserId = _.groupBy(allReviews, "userId");
+  const normalizedReviews = _.flatMap<_.Dictionary<Review[]>, Review>(reviewByUserId, (reviewsForUser, userId) => {
+
+    const ratingValues = _.map(reviewsForUser, r => r.rating);
+    const min = _.min(ratingValues) || 0;
+    const max = _.max(ratingValues) || 5;
+    const normalizer = v => 5 * (v - min) / (max - min)
+
+    const normalizedReviewsForUser = reviewsForUser.map(review => ({ ...review, rating: normalizer(review.rating) }))
+    return normalizedReviewsForUser;
+  });
+
+  const normalizedReviewsGroupedByPlaceId = _.groupBy(normalizedReviews, "placeId");
+
+  return calculateRating(normalizedReviewsGroupedByPlaceId[place.placeId]);
 }
 
 const getGooglePlaceInfo = async (place) => {
@@ -29,13 +48,15 @@ const getGooglePlaceInfo = async (place) => {
   }
 }
 
-export const decoratePlace = async (place, reviews) => {
-  const rating = calculateRating(place, reviews)
+export const decoratePlace = async (place: Place, reviews: Review[]) => {
+  const rating = calculateRating(reviews);
+  const normalizedRating: number = await calculateNormalizedRating(place);
   const googlePlace = await getGooglePlaceInfo(place);
 
   return {
     ...place,
     rating,
+    normalizedRating,
     googlePlace
   }
 }

@@ -4,7 +4,7 @@ export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
 export interface Rating extends Place {
   rating: number;
-  normalized_rating: number;
+  normalizedRating: number;
   rank: number;
 }
 export interface Review {
