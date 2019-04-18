@@ -72,10 +72,6 @@ const CommentContainer = styled.div`
   grid-area: comments;
   display: flex;
   padding: 0.5em;
-  /* align-items: center; */
-  /*@media screen and (max-width: 600px) {
-    align-items: stretch;
-  } */
 `;
 
 const UserImage = styled.div<{ url?: string; active: boolean }>`

@@ -154,9 +154,7 @@ const PlaceRow = styled.div`
   grid-template-areas:
     "img place rating chart"
     "img comments comments chart";
-  /* align-items: stretch;
 
-  margin: 1em; */
   @media screen and (max-width: 600px) {
     grid-template-columns: auto;
     grid-template-rows: repeat(4, auto);
@@ -214,7 +212,6 @@ const PlaceRatings = styled.div`
   @media screen and (max-width: 600px) {
     justify-content: center;
     font-size: 2.5em;
-    /* margin: 1em 0; */
   }
 `;
 
