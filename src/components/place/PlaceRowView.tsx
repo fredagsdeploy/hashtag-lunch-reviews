@@ -126,6 +126,10 @@ const PlaceImage = styled.div<{ url?: string }>`
   background-size: cover;
   background-position: center center;
 
+  display: grid;
+  justify-content: center;
+  align-content: center;
+
   & > svg {
     display: ${props => (props.url ? "none" : "initial")};
   }
