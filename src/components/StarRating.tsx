@@ -22,6 +22,8 @@ interface Props {
 const clamp = (num: number, max: number, min: number) =>
   Math.max(min, Math.min(max, num));
 
+const roundValue = (num: number) => Math.round(num * 10) / 10;
+
 export const StarRating = ({
   rating,
   onChange,
@@ -35,8 +37,9 @@ export const StarRating = ({
   ) => {
     const posX = "clientX" in event ? event.clientX : event.touches[0].clientX;
     const container = event.currentTarget as HTMLDivElement;
-    const newRating =
-      clamp((posX - container.offsetLeft) / container.offsetWidth, 1, 0) * 5;
+    const newRating = roundValue(
+      clamp((posX - container.offsetLeft) / container.offsetWidth, 1, 0) * 5
+    );
 
     if (onChange) {
       onChange(newRating);
@@ -94,12 +97,13 @@ export const StarRatingView = ({
       style={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center"
+        alignItems: "center",
+        userSelect: "none"
       }}
+      {...props}
     >
       <div
         style={{ width: 5 * starSize, height: starSize, touchAction: "none" }}
-        {...props}
       >
         <StarDiv style={{ width: rating * starSize }} size={starSize} />
         <HollowStarDiv style={{ width: 5 * starSize }} size={starSize} />
