@@ -84,28 +84,6 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
       <Suspense
         fallback={
           <>
-            <PlaceContent>
-              <MetaData>
-                <NameComment>
-                  <PlaceName>{place.placeName}</PlaceName>
-                  <PlaceComment>{place.comment}</PlaceComment>
-                </NameComment>
-                <PlaceRatings>
-                  <Blue icon={faHashtag} />
-                  {formatStarRating(place.normalizedRating)}
-                  <Yellow icon={faStar} />
-                  {formatStarRating(place.rating)}
-                </PlaceRatings>
-              </MetaData>
-
-              <Spinner />
-            </PlaceContent>
-            <div style={{ width: 160 }} />
-          </>
-        }
-      >
-        <PlaceContent>
-          <MetaData>
             <NameComment>
               <PlaceName>{place.placeName}</PlaceName>
               <PlaceComment>{place.comment}</PlaceComment>
@@ -116,10 +94,24 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
               <Yellow icon={faStar} />
               {formatStarRating(place.rating)}
             </PlaceRatings>
-          </MetaData>
 
-          <RatingDisplay placeId={placeId} />
-        </PlaceContent>
+            <Spinner />
+            <div style={{ width: 160 }} />
+          </>
+        }
+      >
+        <NameComment>
+          <PlaceName>{place.placeName}</PlaceName>
+          <PlaceComment>{place.comment}</PlaceComment>
+        </NameComment>
+        <PlaceRatings>
+          <Blue icon={faHashtag} />
+          {formatStarRating(place.normalizedRating)}
+          <Yellow icon={faStar} />
+          {formatStarRating(place.rating)}
+        </PlaceRatings>
+
+        <RatingDisplay placeId={placeId} />
         <ChartDisplay placeId={placeId} />
       </Suspense>
     </PlaceRow>
@@ -127,41 +119,44 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
 };
 
 const PlaceImage = styled.div<{ url?: string }>`
-  flex: 1;
+  grid-area: img;
+  /*flex: 1;
   max-width: 13em;
-  height: 10em;
+  height: 10em; */
 
   background: ${props => (props.url ? `url(${props.url})` : "#6495ed")};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
 
-  color: #fff;
+  /* color: #fff;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 
   & > svg {
     display: ${props => (props.url ? "none" : "initial")};
   }
 
-  @media screen and (max-width: 600px) {
+  /* @media screen and (max-width: 600px) {
     max-width: initial;
     flex: initial;
-  }
+  } */
 `;
 
 const PlaceRow = styled.div`
-  display: flex;
-
+  display: grid;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-
   background-color: #fff;
 
-  align-items: stretch;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "img place rating chart"
+    "img comments comments chart";
+  /* align-items: stretch;
 
-  margin: 1em;
-
+  margin: 1em; */
   @media screen and (max-width: 600px) {
     flex-direction: column;
   }
@@ -186,10 +181,11 @@ const MetaData = styled.div`
 `;
 
 const ChartRow = styled.div`
-  display: flex;
+  grid-area: chart;
+  /* display: flex;
   @media screen and (max-width: 600px) {
     justify-content: center;
-  }
+  } */
 `;
 
 const PlaceName = styled.div`
@@ -201,14 +197,15 @@ const PlaceComment = styled.div``;
 const NameComment = styled.div``;
 
 const PlaceRatings = styled.div`
-  font-size: 1.4em;
+  grid-area: rating;
+  /* font-size: 1.4em;
   display: flex;
 
   @media screen and (max-width: 600px) {
     justify-content: center;
     font-size: 2.5em;
     margin: 1em 0;
-  }
+  } */
 `;
 
 const Yellow = styled(FontAwesomeIcon)`

@@ -69,11 +69,12 @@ const NewCommentForm = ({ placeId }: Pick<Props, "placeId">) => {
 };
 
 const CommentContainer = styled.div`
-  display: flex;
+  grid-area: comments;
+  /* display: flex;
   align-items: center;
   @media screen and (max-width: 600px) {
     align-items: stretch;
-  }
+  } */
 `;
 
 const UserImage = styled.div<{ url?: string; active: boolean }>`
