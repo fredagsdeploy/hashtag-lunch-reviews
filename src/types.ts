@@ -1,5 +1,3 @@
-import { string } from "prop-types";
-
 export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
 export interface Rating extends Place {
@@ -17,7 +15,7 @@ export interface Review {
 
 export interface NewReview extends Omit<Review, "reviewId" | "user"> {
   userId: string;
-};
+}
 
 export interface Place {
   placeId: string;
@@ -38,15 +36,15 @@ export interface GoogleUser {
 }
 
 export interface User {
-  googleUserId: string,
-  displayName: string,
-  imageUrl: string
+  googleUserId: string;
+  displayName: string;
+  imageUrl: string;
 }
 
 export const emptyUser: User = {
   googleUserId: "no-id",
   displayName: "no-displayName",
-  imageUrl: "no-imageUrl",
+  imageUrl: "no-imageUrl"
 };
 
 export const newPlace: Place = {
