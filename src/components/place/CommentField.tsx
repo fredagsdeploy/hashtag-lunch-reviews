@@ -26,7 +26,7 @@ export const CommentField = ({
   afterSubmit,
   recentlySaved
 }: Props) => {
-  const user = useUserContext();
+  const user = useUserContext()!;
 
   return (
     <CommentContainer>

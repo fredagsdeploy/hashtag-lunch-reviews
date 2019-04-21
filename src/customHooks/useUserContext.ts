@@ -1,6 +1,7 @@
-import { emptyUser } from "../types";
-import React, { useContext } from "react";
+import { useMappedState } from "redux-react-hook";
+import { StoreState } from "../store/configureStore";
+import { User } from "../types";
 
-export const UserContext = React.createContext(emptyUser);
+const mapState = (state: StoreState): User | null => state.user.user;
 
-export const useUserContext = () => useContext(UserContext);
+export const useUserContext = () => useMappedState(mapState);

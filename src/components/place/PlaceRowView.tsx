@@ -25,7 +25,7 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const reviewsFromServer = useReviewsByPlaceId(placeId);
   const [reviews, setReviews] = useState<Review[]>(reviewsFromServer);
 
-  const user = useUserContext();
+  const user = useUserContext()!;
 
   const myReview = reviews.filter(
     review => review.user.googleUserId == user.googleUserId

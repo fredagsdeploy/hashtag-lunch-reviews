@@ -21,7 +21,7 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
   const { placeId } = match.params;
   const place = usePlaceById(placeId);
 
-  const user = useUserContext();
+  const user = useUserContext()!;
   const newReviewInitalState: NewReview = {
     rating: 0,
     comment: "",
