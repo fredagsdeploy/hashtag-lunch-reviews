@@ -1,30 +1,18 @@
-import React, {
-  useState,
-  ChangeEvent,
-  MouseEventHandler,
-  FormEvent
-} from "react";
-import { Review, NewReview, Omit } from "../../types";
-import styled from "styled-components";
-import { StarRating, StarRatingView } from "../StarRating";
-import { useUserContext } from "../../customHooks/useUserContext";
-import { postReview } from "../../lib/backend";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { useUserContext } from "../../customHooks/useUserContext";
+import { Review } from "../../types";
+import { StarRatingView } from "../StarRating";
 
 interface Props {
   review?: Review;
   placeId: string;
-  afterSubmit: (review: Review) => void;
-  recentlySaved: boolean;
 }
 
 export const CommentField = ({
   review,
   placeId,
-  afterSubmit,
-  recentlySaved
 }: Props) => {
   const user = useUserContext()!;
 
@@ -36,7 +24,7 @@ export const CommentField = ({
       </div>
       <RatingContainer>
         {review ? (
-          <CommentOnly review={review} recentlySaved={recentlySaved} />
+          <CommentOnly review={review} />
         ) : (
           <NewCommentForm placeId={placeId} />
         )}
@@ -47,17 +35,13 @@ export const CommentField = ({
 
 interface CommentOnlyProps {
   review: Review;
-  recentlySaved: boolean;
 }
 
-const CommentOnly = ({ review, recentlySaved }: CommentOnlyProps) => {
+const CommentOnly = ({ review }: CommentOnlyProps) => {
   return (
     <>
       <StarRatingView rating={review.rating} />
       <Comment>{review.comment}</Comment>
-      {recentlySaved && (
-        <FontAwesomeIcon icon={faCheckCircle} color={"#6495ed"} />
-      )}
     </>
   );
 };
@@ -71,7 +55,7 @@ const NewCommentForm = ({ placeId }: Pick<Props, "placeId">) => {
 const CommentContainer = styled.div`
   grid-area: comments;
   display: flex;
-  padding: 0.5em;
+  padding: 1em;
 `;
 
 const UserImage = styled.div<{ url?: string; active: boolean }>`

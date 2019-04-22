@@ -4,14 +4,14 @@ import {
   faUtensils
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useMemo } from "react";
 import styled from "styled-components";
 import { useReviewsByPlaceId } from "../../customHooks/api";
-import { useFadeState } from "../../customHooks/useFadeState";
 
 import { useUserContext } from "../../customHooks/useUserContext";
 import { getPhotoUrl } from "../../googlePlaces/googlePlaces";
-import { Rating, Review } from "../../types";
+import { Rating } from "../../types";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { SpiderWebChart } from "../SpiderWebChart";
 import { Spinner } from "../Spinner";
 import { formatStarRating } from "../utils/formatter";
@@ -22,8 +22,7 @@ interface RatingDisplayProps {
 }
 
 const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
-  const reviewsFromServer = useReviewsByPlaceId(placeId);
-  const [reviews, setReviews] = useState<Review[]>(reviewsFromServer);
+  const reviews = useReviewsByPlaceId(placeId);
 
   const user = useUserContext()!;
 
@@ -31,36 +30,25 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
     review => review.user.googleUserId == user.googleUserId
   )[0];
 
-  const [recentlySaved, setRecentlySaved] = useFadeState(false, 3000);
-
-  return (
-    <CommentField
-      review={myReview}
-      placeId={placeId}
-      afterSubmit={(review: Review) => {
-        setReviews(reviews => [...reviews, review]);
-        setRecentlySaved(true);
-      }}
-      recentlySaved={recentlySaved}
-    />
+  const chartData = useMemo(
+    () =>
+      reviews.map(review => ({
+        value: review.rating,
+        max: 5
+      })),
+    [reviews]
   );
-};
-
-const ChartDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
-  const reviewsFromServer = useReviewsByPlaceId(placeId);
-
-  const chartData = reviewsFromServer.map(review => ({
-    value: review.rating,
-    max: 5
-  }));
 
   const data =
     chartData.length === 1 ? [...chartData, { value: 0, max: 5 }] : chartData;
 
   return (
-    <ChartRow>
-      <SpiderWebChart data={data} />
-    </ChartRow>
+    <>
+      <CommentField review={myReview} placeId={placeId} />
+      <ChartRow>
+        <SpiderWebChart data={data} />
+      </ChartRow>
+    </>
   );
 };
 
@@ -81,38 +69,21 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
       >
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
-      <Suspense
-        fallback={
-          <>
-            <NameComment>
-              <PlaceName>{place.placeName}</PlaceName>
-              <PlaceComment>{place.comment}</PlaceComment>
-            </NameComment>
-            <PlaceRatings>
-              <Blue icon={faHashtag} />
-              {formatStarRating(place.normalizedRating)}
-              <Yellow icon={faStar} />
-              {formatStarRating(place.rating)}
-            </PlaceRatings>
 
-            <Spinner />
-            <div style={{ width: 160 }} />
-          </>
-        }
-      >
-        <NameComment>
-          <PlaceName>{place.placeName}</PlaceName>
-          <PlaceComment>{place.comment}</PlaceComment>
-        </NameComment>
-        <PlaceRatings>
-          <Blue icon={faHashtag} />
-          {formatStarRating(place.normalizedRating)}
-          <Yellow icon={faStar} />
-          {formatStarRating(place.rating)}
-        </PlaceRatings>
-
-        <RatingDisplay placeId={placeId} />
-        <ChartDisplay placeId={placeId} />
+      <NameComment>
+        <PlaceName>{place.placeName}</PlaceName>
+        <PlaceComment>{place.comment}</PlaceComment>
+      </NameComment>
+      <PlaceRatings>
+        <Blue icon={faHashtag} />
+        {formatStarRating(place.normalizedRating)}
+        <Yellow icon={faStar} />
+        {formatStarRating(place.rating)}
+      </PlaceRatings>
+      <Suspense fallback={<Spinner />}>
+        <ErrorBoundary>
+          <RatingDisplay placeId={placeId} />
+        </ErrorBoundary>
       </Suspense>
     </PlaceRow>
   );
@@ -139,6 +110,7 @@ const PlaceRow = styled.div`
   display: grid;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
   background-color: #fff;
+  min-height: 160px;
 
   grid-template-columns: 200px auto auto 160px;
   grid-template-rows: auto auto;
@@ -172,7 +144,7 @@ const PlaceName = styled.div`
 const PlaceComment = styled.div``;
 
 const NameComment = styled.div`
-  padding: 0.5em;
+  padding: 1em;
 `;
 
 const PlaceRatings = styled.div`
@@ -180,7 +152,7 @@ const PlaceRatings = styled.div`
   font-size: 1.4em;
   display: flex;
   justify-content: right;
-  padding: 0.5em;
+  padding: 1em;
 
   @media screen and (max-width: 600px) {
     justify-content: center;
