@@ -1,11 +1,15 @@
-import React, { FormEvent, useState, ChangeEvent } from "react";
-import { NewReview } from "../../types";
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
+import { RouteChildrenProps } from "react-router";
+import { useDispatch } from "redux-react-hook";
 import styled from "styled-components";
-import { StarRating } from "../StarRating";
+import { usePlaceById } from "../../customHooks/api";
 import { useUserContext } from "../../customHooks/useUserContext";
 import { postReview } from "../../lib/backend";
-import { RouteChildrenProps } from "react-router";
-import { usePlaceById } from "../../customHooks/api";
+import { updateRating } from "../../store/reducers/ratings";
+import { addReview } from "../../store/reducers/reviews";
+import { NewReview, ReviewRating } from "../../types";
+import { StarRating } from "../StarRating";
 
 interface Props
   extends RouteChildrenProps<{
@@ -21,7 +25,7 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
   const { placeId } = match.params;
   const place = usePlaceById(placeId);
 
-  const user = useUserContext();
+  const user = useUserContext()!;
   const newReviewInitalState: NewReview = {
     rating: 0,
     comment: "",
@@ -31,10 +35,17 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
 
   const [newReview, setNewReview] = useState(newReviewInitalState);
 
-  const addReview = (event: FormEvent<HTMLFormElement>) => {
+  const dispatch = useDispatch();
+
+  const submitReview = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     postReview(newReview)
-      .then(() => {
+      .then(({ review, rating }: ReviewRating) => {
+        unstable_batchedUpdates(() => {
+          dispatch(updateRating(rating));
+          dispatch(addReview(placeId, review));
+        });
+
         onClose();
       })
       .catch(e => {
@@ -61,7 +72,7 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
   };
 
   return (
-    <CommentForm onSubmit={addReview}>
+    <CommentForm onSubmit={submitReview}>
       <PlaceName>{place.placeName}</PlaceName>
       {place.comment && <PlaceComment>{place.comment}</PlaceComment>}
       <StarRating

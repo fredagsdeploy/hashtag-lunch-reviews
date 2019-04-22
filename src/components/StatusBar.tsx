@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const StatusBar = ({ logoutClicked }: Props) => {
-  const user = useUserContext();
+  const user = useUserContext()!;
   return (
     <Bar>
       <div>

@@ -72,8 +72,12 @@ export const StatsView = ({
 const RatingsListContainer = styled.div`
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: minmax(1fr, 800px);
+  grid-template-columns: minmax(auto, 800px);
   grid-gap: 1em;
+  
+  @media screen and (max-width: 600px) { 
+    padding: 0 1em;
+  }
 `;
 
 const StatsContainerNoHover = styled(Row)`

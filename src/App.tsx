@@ -1,7 +1,9 @@
 import React, { Suspense } from "react";
+import { StoreContext } from "redux-react-hook";
 import styled, { createGlobalStyle } from "styled-components";
 import { App2 } from "./App2";
 import { Spinner } from "./components/Spinner";
+import { store } from "./store/configureStore";
 
 declare global {
   interface Window {
@@ -11,12 +13,14 @@ declare global {
 
 export const App = () => {
   return (
-    <LayoutGrid className="App">
-      <GlobalStyle />
-      <Suspense fallback={<Spinner size={"large"} />}>
-        <App2 />
-      </Suspense>
-    </LayoutGrid>
+    <StoreContext.Provider value={store}>
+      <LayoutGrid className="App">
+        <GlobalStyle />
+        <Suspense fallback={<Spinner size={"large"} />}>
+          <App2 />
+        </Suspense>
+      </LayoutGrid>
+    </StoreContext.Provider>
   );
 };
 
