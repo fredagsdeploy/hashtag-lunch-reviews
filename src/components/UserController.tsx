@@ -12,8 +12,8 @@ export const UserController = () => {
   const [displayName, setDisplayName] = useState(user.displayName);
 
   const saveUser = () => {
-    putUser({ ...user, displayName }).then(user => {
-      dispatch(updateUser(user));
+    putUser({ ...user, displayName }).then(updatedUser => {
+      dispatch(updateUser(updatedUser));
     });
   };
 
