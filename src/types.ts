@@ -13,6 +13,11 @@ export interface Review {
   comment: string;
 }
 
+export interface ReviewRating {
+  review: Review;
+  rating: Rating;
+}
+
 export interface NewReview extends Omit<Review, "reviewId" | "user"> {
   userId: string;
 }

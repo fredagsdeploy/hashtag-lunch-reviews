@@ -45,8 +45,9 @@ export const userReducer: Reducer<
       }
     case "SET_SIGNED_OUT":
       return { ...initialUserState, loaded: true };
+    default:
+      return state;
   }
-  return state;
 };
 
 interface UpdateUserAction {

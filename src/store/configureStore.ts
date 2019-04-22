@@ -1,4 +1,4 @@
-import { applyMiddleware, combineReducers, createStore } from "redux";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { ratingsReducer as ratings, RatingsState } from "./reducers/ratings";
 import { reviewsReducer as reviews, ReviewsState } from "./reducers/reviews";
@@ -16,4 +16,10 @@ const rootReducer = combineReducers<StoreState>({
   user
 });
 
-export const store = createStore(rootReducer, applyMiddleware(thunk));
+const composeWithDevTools =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+export const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);

@@ -1,15 +1,13 @@
 import _ from "lodash";
 import React, { ChangeEvent, useMemo, useState } from "react";
+import { useDispatch } from "redux-react-hook";
 import { useRatings } from "../customHooks/api";
 import { useBoolean } from "../customHooks/useBoolean";
 import { browserHistory } from "../history";
 import { postPlace } from "../lib/backend";
+import { updateRating } from "../store/reducers/ratings";
 import { Place, Rating } from "../types";
 import { StatsView } from "./StatsView";
-
-interface Props {
-  userId: string;
-}
 
 const useSorting = <T extends {}>(
   array: T[],
@@ -23,10 +21,9 @@ const useSorting = <T extends {}>(
   ]);
 };
 
-export const StatsController = ({ userId }: Props) => {
-  const ratingsFromServer = useRatings();
+export const StatsController = () => {
+  const ratings = useRatings();
 
-  const [ratings, setRatings] = useState(ratingsFromServer);
   const [ascending, toggleAscending] = useBoolean(false);
   const [sortedBy, setSortedBy] = useState<keyof Rating>("rating");
 
@@ -54,9 +51,12 @@ export const StatsController = ({ userId }: Props) => {
     }
   };
 
+  const dispatch = useDispatch();
+
   const addPlace = () => {
     postPlace(newPlace)
-      .then((place: Place) => {
+      .then((rating: Rating) => {
+        dispatch(updateRating(rating));
         setNewPlace(newPlaceInitialState);
         setIsAddingPlace(false);
       })
@@ -69,8 +69,7 @@ export const StatsController = ({ userId }: Props) => {
     if (!event.target || !event.target.name) {
       throw new Error("No name on event.target");
     }
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
     setNewPlace(newPlace => ({
       ...newPlace,
       [name]: value
