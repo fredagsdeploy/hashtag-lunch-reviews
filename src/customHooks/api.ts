@@ -60,12 +60,12 @@ export const useReviewsByPlaceId = (placeId: PlaceId): Review[] => {
   const state = useMappedState(mapState);
   const dispatch = useDispatch();
 
-
   if (state.resolved && placeId === lastPlaceId.current) {
     return state.data;
   }
 
   if (!reviewsPromise.current || placeId !== lastPlaceId.current) {
+    lastPlaceId.current = placeId;
     reviewsPromise.current = getReviewsForPlace(placeId).then(reviews => {
       dispatch(setReviews(placeId, reviews));
 
