@@ -27,7 +27,7 @@ jobs:
             - v1-frontend-dependencies-
 
       - run:
-          name: Install Serverless CLI and dependencies
+          name: Install frontend dependencies
           command: |
             yarn
 
@@ -44,19 +44,6 @@ jobs:
       - persist_to_workspace:
           root: ~/repo
           paths: build
-
-      - run:
-          name: Install serverless-api dependencies
-          command: cd serverless-api && yarn
-
-      - save_cache:
-          paths:
-            - serverless-api/node_modules
-          key: serverless-api_dependencies
-
-      - run:
-          name: Deploy application
-          command: cd serverless-api && yarn sls deploy --stage prod
 
   build-backend:
     docker:
