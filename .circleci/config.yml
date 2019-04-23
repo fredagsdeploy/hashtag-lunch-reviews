@@ -1,8 +1,18 @@
 version: 2.1
 jobs:
-  build:
+  deploy-frontend:
     docker:
-      - image: circleci/node:8.10
+      - image: cibuilds/aws:1.16.1
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: AWS S3
+          command: aws s3 sync ~/repo/build s3://hashtag-lunch-reviews.tejp.rocks
+
+  build-frontend:
+    docker:
+      - image: circleci/node:11.9
 
     working_directory: ~/repo
 
@@ -12,24 +22,32 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-
+            - v1-frontend-dependencies-
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-frontend-dependencies-
 
       - run:
           name: Install Serverless CLI and dependencies
           command: |
-            sudo npm i -g serverless
-            npm install
+            yarn
 
       - save_cache:
           paths:
             - node_modules
-          key: frontend_dependencies
+          key: v1-frontend-dependencies-
+
+      - run:
+          name: Build frontend
+          command: |
+            yarn build
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: build
 
       - run:
           name: Install serverless-api dependencies
-          command: cd serverless-api && npm install
+          command: cd serverless-api && yarn
 
       - save_cache:
           paths:
@@ -38,19 +56,76 @@ jobs:
 
       - run:
           name: Deploy application
-          command: cd serverless-api && sls deploy --stage prod
+          command: cd serverless-api && yarn sls deploy --stage prod
 
+  build-backend:
+    docker:
+      - image: circleci/node:11.9
 
+    working_directory: ~/repo
 
+    steps:
+      - checkout
 
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-backend-dependencies-
+            # fallback to using the latest cache if no exact match is found
+            - v1-backend-dependencies-
 
+      - run:
+          name: Install serverless-api dependencies
+          command: cd serverless-api && yarn
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-backend-dependencies-
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: serverless-api
+
+  deploy-backend:
+    docker:
+      - image: circleci/node:11.9
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Deploy application
+          command: cd ~/repo/serverless-api && yarn sls deploy --stage prod
 
 workflows:
   version: 2
   deploy:
     jobs:
-      - build:
+      - build-frontend:
           filters:
             branches:
               only:
                 - circleci
+      - deploy-frontend:
+          filters:
+            branches:
+              only:
+                - circleci
+          requires:
+            - build-frontend
+            - build-backend
+
+      - build-backend:
+          filters:
+            branches:
+              only:
+                - circleci
+      - deploy-backend:
+          filters:
+            branches:
+              only:
+                - circleci
+          requires:
+            - build-backend
+            - build-frontend
