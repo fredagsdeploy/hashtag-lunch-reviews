@@ -1,13 +1,32 @@
-import React from "react";
+import React, { ChangeEventHandler, FormEventHandler, useState } from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { Place } from "../types";
-import { Cell, TextInput } from "./CommonFormComponents";
+import { postPlace } from "../lib/backend";
+import { updateRating } from "../store/reducers/ratings";
+import { Place, Rating } from "../types";
+import {
+  CommentForm,
+  FormLabelWrapper,
+  Label,
+  SaveButton,
+  SuggestionItem,
+  Suggestions,
+  TextArea,
+  TextInput
+} from "./CommonFormComponents";
+import { ModalContainer } from "./ModalContainer";
+import { Spinner } from "./Spinner";
 
 interface EditPlaceRowProps {
-  placeData: Partial<Place>;
-  newPlaceDataChange: Function;
+  onClose: () => void;
 }
+
+const newPlaceInitialState: Partial<Place> = {
+  placeName: "",
+  comment: "",
+  googlePlaceId: ""
+};
 
 const getGothenburgCoords = () =>
   // @ts-ignore
@@ -19,37 +38,68 @@ const getSearchOptions = () => ({
   types: ["establishment"]
 });
 
-export const AddNewPlaceForm = ({
-  placeData,
-  newPlaceDataChange
-}: EditPlaceRowProps) => {
-  const { placeName, comment } = placeData;
+export const AddNewPlaceForm = ({ onClose }: EditPlaceRowProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [newPlace, setNewPlace] = useState<Partial<Place>>(
+    newPlaceInitialState
+  );
+
+  const dispatch = useDispatch();
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = event => {
+    event.preventDefault();
+
+    setIsSubmitting(true);
+
+    postPlace(newPlace)
+      .then(
+        (rating: Rating) => {
+          dispatch(updateRating(rating));
+          onClose();
+        },
+        e => {
+          console.log("Couldn't post new place", e);
+        }
+      )
+      .then(() => {
+        setIsSubmitting(false);
+      });
+  };
+
+  const handleNewPlaceInput = (values: Partial<Place>) => {
+    setNewPlace(newPlace => ({
+      ...newPlace,
+      ...values
+    }));
+  };
+
+  const handleChangeEvent: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = event => {
+    const { name, value } = event.currentTarget;
+    handleNewPlaceInput({
+      [name]: value
+    });
+  };
 
   return (
-    <>
-      <Cell style={{ gridArea: "rating" }}>
-        <TextInput
-          placeholder="Comment"
-          name="comment"
-          value={comment ? comment : ""}
-          onChange={newPlaceDataChange}
-        />
-      </Cell>
-      <Cell style={{ gridArea: "comment" }}>
+    <ModalContainer title="Nytt lunchställe" onClose={onClose}>
+      <CommentForm onSubmit={handleSubmit}>
         <PlacesAutocomplete
-          value={placeName}
+          value={newPlace.placeName}
           searchOptions={getSearchOptions()}
-          onChange={value => {
-            newPlaceDataChange({
-              target: { name: "placeName", value: value }
+          onChange={placeName => {
+            handleNewPlaceInput({
+              placeName
             });
           }}
           onSelect={(placeName, googlePlaceId) => {
-            newPlaceDataChange({
-              target: { name: "googlePlaceId", value: googlePlaceId }
+            handleNewPlaceInput({
+              googlePlaceId
             });
-            newPlaceDataChange({
-              target: { name: "placeName", value: placeName }
+            handleNewPlaceInput({
+              placeName
             });
           }}
         >
@@ -59,8 +109,9 @@ export const AddNewPlaceForm = ({
             getSuggestionItemProps,
             loading
           }) => (
-            <div>
-              <input
+            <FormLabelWrapper>
+              <Label>Googleplats</Label>
+              <TextInput
                 {...getInputProps({
                   placeholder: "Search Places ...",
                   className: "location-search-input"
@@ -79,27 +130,47 @@ export const AddNewPlaceForm = ({
                   );
                 })}
               </Suggestions>
-            </div>
+            </FormLabelWrapper>
           )}
         </PlacesAutocomplete>
-      </Cell>
-    </>
+        <FormLabelWrapper>
+          <Label>Namn</Label>
+          <TextInput
+            placeholder="Namn"
+            name="placeName"
+            value={newPlace.placeName || ""}
+            onChange={handleChangeEvent}
+          />
+        </FormLabelWrapper>
+        <FormLabelWrapper>
+          <Label>Beskrivning</Label>
+          <TextArea
+            placeholder="Lägg till beskrivning"
+            name="comment"
+            value={newPlace.comment || ""}
+            onChange={handleChangeEvent}
+          />
+        </FormLabelWrapper>
+        <SaveButton disabled={isSubmitting}>
+          {isSubmitting ? (
+            <Row style={{ flex: 1 }}>
+              <Row />
+              Sparar...
+              <Row>
+                <Spinner color={"#fff"} />
+              </Row>
+            </Row>
+          ) : (
+            "Spara"
+          )}
+        </SaveButton>
+      </CommentForm>
+    </ModalContainer>
   );
 };
 
-const Suggestions = styled.div`
-  position: absolute;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-  border-radius: 24px;
-  background-color: #fff;
-`;
-
-const SuggestionItem = styled.div`
-  padding: 0.4em 1em;
-  cursor: pointer;
-  border-radius: 24px;
-
-  &:hover {
-    background-color: #eee;
-  }
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;

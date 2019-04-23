@@ -1,8 +1,7 @@
 import React from "react";
-import { Route, Router, Switch } from "react-router-dom";
+import { Redirect, Route, Router, Switch } from "react-router-dom";
 import styled from "styled-components";
 import { NavigationFooter } from "./components/NavigationFooter";
-import { AddNewReviewForm } from "./components/review/AddNewReviewForm";
 
 import { StatsController } from "./components/StatsController";
 import { StatusBar } from "./components/StatusBar";
@@ -28,11 +27,6 @@ export const App2: React.FC = () => {
     );
   }
 
-  const goBack = () => {
-    // This doesn't work but I couldn't figure it out
-    browserHistory.push("/");
-  };
-
   return (
     <>
       <Router history={browserHistory}>
@@ -40,15 +34,11 @@ export const App2: React.FC = () => {
           <StatusBar logoutClicked={signOut} />
           <ContentContainer>
             <Switch>
-              <Route exact path="/" component={StatsController} />
-              <Route exact path="/ratings" component={StatsController} />
+              <Route path="/ratings" component={StatsController} />
               <Route exact path="/me" component={UserController} />
-              <Route
-                path="/newreview/:placeId"
-                render={props => (
-                  <AddNewReviewForm {...props} onClose={goBack} />
-                )}
-              />
+              <Route>
+                <Redirect to="/ratings" />
+              </Route>
             </Switch>
           </ContentContainer>
         </>

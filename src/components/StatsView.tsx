@@ -1,51 +1,19 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Place, Rating } from "../types";
-import { AddNewPlaceForm } from "./AddNewPlaceForm";
-import { Button, LastCell, Row, WhiteRow } from "./CommonFormComponents";
+import { Rating } from "../types";
 import { PlaceRowView } from "./place/PlaceRowView";
 
 interface Props {
   ratings: Array<Rating>;
-  addRowPressed: () => void;
-  newPlaceData: Partial<Place>;
-  newPlaceDataChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  isAddingPlace: boolean;
-  submitNewPlace: () => void;
 }
 
-export const StatsView = ({
-  ratings,
-  addRowPressed,
-  newPlaceData,
-  newPlaceDataChange,
-  isAddingPlace,
-  submitNewPlace
-}: Props) => {
+export const StatsView = ({ ratings }: Props) => {
   return (
     <>
-      {!isAddingPlace && (
-        <AddPlaceContainer>
-          <Button onClick={addRowPressed}>Add new place</Button>
-        </AddPlaceContainer>
-      )}
-      {isAddingPlace && (
-        <>
-          <h3>New place:</h3>
-          <StatsContainerNoHover>
-            <AddNewPlaceForm
-              newPlaceDataChange={newPlaceDataChange}
-              placeData={newPlaceData}
-            />
-          </StatsContainerNoHover>
-          <WhiteRow>
-            <LastCell>
-              <div onClick={submitNewPlace}>OK</div>
-              <div onClick={addRowPressed}>NEJ</div>
-            </LastCell>
-          </WhiteRow>
-        </>
-      )}
+      <AddPlaceContainer>
+        <Button to="/ratings/newplace">Add new place</Button>
+      </AddPlaceContainer>
       <RatingsListContainer>
         {ratings.map(rating => (
           <PlaceRowView
@@ -64,33 +32,24 @@ const RatingsListContainer = styled.div`
   grid-template-rows: 1fr;
   grid-template-columns: minmax(auto, 800px);
   grid-gap: 1em;
-
-  @media screen and (max-width: 600px) {
-    padding: 0 1em;
-  }
-`;
-
-const StatsContainerNoHover = styled(Row)`
-  display: grid;
-  @media (min-width: 900px) {
-    grid-template-columns: 15% 15% 45% auto;
-    grid-template-areas: "rating normalized-rating comment comment link";
-    padding: 2em 5em;
-  }
-
-  @media (max-width: 900px) {
-    grid-template-columns: 25% 25% 25% auto;
-    grid-template-rows: 50% auto;
-    grid-template-areas:
-      "rating rating normalized-rating normalized-rating"
-      "comment comment comment link";
-    padding: 2em 2em;
-  }
-  align-items: center;
 `;
 
 const AddPlaceContainer = styled.div`
   align-self: flex-end;
   padding-right: 10%;
   margin-top: 1em;
+`;
+
+export const Button = styled(Link)`
+  background-color: #fff;
+  padding: 0.3em 1em;
+
+  width: max-content;
+  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.8);
+  border-radius: 24px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #ccc;
+  }
 `;

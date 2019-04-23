@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import { Provider } from 'react-redux'
+import Modal from "react-modal";
 import styled, { createGlobalStyle } from "styled-components";
 import { App2 } from "./App2";
 import { Spinner } from "./components/Spinner";
@@ -10,6 +11,8 @@ declare global {
     gapi: any;
   }
 }
+
+Modal.setAppElement("#root");
 
 export const App = () => {
   return (

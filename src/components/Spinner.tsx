@@ -4,9 +4,10 @@ import React from "react";
 
 interface Props {
   size?: "large" | "small";
+  color?: string;
 }
 
-export const Spinner = ({ size = "small" }: Props) => {
+export const Spinner = ({ size = "small", color = "#5d5d5d" }: Props) => {
   return (
     <div
       style={{
@@ -19,8 +20,8 @@ export const Spinner = ({ size = "small" }: Props) => {
       <FontAwesomeIcon
         icon={faUtensilSpoon}
         spin
-        size={size === "large" ? "6x" : "2x"}
-        color={"#5d5d5d"}
+        size={size === "large" ? "6x" : "1x"}
+        color={color}
       />
     </div>
   );

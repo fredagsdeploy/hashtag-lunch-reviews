@@ -110,6 +110,7 @@ export const StarRatingView = ({
   return (
     <div
       style={{
+        display: "flex",
         userSelect: "none"
       }}
     >

@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { batch, useDispatch } from "react-redux";
-import { RouteChildrenProps } from "react-router";
 import styled from "styled-components";
 import { usePlaceById } from "../../customHooks/api";
 import { useUserContext } from "../../customHooks/useUserContext";
@@ -8,20 +7,23 @@ import { postReview } from "../../lib/backend";
 import { updateRating } from "../../store/reducers/ratings";
 import { addReview } from "../../store/reducers/reviews";
 import { NewReview, ReviewRating } from "../../types";
+import {
+  CommentForm,
+  FormLabelWrapper,
+  SaveButton,
+  TextArea
+} from "../CommonFormComponents";
+import { ModalContainer } from "../ModalContainer";
+import { Spinner } from "../Spinner";
 import { StarRating } from "../StarRating";
 
-interface Props
-  extends RouteChildrenProps<{
-    placeId: string;
-  }> {
+interface Props {
+  placeId: string;
   onClose: () => void;
 }
 
-export const AddNewReviewForm = ({ match, onClose }: Props) => {
-  if (!match) {
-    throw new Error("No such place");
-  }
-  const { placeId } = match.params;
+export const AddNewReviewForm: React.FC<Props> = ({ onClose, placeId }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const place = usePlaceById(placeId);
 
   const user = useUserContext()!;
@@ -38,6 +40,8 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
 
   const submitReview = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsSubmitting(true);
+
     postReview(newReview)
       .then(({ review, rating }: ReviewRating) => {
         batch(() => {
@@ -49,6 +53,9 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
       })
       .catch(e => {
         console.log("Couldn't post new review", e);
+      })
+      .then(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -71,93 +78,49 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
   };
 
   return (
-    <CommentForm onSubmit={submitReview}>
-      <PlaceName>{place.placeName}</PlaceName>
+    <ModalContainer title={place.placeName} onClose={onClose}>
       {place.comment && <PlaceComment>{place.comment}</PlaceComment>}
-      <StarRating
-        rating={newReview.rating}
-        onChange={ratingChangeHandler}
-        defaultSize={48}
-        mobileSize={48}
-      />
-      <Comment>
-        <CommentInput
-          rows={14}
-          cols={30}
-          value={newReview.comment}
-          placeholder={"Lägg till kommentar"}
-          name={"comment"}
-          onChange={handleNewReviewInput}
-        />
-      </Comment>
-      <SaveButton>Spara</SaveButton>
-    </CommentForm>
+      <CommentForm onSubmit={submitReview}>
+        <Row>
+          <StarRating
+            rating={newReview.rating}
+            onChange={ratingChangeHandler}
+            defaultSize={48}
+            mobileSize={48}
+          />
+        </Row>
+        <FormLabelWrapper>
+          <TextArea
+            value={newReview.comment}
+            placeholder={"Lägg till kommentar"}
+            name={"comment"}
+            onChange={handleNewReviewInput}
+          />
+        </FormLabelWrapper>
+        <SaveButton disabled={isSubmitting}>
+          {isSubmitting ? (
+            <Row style={{ flex: 1 }}>
+              <Row />
+              Sparar...
+              <Row>
+                <Spinner color={"#fff"} />
+              </Row>
+            </Row>
+          ) : (
+            "Spara"
+          )}
+        </SaveButton>
+      </CommentForm>
+    </ModalContainer>
   );
 };
-
-const Comment = styled.div`
-  /* white-space: nowrap; */
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  color: #5d5d5d;
-  font-style: italic;
-
-  flex: 1;
-  background-color: #efefef;
-
-  border-radius: 4px;
-  margin-bottom: 1em;
-`;
-
-const CommentInput = styled.textarea`
-  padding: 1em;
-  background-color: transparent;
-  color: #5d5d5d;
-
-  border: 0;
-  width: 100%;
-  resize: none;
-`;
-
-const CommentForm = styled.form`
-  display: grid;
-  grid-row-gap: 10px;
-  flex: 1;
-
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-
-  margin: 1em;
-  padding: 1em;
-
-  background-color: #fff;
-
-  @media screen and (max-width: 600px) {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  width: 22em;
-`;
-
-const PlaceName = styled.h2`
-  margin: 0;
-  margin-top: 1em;
-`;
 
 const PlaceComment = styled.p`
   margin: 0;
 `;
 
-const SaveButton = styled.button`
-  background-color: #6495ed;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  height: 3em;
-
-  &:hover {
-    cursor: pointer;
-    background-color: #6495edb3;
-  }
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
