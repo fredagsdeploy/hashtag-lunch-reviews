@@ -21,6 +21,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     STAGE_ENV: ${opt:stage, 'dev'}
+    GOOGLE_PLACES_API_KEY: ${env:GOOGLE_PLACES_API_KEY}
 
   iamRoleStatements:
     - Effect: Allow
