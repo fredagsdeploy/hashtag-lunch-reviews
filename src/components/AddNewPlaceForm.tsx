@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Place } from "../types";
-import { Cell, TextInput, WhiteRow } from "./CommonFormComponents";
+import React from "react";
 import PlacesAutocomplete from "react-places-autocomplete";
 import styled from "styled-components";
+import { Place } from "../types";
+import { Cell, TextInput } from "./CommonFormComponents";
 
 interface EditPlaceRowProps {
   placeData: Partial<Place>;

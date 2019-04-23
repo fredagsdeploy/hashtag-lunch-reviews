@@ -1,16 +1,8 @@
 import React, { ChangeEvent } from "react";
-import { Place, Rating } from "../types";
-import { StarRating } from "./StarRating";
-import { AddNewPlaceForm } from "./AddNewPlaceForm";
-import {
-  Cell,
-  LastCell,
-  Row,
-  StarCell,
-  WhiteRow,
-  Button
-} from "./CommonFormComponents";
 import styled from "styled-components";
+import { Place, Rating } from "../types";
+import { AddNewPlaceForm } from "./AddNewPlaceForm";
+import { Button, LastCell, Row, WhiteRow } from "./CommonFormComponents";
 import { PlaceRowView } from "./place/PlaceRowView";
 
 interface Props {
@@ -19,8 +11,7 @@ interface Props {
   newPlaceData: Partial<Place>;
   newPlaceDataChange: (event: ChangeEvent<HTMLInputElement>) => void;
   isAddingPlace: boolean;
-  sumbitNewPlace: () => void;
-  placeClicked: (rating: Rating) => void;
+  submitNewPlace: () => void;
 }
 
 export const StatsView = ({
@@ -29,8 +20,7 @@ export const StatsView = ({
   newPlaceData,
   newPlaceDataChange,
   isAddingPlace,
-  sumbitNewPlace,
-  placeClicked
+  submitNewPlace
 }: Props) => {
   return (
     <>
@@ -50,7 +40,7 @@ export const StatsView = ({
           </StatsContainerNoHover>
           <WhiteRow>
             <LastCell>
-              <div onClick={sumbitNewPlace}>OK</div>
+              <div onClick={submitNewPlace}>OK</div>
               <div onClick={addRowPressed}>NEJ</div>
             </LastCell>
           </WhiteRow>
@@ -72,8 +62,12 @@ export const StatsView = ({
 const RatingsListContainer = styled.div`
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: minmax(1fr, 800px);
+  grid-template-columns: minmax(auto, 800px);
   grid-gap: 1em;
+
+  @media screen and (max-width: 600px) {
+    padding: 0 1em;
+  }
 `;
 
 const StatsContainerNoHover = styled(Row)`

@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
+import { Route, Router, Switch } from "react-router-dom";
+import styled from "styled-components";
+import { NavigationFooter } from "./components/NavigationFooter";
+import { AddNewReviewForm } from "./components/review/AddNewReviewForm";
 
 import { StatsController } from "./components/StatsController";
 import { StatusBar } from "./components/StatusBar";
-import { NavigationFooter } from "./components/NavigationFooter";
-import { browserHistory } from "./history";
-import { Router, Route, Switch } from "react-router-dom";
 import { UserController } from "./components/UserController";
+import { browserHistory } from "./history";
 import { useGoogleAuth } from "./useGoogleAuth";
-import { GoogleUser, emptyUser } from "./types";
-import { UserContext } from "./customHooks/useUserContext";
-import styled from "styled-components";
-import { AddNewReviewForm } from "./components/review/AddNewReviewForm";
 
 declare global {
   interface Window {
@@ -19,7 +17,6 @@ declare global {
 }
 
 export const App2: React.FC = () => {
-  const [error, setError] = useState<Error | null | string>(null);
   const { googleUser, user, signOut, authorize } = useGoogleAuth();
 
   if (!googleUser || !user) {
@@ -37,7 +34,7 @@ export const App2: React.FC = () => {
   };
 
   return (
-    <UserContext.Provider value={user}>
+    <>
       <Router history={browserHistory}>
         <>
           <StatusBar logoutClicked={signOut} />
@@ -57,8 +54,7 @@ export const App2: React.FC = () => {
         </>
       </Router>
       <NavigationFooter />
-      {error && <h2>{error}</h2>}
-    </UserContext.Provider>
+    </>
   );
 };
 

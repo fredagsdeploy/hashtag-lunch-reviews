@@ -1,7 +1,5 @@
-import * as AWS from "aws-sdk";
-import { getPlaceById, Place } from "./places";
+import { getPlaceById } from "./places";
 import { dynamodb } from "./documentClient";
-import { createResponse } from "../common";
 
 export interface Review {
   reviewId: string;
@@ -27,7 +25,7 @@ export const getReviewById = async (
 };
 
 export const getAllReviews = async (): Promise<Review[]> => {
-  var params = {
+  const params = {
     TableName: "Reviews"
   };
 
@@ -36,25 +34,27 @@ export const getAllReviews = async (): Promise<Review[]> => {
   return (response.Items || []) as Review[];
 };
 
-export const getReviewsByPlaceId = async (placeId: string): Promise<Review[]> => {
-    const queryParams = {
-      TableName: "Reviews",
-      Select: "ALL_ATTRIBUTES",
-      IndexName: "reviewPlaceIdIndex",
-      KeyConditionExpression: "placeId = :place_id",
-      ExpressionAttributeValues: { ":place_id": placeId}
-    };
-    const res = await dynamodb.query(queryParams).promise();
-    console.log("query res", res);
-    if (!res.Items || !res.Items[0]) {
-      return [];
-    }
+export const getReviewsByPlaceId = async (
+  placeId: string
+): Promise<Review[]> => {
+  const queryParams = {
+    TableName: "Reviews",
+    Select: "ALL_ATTRIBUTES",
+    IndexName: "reviewPlaceIdIndex",
+    KeyConditionExpression: "placeId = :place_id",
+    ExpressionAttributeValues: { ":place_id": placeId }
+  };
+  const res = await dynamodb.query(queryParams).promise();
+  console.log("query res", res);
+  if (!res.Items || !res.Items[0]) {
+    return [];
+  }
 
-    return res.Items as Review[];
+  return res.Items as Review[];
 };
 
 export const saveReview = async (reviewInput: Review): Promise<Review> => {
-  var params = {
+  const params = {
     TableName: "Reviews",
     Item: reviewInput
   };

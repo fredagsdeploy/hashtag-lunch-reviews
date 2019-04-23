@@ -65,7 +65,7 @@ export const SpiderWebChart: React.FC<Props> = ({
         Math.cos(((Math.PI * 2) / dimensions) * index - Math.PI / 2),
         Math.sin(((Math.PI * 2) / dimensions) * index - Math.PI / 2)
       ]),
-    [dimensions]
+    [range, dimensions]
   );
 
   const spring = useSpring<{ xs: number[]; ys: number[] }>({

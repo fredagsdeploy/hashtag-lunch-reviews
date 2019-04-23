@@ -1,7 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
+// @ts-ignore
+import { useDispatch, useSelector } from "react-redux";
 import config from "./config";
 import { getUser, setToken } from "./lib/backend";
-import { GoogleUser, User } from "./types";
+import { StoreState } from "./store/configureStore";
+import { setSignedIn, setSignedOut, UserState } from "./store/reducers/user";
+import { GoogleUser } from "./types";
 
 let promiseCache: null | Promise<any> = null;
 let resolved: boolean = false;
@@ -26,68 +30,59 @@ const useGoogleClientAuthApi = (): unknown => {
   return resolved;
 };
 
+let authPromise: Promise<any> | null = null;
+
+const transformGoogleUser = (profile: gapi.auth2.BasicProfile): GoogleUser => ({
+  id: profile.getId(),
+  fullName: profile.getName(),
+  givenName: profile.getGivenName(),
+  familyName: profile.getFamilyName(),
+  imageUrl: profile.getImageUrl(),
+  email: profile.getEmail()
+});
+
 export const useGoogleAuth = () => {
-  const [googleUser, setGoogleUser] = useState<GoogleUser | null>(null);
-  const [lunchUser, setLunchUser] = useState<User | null>(null);
+  const state: UserState = useSelector(
+    (state: StoreState): UserState => state.user,
+    []
+  );
+
+  const dispatch = useDispatch();
 
   useGoogleClientAuthApi();
 
-  useEffect(
-    () => {
-      if (googleUser) {
-        getUser(googleUser.id).then(setLunchUser);
-      }
-    },
-    [googleUser]
-  );
-
-  useEffect(() => {
-    window.gapi.auth2
+  if (!authPromise) {
+    authPromise = window.gapi.auth2
       .init({
         apiKey: config.apiKey,
         clientId: config.clientId,
         scope: "profile email"
       })
-      .then(() => {
-        if (window.gapi.auth2.getAuthInstance().isSignedIn.get()) {
-          const currentUser = window.gapi.auth2
-            .getAuthInstance()
-            .currentUser.get();
-          const profile = currentUser.getBasicProfile();
-          const user = {
-            id: profile.getId(),
-            fullName: profile.getName(),
-            givenName: profile.getGivenName(),
-            familyName: profile.getFamilyName(),
-            imageUrl: profile.getImageUrl(),
-            email: profile.getEmail()
-          };
+      .then((auth: gapi.auth2.GoogleAuth) => {
+        auth.currentUser.listen(currentUser => {
+          setToken(currentUser.getAuthResponse().id_token);
+
+          const googleUser = transformGoogleUser(currentUser.getBasicProfile());
+
+          getUser(googleUser.id).then(user => {
+            dispatch(setSignedIn(googleUser, user));
+          });
+        });
+
+        if (auth.isSignedIn.get()) {
+          const currentUser = auth.currentUser.get();
+          const googleUser = transformGoogleUser(currentUser.getBasicProfile());
 
           setToken(currentUser.getAuthResponse().id_token);
 
-          setGoogleUser(user);
-        }
-        window.gapi.auth2.getAuthInstance().isSignedIn.listen(console.log);
-
-        window.gapi.auth2
-          .getAuthInstance()
-          .currentUser.listen((currentUser: any) => {
-            setToken(currentUser.getAuthResponse().id_token);
-
-            const profile = currentUser.getBasicProfile();
-            const user = {
-              id: profile.getId(),
-              fullName: profile.getName(),
-              givenName: profile.getGivenName(),
-              familyName: profile.getFamilyName(),
-              imageUrl: profile.getImageUrl(),
-              email: profile.getEmail()
-            };
-
-            setGoogleUser(user);
+          return getUser(googleUser.id).then(user => {
+            dispatch(setSignedIn(googleUser, user));
           });
+        } else {
+          dispatch(setSignedOut());
+        }
       });
-  }, []);
+  }
 
   const authorize = useCallback(() => {
     window.gapi.auth2.getAuthInstance().signIn();
@@ -97,12 +92,16 @@ export const useGoogleAuth = () => {
     window.gapi.auth2
       .getAuthInstance()
       .signOut()
-      .then(() => setGoogleUser(null));
-  }, []);
+      .then(() => dispatch(setSignedOut()));
+  }, [dispatch]);
+
+  if (!state.loaded) {
+    throw authPromise;
+  }
 
   return {
-    googleUser,
-    user: lunchUser,
+    googleUser: state.googleUser,
+    user: state.user,
     signOut,
     authorize
   };

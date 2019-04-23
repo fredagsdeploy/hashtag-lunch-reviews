@@ -1,16 +1,10 @@
 import styled from "styled-components";
-import React from "react";
 
 export const Cell = styled.div`
   padding: 10px 1em;
   word-break: break-all;
   display: flex;
   align-items: center;
-`;
-
-export const NameCell = styled(Cell)`
-  font-weight: 500;
-  font-size: 1.2em;
 `;
 
 export const WhiteRow = styled.div`
@@ -23,17 +17,6 @@ export const LastCell = styled.div`
 export const StarCell = styled(Cell)`
   white-space: nowrap;
   text-align: center;
-`;
-
-export const HeaderCell = styled.th`
-  font-weight: bold;
-  border-bottom: 2px solid black;
-`;
-
-export const Table = styled.table`
-  width: 50%;
-  border-collapse: collapse;
-  justify-self: center;
 `;
 
 export const Row = styled.div`

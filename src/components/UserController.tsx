@@ -1,22 +1,35 @@
 import React, { useState } from "react";
+// @ts-ignore
+import { useDispatch } from "react-redux";
 import { useUserContext } from "../customHooks/useUserContext";
-import { User } from "../types";
 import { putUser } from "../lib/backend";
-
-
-const saveUser = (displayName: string, user: User) => {
-  putUser({ ...user, displayName });
-}
+import { updateUser } from "../store/reducers/user";
 
 export const UserController = () => {
-  const user = useUserContext();
+  const user = useUserContext()!;
+
+  const dispatch = useDispatch();
+
   const [displayName, setDisplayName] = useState(user.displayName);
+
+  const saveUser = () => {
+    putUser({ ...user, displayName }).then(updatedUser => {
+      dispatch(updateUser(updatedUser));
+    });
+  };
+
   return (
     <>
       {user.displayName}
-      <img src={user.imageUrl} />
-      <input type="text" onChange={e => setDisplayName(e.target.value)} value={displayName} />
-      <button type="button" onClick={e => { saveUser(displayName, user) }}>Submit!!</button>
+      <img src={user.imageUrl} alt="User" />
+      <input
+        type="text"
+        onChange={e => setDisplayName(e.target.value)}
+        value={displayName}
+      />
+      <button type="button" onClick={saveUser}>
+        Submit!!
+      </button>
     </>
   );
 };

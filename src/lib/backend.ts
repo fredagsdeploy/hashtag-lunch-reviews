@@ -1,4 +1,4 @@
-import { NewReview, Place, Rating, Review, User } from "../types";
+import { NewReview, Place, Rating, Review, ReviewRating, User } from "../types";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -64,7 +64,7 @@ export const getPlaceById = (placeId: string): Promise<Place> => {
   return myFetch(getPlaceByPlaceIdUrl(placeId)).then(handleResponse);
 };
 
-export const postPlace = (place: Partial<Place>): Promise<Place> => {
+export const postPlace = (place: Partial<Place>): Promise<Rating> => {
   const { placeName } = place;
   if (!placeName) {
     throw new Error(
@@ -77,7 +77,7 @@ export const postPlace = (place: Partial<Place>): Promise<Place> => {
   }).then(handleResponse);
 };
 
-export const postReview = (review: NewReview): Promise<Review> => {
+export const postReview = (review: NewReview): Promise<ReviewRating> => {
   const { userId, placeId, rating } = review;
   if (!userId || !placeId || !rating) {
     throw new Error(`Missing attribute(s) in review ${JSON.stringify(review)}`);

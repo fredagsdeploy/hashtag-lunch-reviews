@@ -1,6 +1,7 @@
-import { emptyUser } from "../types";
-import React, { useContext } from "react";
+// @ts-ignore
+import { useSelector } from "react-redux";
+import { StoreState } from "../store/configureStore";
+import { User } from "../types";
 
-export const UserContext = React.createContext(emptyUser);
-
-export const useUserContext = () => useContext(UserContext);
+export const useUserContext = (): User | null =>
+  useSelector((state: StoreState): User | null => state.user.user, []);

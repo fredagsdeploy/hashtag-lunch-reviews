@@ -1,13 +1,12 @@
 import { v1 as uuid } from "uuid";
-import * as AWS from "aws-sdk";
-import { createResponse, parseJSON, LambdaHandler } from "./common";
+import { createResponse, LambdaHandler, parseJSON } from "./common";
 import {
   getAllPlaces,
-  savePlace,
-  Place,
-  getPlaceByName,
+  getPlaceByGoogleId,
   getPlaceById,
-  getPlaceByGoogleId
+  getPlaceByName,
+  Place,
+  savePlace
 } from "./repository/places";
 import { getGooglePlace } from "./googlePlaces/googlePlaces";
 import { decoratePlace } from "./ratings";
@@ -29,12 +28,10 @@ export const get: LambdaHandler = async (event, context) => {
   return createResponse(200, { places });
 };
 
-export type GetByIdRequest = {
-  placeId: string;
-};
-
 export const getById: LambdaHandler = async (event, context) => {
-  console.log(`Get place by id ${JSON.stringify(event)} ${JSON.stringify(context)}`);
+  console.log(
+    `Get place by id ${JSON.stringify(event)} ${JSON.stringify(context)}`
+  );
 
   if (!event.pathParameters || !event.pathParameters.placeId) {
     return createResponse(400, { message: "Missing path parameter" });
@@ -104,7 +101,7 @@ export const post: LambdaHandler = async (event, context) => {
         )
       );
 
-      const rating = await decoratePlace(place, [])
+      const rating = await decoratePlace(place, []);
       return createResponse(200, rating);
     } catch (error) {
       return createResponse(400, error);

@@ -1,10 +1,7 @@
 import * as jwt from "jsonwebtoken";
-import { createResponse, LambdaHandler } from "./common";
 import fetch from "node-fetch";
 
-
-import { APIGatewayEvent, Context } from "aws-lambda";
-import { dynamodb } from "./repository/documentClient";
+import { Context } from "aws-lambda";
 import { getUserById, saveUser } from "./repository/users";
 
 const decodeJwt = async (id_token: string) => {
@@ -20,15 +17,13 @@ const decodeJwt = async (id_token: string) => {
   return null;
 };
 
-
 interface DecodedJWT {
-  sub: string,
-  name: string,
-  picture: string,
+  sub: string;
+  name: string;
+  picture: string;
 }
 
 const checkUser = async (decodedJwt: DecodedJWT) => {
-
   const maybeUser = await getUserById(decodedJwt.sub);
   if (!maybeUser) {
     console.log(`Creating new user for googleUserId ${decodedJwt.sub}`);
@@ -37,14 +32,17 @@ const checkUser = async (decodedJwt: DecodedJWT) => {
       googleUserId: decodedJwt.sub,
       imageUrl: decodedJwt.picture,
       displayName: decodedJwt.name
-    })
+    });
   }
-
-}
+};
 
 export const verify = async (event: any, context: Context) => {
   const token = event.authorizationToken;
-  console.log(`Entered jwt verify ${JSON.stringify(event)}   Context: ${JSON.stringify(context)}`);
+  console.log(
+    `Entered jwt verify ${JSON.stringify(event)}   Context: ${JSON.stringify(
+      context
+    )}`
+  );
 
   if (!token) {
     console.log("Token missing");
@@ -63,12 +61,11 @@ export const verify = async (event: any, context: Context) => {
       const decoded = valid as DecodedJWT;
       try {
         await checkUser(decoded);
-
       } catch (error) {
         console.log("Error on checkUser", error);
         throw error;
       }
-      return generatePolicy(decoded.sub, "Allow", resourceArn)
+      return generatePolicy(decoded.sub, "Allow", resourceArn);
     } else {
       console.log("Return Deny, not valid");
       return generatePolicy("invalid_user", "Deny", resourceArn);
@@ -80,7 +77,11 @@ export const verify = async (event: any, context: Context) => {
 };
 
 // Help function to generate an IAM policy
-const generatePolicy = function (principalId: string, effect: any, resource: any) {
+const generatePolicy = function(
+  principalId: string,
+  effect: any,
+  resource: any
+) {
   const authResponse: any = {};
 
   authResponse.principalId = principalId;
