@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-// @ts-ignore
 import { useDispatch, useSelector } from "react-redux";
 import {
   getPlaceByPlaceIdUrl,
@@ -48,8 +47,8 @@ export const usePlaceById = (placeId: string): Place =>
 let ratingsResult: Result | null = null;
 
 export const useRatings = (): Rating[] => {
-  const state: RatingsState = useSelector(
-    (state: StoreState): RatingsState => state.ratings,
+  const state = useSelector<RatingsState, StoreState>(
+    state => state.ratings,
     []
   );
   const dispatch = useDispatch();
@@ -107,8 +106,8 @@ export const useRatings = (): Rating[] => {
 const reviewsByPlaceIdCache: Record<PlaceId, Result> = {};
 
 export const useReviewsByPlaceId = (placeId: PlaceId): Review[] => {
-  const state: ReviewState = useSelector(
-    (state: StoreState) => getReviewsState(state, placeId),
+  const state = useSelector<ReviewState, StoreState>(
+    state => getReviewsState(state, placeId),
     [placeId]
   );
   const dispatch = useDispatch();

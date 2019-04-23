@@ -1,8 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
+import { batch, useDispatch } from "react-redux";
 import { RouteChildrenProps } from "react-router";
-// @ts-ignore
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { usePlaceById } from "../../customHooks/api";
 import { useUserContext } from "../../customHooks/useUserContext";
@@ -42,7 +40,7 @@ export const AddNewReviewForm = ({ match, onClose }: Props) => {
     event.preventDefault();
     postReview(newReview)
       .then(({ review, rating }: ReviewRating) => {
-        unstable_batchedUpdates(() => {
+        batch(() => {
           dispatch(updateRating(rating));
           dispatch(addReview(placeId, review));
         });

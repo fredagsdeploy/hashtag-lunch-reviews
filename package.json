@@ -51,7 +51,6 @@
     "@types/deep-equal": "^1.0.1",
     "@types/gapi": "^0.0.36",
     "@types/gapi.auth2": "^0.0.50",
-    "@types/react-redux": "^7.0.8",
     "prettier": "^1.17.0"
   }
 }

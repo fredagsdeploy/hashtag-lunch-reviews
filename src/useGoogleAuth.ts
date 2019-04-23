@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-// @ts-ignore
 import { useDispatch, useSelector } from "react-redux";
 import config from "./config";
 import { getUser, setToken } from "./lib/backend";
@@ -42,10 +41,7 @@ const transformGoogleUser = (profile: gapi.auth2.BasicProfile): GoogleUser => ({
 });
 
 export const useGoogleAuth = () => {
-  const state: UserState = useSelector(
-    (state: StoreState): UserState => state.user,
-    []
-  );
+  const state = useSelector<UserState, StoreState>(state => state.user, []);
 
   const dispatch = useDispatch();
 
