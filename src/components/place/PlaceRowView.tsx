@@ -151,7 +151,7 @@ const PlaceRatings = styled.div`
   grid-area: rating;
   font-size: 1.4em;
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
   padding: 1em;
 
   @media screen and (max-width: 600px) {
