@@ -31,6 +31,9 @@ export const myFetch = (
 export const getReviewsByPlaceIdUrl = (placeId: string): string =>
   `${BASE_URL}/places/${placeId}/reviews`;
 
+export const getRatingByPlaceIdUrl = (placeId: string): string =>
+  `${BASE_URL}/places/${placeId}/rating`;
+
 export const getRatingsUrl = () => BASE_URL + "/ratings";
 
 export const getUserByUserIdUrl = (googleUserId: string) =>
@@ -41,6 +44,10 @@ export const getPlaceByPlaceIdUrl = (placeId: string) =>
 
 export const getReviewsForPlace = (placeId: string): Promise<Review[]> => {
   return myFetch(getReviewsByPlaceIdUrl(placeId)).then(handleResponse);
+};
+
+export const getRatingByPlaceId = (placeId: string): Promise<Rating> => {
+  return myFetch(getRatingByPlaceIdUrl(placeId)).then(handleResponse);
 };
 
 export const getRatings = (): Promise<Rating[]> => {

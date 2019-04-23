@@ -1,8 +1,4 @@
-import {
-  faHashtag,
-  faStar,
-  faUtensils
-} from "@fortawesome/free-solid-svg-icons";
+import { faHashtag, faStar, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Suspense, useMemo } from "react";
 import styled from "styled-components";
@@ -42,15 +38,14 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const data =
     chartData.length === 1 ? [...chartData, { value: 0, max: 5 }] : chartData;
 
-  return (
-    <>
-      <CommentField review={myReview} placeId={placeId} />
-      <ChartRow>
-        <SpiderWebChart data={data} />
-      </ChartRow>
-    </>
-  );
+  return     <>
+    <CommentField review={myReview} placeId={placeId} />
+    <ChartRow>
+      <SpiderWebChart data={data} />
+    </ChartRow>
+  </>;
 };
+
 
 interface Props {
   placeId: string;
