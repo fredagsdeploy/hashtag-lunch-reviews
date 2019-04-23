@@ -94,14 +94,18 @@ export const postReviews: LambdaHandler = async event => {
 
     const reviewsForPlace = await getReviewsByPlaceId(placeId);
 
-    const place = await getPlaceById(placeId)
+    const place = await getPlaceById(placeId);
     if (!place) {
-      return createResponse(404, { message: `there's no place like ${placeId}` });
+      return createResponse(404, {
+        message: `there's no place like ${placeId}`
+      });
     }
 
-    const updatedRating = await decoratePlace(place, reviewsForPlace)
-    return createResponse(200, { rating: updatedRating, review: await expandReview(newReview) });
-
+    const updatedRating = await decoratePlace(place, reviewsForPlace);
+    return createResponse(200, {
+      rating: updatedRating,
+      review: await expandReview(newReview)
+    });
   } catch (error) {
     return createResponse(400, { error: error.message });
   }
@@ -111,14 +115,14 @@ export const putReview: LambdaHandler = async event => {
   const body = parseJSON(event.body) as Partial<ReviewInput>;
 
   if (!event.pathParameters || !event.pathParameters.reviewId) {
-    return createResponse(400, { message: "Missing path parameter reviewId" })
+    return createResponse(400, { message: "Missing path parameter reviewId" });
   }
 
   const reviewId = event.pathParameters.reviewId;
   const oldReview = await getReviewById(reviewId);
 
   if (!oldReview) {
-    return createResponse(404, { message: `No review with id ${reviewId}` })
+    return createResponse(404, { message: `No review with id ${reviewId}` });
   }
 
   const { userId, placeId, rating, comment } = body;
@@ -127,10 +131,15 @@ export const putReview: LambdaHandler = async event => {
     return createResponse(400, { error: "Missing parameters" });
   }
 
-
   try {
     const review = await saveReview(
-      createReview(oldReview.reviewId, userId, placeId, rating, comment ? comment : " ")
+      createReview(
+        oldReview.reviewId,
+        userId,
+        placeId,
+        rating,
+        comment ? comment : " "
+      )
     );
     const expandedReview = await expandReview(review);
     return createResponse(200, expandedReview);

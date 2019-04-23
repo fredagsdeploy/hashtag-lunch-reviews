@@ -1,4 +1,4 @@
-import {dynamodb} from "./documentClient";
+import { dynamodb } from "./documentClient";
 
 export interface Place {
   placeId: string;
