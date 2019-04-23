@@ -89,30 +89,22 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - build-frontend:
-          filters:
-            branches:
-              only:
-                - circleci
+      - build-frontend
       - deploy-frontend:
           filters:
             branches:
               only:
-                - circleci
+                - master
           requires:
             - build-frontend
             - build-backend
 
-      - build-backend:
-          filters:
-            branches:
-              only:
-                - circleci
+      - build-backend
       - deploy-backend:
           filters:
             branches:
               only:
-                - circleci
+                - master
           requires:
             - build-backend
             - build-frontend
