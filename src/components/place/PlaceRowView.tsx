@@ -27,7 +27,7 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const user = useUserContext()!;
 
   const myReview = reviews.filter(
-    review => review.user.googleUserId == user.googleUserId
+    review => review.user.googleUserId === user.googleUserId
   )[0];
 
   const chartData = useMemo(

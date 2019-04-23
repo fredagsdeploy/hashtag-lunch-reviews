@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 
 export type useBoolean = (
   initialState: boolean

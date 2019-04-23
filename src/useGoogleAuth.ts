@@ -96,7 +96,7 @@ export const useGoogleAuth = () => {
       .getAuthInstance()
       .signOut()
       .then(() => dispatch(setSignedOut()));
-  }, []);
+  }, [dispatch]);
 
   if (!state.loaded) {
     throw authPromise;

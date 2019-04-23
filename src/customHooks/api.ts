@@ -54,7 +54,7 @@ export const useRatings = (): Rating[] => {
 
   const ratings = useMemo<Rating[]>(
     () => (state.resolved ? Object.values(state.data) : []),
-    [state.data]
+    [state.data, state.resolved]
   );
 
   if (state.resolved) {
@@ -86,6 +86,7 @@ export const useRatings = (): Rating[] => {
       });
   }
 
+  // noinspection JSUnreachableSwitchBranches
   switch (ratingsResult.status) {
     case ResultStatus.Pending: {
       const suspender = ratingsResult.value;
@@ -95,6 +96,7 @@ export const useRatings = (): Rating[] => {
       const error = ratingsResult.value;
       throw error;
     }
+    default:
   }
 
   return ratings;
@@ -157,6 +159,7 @@ export const useReviewsByPlaceId = (placeId: PlaceId): Review[] => {
       const error = result.value;
       throw error;
     }
+    default:
   }
 
   return state.data!;

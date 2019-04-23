@@ -55,6 +55,8 @@ export const StarRating = ({
       case "ArrowRight":
         onChange(clamp(rating + 0.1, 5, 0));
         break;
+      default:
+        return;
     }
   };
 

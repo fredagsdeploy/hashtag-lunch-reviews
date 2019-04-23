@@ -20,7 +20,7 @@ export const UserController = () => {
   return (
     <>
       {user.displayName}
-      <img src={user.imageUrl} alt="User image" />
+      <img src={user.imageUrl} alt="User" />
       <input
         type="text"
         onChange={e => setDisplayName(e.target.value)}
