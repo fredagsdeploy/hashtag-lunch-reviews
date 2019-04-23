@@ -1,9 +1,10 @@
 import { useCallback } from "react";
-import { useDispatch, useMappedState } from "redux-react-hook";
+// @ts-ignore
+import { useDispatch, useSelector } from "react-redux";
 import config from "./config";
 import { getUser, setToken } from "./lib/backend";
 import { StoreState } from "./store/configureStore";
-import { setSignedIn, setSignedOut } from "./store/reducers/user";
+import { setSignedIn, setSignedOut, UserState } from "./store/reducers/user";
 import { GoogleUser } from "./types";
 
 let promiseCache: null | Promise<any> = null;
@@ -31,13 +32,6 @@ const useGoogleClientAuthApi = (): unknown => {
 
 let authPromise: Promise<any> | null = null;
 
-const mapState = (state: StoreState) => ({
-  loaded: state.user.loaded,
-  signedIn: state.user.signedIn,
-  googleUser: state.user.googleUser,
-  user: state.user.user
-});
-
 const transformGoogleUser = (profile: gapi.auth2.BasicProfile): GoogleUser => ({
   id: profile.getId(),
   fullName: profile.getName(),
@@ -48,7 +42,10 @@ const transformGoogleUser = (profile: gapi.auth2.BasicProfile): GoogleUser => ({
 });
 
 export const useGoogleAuth = () => {
-  const state = useMappedState(mapState);
+  const state: UserState = useSelector(
+    (state: StoreState): UserState => state.user,
+    []
+  );
 
   const dispatch = useDispatch();
 

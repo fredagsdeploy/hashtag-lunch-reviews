@@ -1,7 +1,8 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 import { RouteChildrenProps } from "react-router";
-import { useDispatch } from "redux-react-hook";
+// @ts-ignore
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { usePlaceById } from "../../customHooks/api";
 import { useUserContext } from "../../customHooks/useUserContext";

@@ -1,7 +1,7 @@
-import { useMappedState } from "redux-react-hook";
+// @ts-ignore
+import { useSelector } from "react-redux";
 import { StoreState } from "../store/configureStore";
 import { User } from "../types";
 
-const mapState = (state: StoreState): User | null => state.user.user;
-
-export const useUserContext = () => useMappedState(mapState);
+export const useUserContext = (): User | null =>
+  useSelector((state: StoreState): User | null => state.user.user, []);

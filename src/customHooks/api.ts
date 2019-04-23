@@ -1,5 +1,6 @@
-import { useCallback, useMemo } from "react";
-import { useDispatch, useMappedState } from "redux-react-hook";
+import { useMemo } from "react";
+// @ts-ignore
+import { useDispatch, useSelector } from "react-redux";
 import {
   getPlaceByPlaceIdUrl,
   getRatings,
@@ -44,12 +45,13 @@ type Result = PendingResult | ResolvedResult | RejectedResult;
 export const usePlaceById = (placeId: string): Place =>
   useFetch(getPlaceByPlaceIdUrl(placeId));
 
-const mapRatingsState = (state: StoreState): RatingsState => state.ratings;
-
 let ratingsResult: Result | null = null;
 
 export const useRatings = (): Rating[] => {
-  const state = useMappedState(mapRatingsState);
+  const state: RatingsState = useSelector(
+    (state: StoreState): RatingsState => state.ratings,
+    []
+  );
   const dispatch = useDispatch();
 
   const ratings = useMemo<Rating[]>(
@@ -105,12 +107,10 @@ export const useRatings = (): Rating[] => {
 const reviewsByPlaceIdCache: Record<PlaceId, Result> = {};
 
 export const useReviewsByPlaceId = (placeId: PlaceId): Review[] => {
-  const mapState = useCallback<(state: StoreState) => ReviewState>(
-    state => getReviewsState(state, placeId),
+  const state: ReviewState = useSelector(
+    (state: StoreState) => getReviewsState(state, placeId),
     [placeId]
   );
-
-  const state = useMappedState(mapState);
   const dispatch = useDispatch();
 
   if (state.resolved) {

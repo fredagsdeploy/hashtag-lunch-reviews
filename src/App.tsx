@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { StoreContext } from "redux-react-hook";
+import { Provider } from 'react-redux'
 import styled, { createGlobalStyle } from "styled-components";
 import { App2 } from "./App2";
 import { Spinner } from "./components/Spinner";
@@ -13,14 +13,14 @@ declare global {
 
 export const App = () => {
   return (
-    <StoreContext.Provider value={store}>
+    <Provider store={store}>
       <LayoutGrid className="App">
         <GlobalStyle />
         <Suspense fallback={<Spinner size={"large"} />}>
           <App2 />
         </Suspense>
       </LayoutGrid>
-    </StoreContext.Provider>
+    </Provider>
   );
 };
 

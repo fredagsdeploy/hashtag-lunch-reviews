@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
-import { useDispatch } from "redux-react-hook";
+// @ts-ignore
+import { useDispatch } from "react-redux";
 import { useRatings } from "../customHooks/api";
 import { useBoolean } from "../customHooks/useBoolean";
 import { postPlace } from "../lib/backend";

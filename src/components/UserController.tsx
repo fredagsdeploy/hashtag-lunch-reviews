@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "redux-react-hook";
+// @ts-ignore
+import { useDispatch } from "react-redux";
 import { useUserContext } from "../customHooks/useUserContext";
 import { putUser } from "../lib/backend";
 import { updateUser } from "../store/reducers/user";
