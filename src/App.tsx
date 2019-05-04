@@ -32,7 +32,7 @@ const LayoutGrid = styled.div`
   flex-flow: column;
   min-height: 100%;
 
-  margin-top: 80px;
+  margin-top: 70px;
 
   @media screen and (max-width: 600px) {
     margin-top: 0;
