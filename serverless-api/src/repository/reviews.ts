@@ -45,7 +45,6 @@ export const getReviewsByPlaceId = async (
     ExpressionAttributeValues: { ":place_id": placeId }
   };
   const res = await dynamodb.query(queryParams).promise();
-  console.log("query res", res);
   if (!res.Items || !res.Items[0]) {
     return [];
   }

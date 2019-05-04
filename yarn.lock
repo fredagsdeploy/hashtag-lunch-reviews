@@ -8420,10 +8420,10 @@ react-places-autocomplete@^7.2.1:
     lodash.debounce "^4.0.8"
     prop-types "^15.5.8"
 
-react-redux@^7.1.0-alpha.1:
-  version "7.1.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.1.0-alpha.1.tgz#a82e66bbaf89d7e6c98f2b502d33318b5a298afb"
-  integrity sha512-Zxfb8xyoCx6KngsYROhOi4mDqSOFq0iWps4QsOzjbRL0L9Ls9tNpuYnPkrNbvxGJm3PUOL0BMq0buDkXD98J/g==
+react-redux@^7.1.0-alpha.4:
+  version "7.1.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.1.0-alpha.4.tgz#103bab23e336ce18951bc76a8c9567ce0607fc44"
+  integrity sha512-Vxk6F1ibo2EC/cThTVUbvhTyltUFg7iLnEtro+QwOfOCygKpvwUtag1a8MPWPGv+BLWMXHniOaeo0sy6INhzFg==
   dependencies:
     "@babel/runtime" "^7.4.3"
     hoist-non-react-statics "^3.3.0"

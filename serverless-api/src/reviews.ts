@@ -66,8 +66,6 @@ export const getReviews: LambdaHandler = async event => {
 };
 
 export const getReviewsByPlace: LambdaHandler = async event => {
-  console.log(`Get reviews by place ${JSON.stringify(event)}`);
-
   if (!event.pathParameters || !event.pathParameters.placeId) {
     return createResponse(400, { message: "Missing path parameter" });
   }

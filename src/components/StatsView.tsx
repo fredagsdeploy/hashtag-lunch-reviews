@@ -19,9 +19,6 @@ export const StatsView = ({ ratings }: Props) => {
 
   return (
     <>
-      <AddPlaceContainer>
-        <Button to="/ratings/newplace">Add new place</Button>
-      </AddPlaceContainer>
       <StickySearchBar
         placeholder="Sök..."
         name="searchString"
@@ -54,9 +51,13 @@ export const StatsView = ({ ratings }: Props) => {
 
 const StickySearchBar = styled(TextInput)`
   position: sticky;
-  top: 50px;
+  top: 70px;
   z-index: 2;
   border-radius: 0;
+
+  @media screen and (max-width: 600px) {
+    top: 0;
+  }
 `;
 
 const RatingsListContainer = styled.div`
@@ -64,12 +65,7 @@ const RatingsListContainer = styled.div`
   grid-template-rows: 1fr;
   grid-template-columns: minmax(auto, 800px);
   grid-gap: 1em;
-`;
-
-const AddPlaceContainer = styled.div`
-  align-self: flex-end;
-  padding-right: 10%;
-  margin-top: 1em;
+  margin-top: 1rem;
 `;
 
 export const Button = styled(Link)`
