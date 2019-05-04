@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { Provider } from 'react-redux'
+import { Provider } from "react-redux";
 import Modal from "react-modal";
 import styled, { createGlobalStyle } from "styled-components";
 import { App2 } from "./App2";
@@ -30,13 +30,20 @@ export const App = () => {
 const LayoutGrid = styled.div`
   display: flex;
   flex-flow: column;
-  background-color: #f6f8fa;
   min-height: 100%;
+
+  margin-top: 80px;
+
+  @media screen and (max-width: 600px) {
+    margin-top: 0;
+    margin-bottom: 70px;
+  }
 `;
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
+    background-color: #f6f8fa;
   }
 
   html, #root, body {

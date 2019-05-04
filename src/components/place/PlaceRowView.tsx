@@ -1,4 +1,8 @@
-import { faHashtag, faStar, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHashtag,
+  faStar,
+  faUtensils
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Suspense, useMemo } from "react";
 import styled from "styled-components";
@@ -37,14 +41,15 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const data =
     chartData.length === 1 ? [...chartData, { value: 0, max: 5 }] : chartData;
 
-  return <>
-    <CommentField review={myReview} placeId={placeId} />
-    <ChartRow>
-      <SpiderWebChart data={data} />
-    </ChartRow>
-  </>;
+  return (
+    <>
+      <CommentField review={myReview} placeId={placeId} />
+      <ChartRow>
+        <SpiderWebChart data={data} />
+      </ChartRow>
+    </>
+  );
 };
-
 
 interface Props {
   placeId: string;
@@ -54,9 +59,7 @@ interface Props {
 export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   return (
     <PlaceRow>
-      <PlaceImage
-        url={ place.photoUrl || undefined }
-      >
+      <PlaceImage url={place.photoUrl || undefined}>
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
 
@@ -92,6 +95,7 @@ const PlaceImage = styled.div<{ url?: string }>`
   align-content: center;
 
   & > svg {
+    color: white;
     display: ${props => (props.url ? "none" : "initial")};
   }
 `;

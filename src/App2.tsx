@@ -16,7 +16,7 @@ declare global {
 }
 
 export const App2: React.FC = () => {
-  const { googleUser, user, signOut, authorize } = useGoogleAuth();
+  const { googleUser, user, authorize } = useGoogleAuth();
 
   if (!googleUser || !user) {
     return (
@@ -31,7 +31,7 @@ export const App2: React.FC = () => {
     <>
       <Router history={browserHistory}>
         <>
-          <StatusBar logoutClicked={signOut} />
+          <StatusBar />
           <ContentContainer>
             <Switch>
               <Route path="/ratings" component={StatsController} />

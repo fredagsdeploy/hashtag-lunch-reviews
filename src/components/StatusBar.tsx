@@ -1,57 +1,83 @@
+import {
+  faList,
+  faMap,
+  faPlus,
+  faUser
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+
 import { useUserContext } from "../customHooks/useUserContext";
-import { Link } from "react-router-dom";
 
-interface Props {
-  logoutClicked: () => void;
-}
-
-export const StatusBar = ({ logoutClicked }: Props) => {
+export const StatusBar = () => {
   const user = useUserContext()!;
   return (
     <Bar>
-      <div>
-        <NavItem to={"/ratings"}>All Places</NavItem>
-      </div>
-      <div>
-        <NavItem to={"/me"}>User</NavItem>
-        <NavItem to={"/"} onClick={logoutClicked}>
-          Logout
-        </NavItem>
-        <Name>{user.displayName}</Name>
-      </div>
+      <NavItem to={"/ratings"} activeClassName="active">
+        <Column>
+          <FontAwesomeIcon icon={faList} style={{ fontSize: "1.7rem" }} />
+          Lista
+        </Column>
+      </NavItem>
+      <NavItem to={"/ratings"} activeClassName="active">
+        <Column>
+          <FontAwesomeIcon icon={faMap} style={{ fontSize: "1.7rem" }} />
+          Karta
+        </Column>
+      </NavItem>
+      <NavItem to={"/ratings/newplace"} activeClassName="active">
+        <Column>
+          <FontAwesomeIcon icon={faPlus} style={{ fontSize: "1.7rem" }} />
+          Nytt
+        </Column>
+      </NavItem>
+      <NavItem to={"/me"} activeClassName="active">
+        <Column>
+          <FontAwesomeIcon icon={faUser} style={{ fontSize: "1.7rem" }} />
+          {user.displayName}
+        </Column>
+      </NavItem>
     </Bar>
   );
 };
 
-const NavItem = styled(Link)`
+const NavItem = styled(NavLink)`
   color: #fff;
-  padding: 0 0.8em 0 0;
   text-decoration: none;
+  padding: 0.8rem 1.2rem;
+  width: 25%;
 
   &:hover {
     background-color: #fff2;
     cursor: pointer;
   }
-  &:first-child {
-    padding-left: 0.8em;
-  }
-`;
 
-const Name = styled.span`
-  padding: 0 0.8em 0 0;
-  color: #ccc;
+  &.active {
+    color: #002f7d;
+    background-color: #fff2;
+  }
 `;
 
 const Bar = styled.div`
   display: flex;
   background-color: cornflowerblue;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
-  padding: 1em 0em;
 
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 99;
+
+  @media screen and (max-width: 600px) {
+    top: auto;
+    bottom: 0;
+  }
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
