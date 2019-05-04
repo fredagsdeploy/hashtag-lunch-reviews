@@ -24,66 +24,66 @@ export const StatsController = ({ history, match }: Props) => {
     <>
       <StatsView ratings={ratings} />
       <Switch>
-      <Route
-        path={`${match!.path}/newreview/:placeId`}
-        render={props => (
-          <LunchModal onRequestClose={onClose}>
-            <Suspense fallback={<Spinner size={"large"} />}>
-              <Row>
-                <AddNewReviewForm
-                  placeId={props.match!.params.placeId}
-                  onClose={onClose}
-                />
-              </Row>
-            </Suspense>
-          </LunchModal>
-        )}
-      />
-      <Route
-        path={`${match!.path}/newplace`}
-        render={props => {
-          console.log("Statscontrolleprops", props);
-
-          let initialPlaceInput = {
-            placeName: "",
-            comment: ""
-          };
-
-          if (props.location.search) {
-            const queryParams = props.location.search.substr(1).split("&");
-            initialPlaceInput = queryParams.reduce((acc, next) => {
-              const [key, value] = next.split("=");
-              return { ...acc, [key]: value };
-            }, initialPlaceInput);
-          }
-
-          return (
+        <Route
+          path={`${match!.path}/newreview/:placeId`}
+          render={props => (
             <LunchModal onRequestClose={onClose}>
               <Suspense fallback={<Spinner size={"large"} />}>
                 <Row>
-                  <AddNewPlaceForm
+                  <AddNewReviewForm
+                    placeId={props.match!.params.placeId}
                     onClose={onClose}
-                    initialPlaceInput={initialPlaceInput}
                   />
                 </Row>
               </Suspense>
             </LunchModal>
-          );
-        }}
-      />
-      <Route
-        path={`${match!.path}/:placeId`}
-        render={props => (
-          <LunchModal onRequestClose={onClose}>
-            <Suspense fallback={<Spinner size={"large"} />}>
-              <SinglePlaceView
-                placeId={props.match!.params.placeId}
-                onClose={onClose}
-              />
-            </Suspense>
-          </LunchModal>
-        )}
-      />
+          )}
+        />
+        <Route
+          path={`${match!.path}/newplace`}
+          render={props => {
+            console.log("Statscontrolleprops", props);
+
+            let initialPlaceInput = {
+              placeName: "",
+              comment: ""
+            };
+
+            if (props.location.search) {
+              const queryParams = props.location.search.substr(1).split("&");
+              initialPlaceInput = queryParams.reduce((acc, next) => {
+                const [key, value] = next.split("=");
+                return { ...acc, [key]: value };
+              }, initialPlaceInput);
+            }
+
+            return (
+              <LunchModal onRequestClose={onClose}>
+                <Suspense fallback={<Spinner size={"large"} />}>
+                  <Row>
+                    <AddNewPlaceForm
+                      onClose={onClose}
+                      initialPlaceInput={initialPlaceInput}
+                    />
+                  </Row>
+                </Suspense>
+              </LunchModal>
+            );
+          }}
+        />
+        <Route
+          path={`${match!.path}/:placeId`}
+          render={props => (
+            <LunchModal onRequestClose={onClose}>
+              <Suspense fallback={<Spinner size={"large"} />}>
+                <SinglePlaceView
+                  placeId={props.match!.params.placeId}
+                  onClose={onClose}
+                />
+              </Suspense>
+            </LunchModal>
+          )}
+        />
       </Switch>
     </>
   );
