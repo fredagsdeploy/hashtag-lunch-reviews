@@ -1,6 +1,6 @@
-[![CircleCI](https://circleci.com/gh/Tejpbit/hashtag-lunch-reviews.svg?style=svg)](https://circleci.com/gh/Tejpbit/hashtag-lunch-reviews)
 
-# Frontend
+
+# Frontend [![CircleCI](https://circleci.com/gh/Tejpbit/hashtag-lunch-reviews.svg?style=svg)](https://circleci.com/gh/Tejpbit/hashtag-lunch-reviews)
 Built in react with typescript and hooks!
 
 Look into [serverless-api/README.md](serverless-api/README.md) for running the api gateway locally.
