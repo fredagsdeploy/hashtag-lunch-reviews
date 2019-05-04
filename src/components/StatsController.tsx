@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState, ChangeEventHandler } from "react";
 import { Route, RouteChildrenProps } from "react-router";
 import { useRatings } from "../customHooks/api";
 import { AddNewPlaceForm } from "./AddNewPlaceForm";
