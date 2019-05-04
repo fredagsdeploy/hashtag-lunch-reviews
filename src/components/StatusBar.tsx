@@ -21,7 +21,7 @@ export const StatusBar = () => {
           Lista
         </Column>
       </NavItem>
-      <NavItem to={"/ratings"} activeClassName="active">
+      <NavItem to={"/map"} activeClassName="active">
         <Column>
           <FontAwesomeIcon icon={faMap} style={{ fontSize: "1.7rem" }} />
           Karta
