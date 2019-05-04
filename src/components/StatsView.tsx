@@ -1,13 +1,12 @@
-import React, { ChangeEventHandler, useState, useMemo } from "react";
+import React, { ChangeEventHandler, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Rating } from "../types";
 import { PlaceRowView } from "./place/PlaceRowView";
-import {SaveButton} from "./CommonFormComponents";
+import { SaveButton } from "./CommonFormComponents";
 import { useDebounce } from "../customHooks/useDebounce";
-import {StickySearchBar} from "./SearchBar";
-import {Spinner} from "./Spinner";
-import {browserHistory} from "../history";
+import { StickySearchBar } from "./SearchBar";
+import { browserHistory } from "../history";
 
 interface Props {
   ratings: Array<Rating>;
@@ -26,8 +25,11 @@ export const StatsView = ({ ratings }: Props) => {
 
   return (
     <>
-        <StickySearchBar value={searchString} setSearchString={searchStringChange} />
-        {useMemo(
+      <StickySearchBar
+        value={searchString}
+        setSearchString={searchStringChange}
+      />
+      {useMemo(
         () => (
           <RatingsListContainer>
             {filteredRatings.length === 0 ? (
@@ -49,24 +51,23 @@ export const StatsView = ({ ratings }: Props) => {
   );
 };
 
-
 interface NoSearchResultProps {
-    searchQuery: string
+  searchQuery: string;
 }
 
-const NoSearchResult = ({searchQuery}: NoSearchResultProps) => {
-    const navigateToCreatePlace = () => {
-        browserHistory.push(`/ratings/newplace?placeName=${searchQuery}`);
-    };
+const NoSearchResult = ({ searchQuery }: NoSearchResultProps) => {
+  const navigateToCreatePlace = () => {
+    browserHistory.push(`/ratings/newplace?placeName=${searchQuery}`);
+  };
 
-    return (
-        <NoResultContainer>
-            Inget plats med det namnet. <br /> Vill du lägga till ett? <br />
-            <SaveButton onClick={() => navigateToCreatePlace()}>
-                Skapa plats
-            </SaveButton>
-        </NoResultContainer>
-    );
+  return (
+    <NoResultContainer>
+      Inget plats med det namnet. <br /> Vill du lägga till ett? <br />
+      <SaveButton onClick={() => navigateToCreatePlace()}>
+        Skapa plats
+      </SaveButton>
+    </NoResultContainer>
+  );
 };
 
 const NoResultContainer = styled.div`
