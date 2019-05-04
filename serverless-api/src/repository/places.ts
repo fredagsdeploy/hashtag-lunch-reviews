@@ -1,14 +1,23 @@
 import { dynamodb } from "./documentClient";
 import { GooglePlaceResult } from "../googlePlaces/types";
+import PlacesAutocomplete from "react-places-autocomplete";
 
 export interface Place {
   placeId: string;
+  createdAt: Date;
   placeName: string;
   comment?: string;
   googlePlaceId?: string;
   googlePlace?: GooglePlaceResult;
   photoUrl?: string;
 }
+
+export type PlaceInput = {
+  placeName: string;
+  comment?: string;
+  googlePlaceId?: string;
+  photoUrl?: string;
+};
 
 export const getPlaceById = async (
   placeId: string
@@ -20,9 +29,13 @@ export const getPlaceById = async (
     }
   };
 
-  const place = await dynamodb.get(getParams).promise();
-
-  return place.Item as Place | undefined;
+  const result = await dynamodb.get(getParams).promise();
+  if (!result.Item) {
+    return undefined;
+  }
+  const place = result.Item as Place;
+  place.createdAt = dateFromUUID(place.placeId);
+  return place;
 };
 
 export const getPlaceByName = async (
@@ -40,7 +53,9 @@ export const getPlaceByName = async (
     return undefined;
   }
 
-  return res.Items[0] as Place | undefined;
+  const place = res.Items[0] as Place;
+  place.createdAt = dateFromUUID(place.placeId);
+  return place;
 };
 
 export const getPlaceByGoogleId = async (
@@ -58,7 +73,9 @@ export const getPlaceByGoogleId = async (
     return undefined;
   }
 
-  return res.Items[0] as Place | undefined;
+  const place = res.Items[0] as Place;
+  place.createdAt = dateFromUUID(place.placeId);
+  return place;
 };
 
 export const getAllPlaces = async (): Promise<Place[]> => {
@@ -68,7 +85,11 @@ export const getAllPlaces = async (): Promise<Place[]> => {
 
   const response = await dynamodb.scan(params).promise();
 
-  return (response.Items || []) as Place[];
+  const places = response.Items as Place[];
+  return places.map((p: Place) => ({
+    ...p,
+    createdAt: dateFromUUID(p.placeId)
+  }));
 };
 
 export const savePlace = async (placeInput: Place): Promise<Place> => {
@@ -107,4 +128,16 @@ export const updatePlace = async (placeInput: Place): Promise<Place> => {
   const place = await getPlaceById(placeInput.placeId);
 
   return place!;
+};
+
+const unixtimeFromUUID = (uuid: string) => {
+  var uuid_arr = uuid.split("-"),
+    time_str = [uuid_arr[2].substring(1), uuid_arr[1], uuid_arr[0]].join("");
+  return parseInt(time_str, 16);
+};
+
+const dateFromUUID = (uuid: string) => {
+  var int_time = unixtimeFromUUID(uuid) - 122192928000000000,
+    int_millisec = Math.floor(int_time / 10000);
+  return new Date(int_millisec);
 };

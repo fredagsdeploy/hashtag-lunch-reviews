@@ -1,4 +1,12 @@
-import { NewReview, Place, Rating, Review, ReviewRating, User } from "../types";
+import {
+  NewReview,
+  Place,
+  Rating,
+  Review,
+  ReviewRating,
+  User,
+  PlaceInput
+} from "../types";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
@@ -71,7 +79,7 @@ export const getPlaceById = (placeId: string): Promise<Place> => {
   return myFetch(getPlaceByPlaceIdUrl(placeId)).then(handleResponse);
 };
 
-export const postPlace = (place: Partial<Place>): Promise<Rating> => {
+export const postPlace = (place: PlaceInput): Promise<Rating> => {
   const { placeName } = place;
   if (!placeName) {
     throw new Error(

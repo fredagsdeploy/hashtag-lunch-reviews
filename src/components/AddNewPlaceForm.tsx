@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { postPlace } from "../lib/backend";
 import { updateRating } from "../store/reducers/ratings";
-import { Place, Rating } from "../types";
+import { Place, Rating, PlaceInput } from "../types";
 import {
   CommentForm,
   FormLabelWrapper,
@@ -22,7 +22,7 @@ interface EditPlaceRowProps {
   onClose: () => void;
 }
 
-const newPlaceInitialState: Partial<Place> = {
+const newPlaceInitialState: PlaceInput = {
   placeName: "",
   comment: "",
   googlePlaceId: ""
@@ -41,9 +41,7 @@ const getSearchOptions = () => ({
 export const AddNewPlaceForm = ({ onClose }: EditPlaceRowProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [newPlace, setNewPlace] = useState<Partial<Place>>(
-    newPlaceInitialState
-  );
+  const [newPlace, setNewPlace] = useState<PlaceInput>(newPlaceInitialState);
 
   const dispatch = useDispatch();
 

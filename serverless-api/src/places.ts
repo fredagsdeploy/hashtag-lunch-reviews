@@ -7,7 +7,8 @@ import {
   getPlaceByName,
   Place,
   savePlace,
-  updatePlace
+  updatePlace,
+  PlaceInput
 } from "./repository/places";
 import { getGooglePlace, getPhotoUrl } from "./googlePlaces/googlePlaces";
 import { decoratePlace } from "./ratings";
@@ -46,8 +47,6 @@ export const getById: LambdaHandler = async (event, context) => {
 
   return createResponse(200, place);
 };
-
-export type PlaceInput = Place;
 
 export const post: LambdaHandler = async (event, context) => {
   if (!event.body) {

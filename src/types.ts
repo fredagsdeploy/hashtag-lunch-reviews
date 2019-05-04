@@ -25,12 +25,20 @@ export interface NewReview extends Omit<Review, "reviewId" | "user"> {
 export interface Place {
   placeId: string;
   placeName: string;
+  createdAt?: Date;
   googlePlaceId?: string;
   googlePlace?: GooglePlaceResult;
   google_maps_link: string;
   comment: string;
   photoUrl?: string;
 }
+
+export type PlaceInput = {
+  placeName: string;
+  comment?: string;
+  googlePlaceId?: string;
+  photoUrl?: string;
+};
 
 export interface GoogleUser {
   id: string;
