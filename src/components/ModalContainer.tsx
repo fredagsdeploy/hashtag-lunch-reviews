@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 interface ModalContainerProps {
-  title: string;
+  title: string | React.ReactNode;
   onClose: () => void;
 }
 
@@ -13,7 +13,7 @@ export const ModalContainer: React.FC<ModalContainerProps> = ({
 }) => (
   <CommentContainerWrapper>
     <Row>
-      <PlaceName>{title}</PlaceName>
+      {typeof title === "string" ? <PlaceName>{title}</PlaceName> : title}
       <button
         type={"button"}
         onClick={onClose}
@@ -41,20 +41,20 @@ const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
+  padding: 1rem 0;
 `;
 
 const CommentContainerWrapper = styled.div`
-  display: grid;
-  grid-row-gap: 10px;
+  display: flex;
+  flex-direction: column;
 
-  padding: 1em;
+  padding: 1rem;
 
   min-width: 30em;
 
   background-color: #fff;
 
   @media screen and (max-width: 600px) {
-    flex-direction: column;
     align-items: stretch;
 
     min-width: initial;

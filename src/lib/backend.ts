@@ -1,12 +1,4 @@
-import {
-  NewReview,
-  Place,
-  Rating,
-  Review,
-  ReviewRating,
-  User,
-  PlaceInput
-} from "../types";
+import { NewReview, Place, PlaceInput, Rating, Review, ReviewRating, User } from "../types";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 

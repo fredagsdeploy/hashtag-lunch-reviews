@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getPlaceByPlaceIdUrl,
+  getRatingByPlaceIdUrl,
   getRatings,
   getReviewsForPlace
 } from "../lib/backend";
@@ -12,7 +12,7 @@ import {
   ReviewState,
   setReviews
 } from "../store/reducers/reviews";
-import { Place, Rating, Review } from "../types";
+import { Rating, Review } from "../types";
 import { useFetch } from "./useFetch";
 
 type Suspender = {
@@ -41,8 +41,8 @@ type RejectedResult = {
 
 type Result = PendingResult | ResolvedResult | RejectedResult;
 
-export const usePlaceById = (placeId: string): Place =>
-  useFetch(getPlaceByPlaceIdUrl(placeId));
+export const useRatingByPlaceId = (placeId: string): Rating =>
+  useFetch(getRatingByPlaceIdUrl(placeId));
 
 let ratingsResult: Result | null = null;
 

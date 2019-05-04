@@ -5,6 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Suspense, useMemo } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useReviewsByPlaceId } from "../../customHooks/api";
 
@@ -14,7 +15,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { SpiderWebChart } from "../SpiderWebChart";
 import { Spinner } from "../Spinner";
 import { formatStarRating } from "../utils/formatter";
-import { CommentField } from "./CommentField";
+import { SelfCommentField } from "./CommentField";
 
 interface RatingDisplayProps {
   placeId: string;
@@ -43,7 +44,7 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
 
   return (
     <>
-      <CommentField review={myReview} placeId={placeId} />
+      <SelfCommentField review={myReview} placeId={placeId} />
       <ChartRow>
         <SpiderWebChart data={data} />
       </ChartRow>
@@ -59,12 +60,22 @@ interface Props {
 export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   return (
     <PlaceRow>
-      <PlaceImage url={place.photoUrl || undefined}>
-        <FontAwesomeIcon icon={faUtensils} size={"3x"} />
-      </PlaceImage>
+      <StyledLink to={`/ratings/${place.placeId}`}>
+        <PlaceImage
+          url={place.photoUrl || undefined}
+          style={{
+            width: "100%",
+            height: "100%"
+          }}
+        >
+          <FontAwesomeIcon icon={faUtensils} size={"3x"} />
+        </PlaceImage>
+      </StyledLink>
 
       <NameComment>
-        <PlaceName>{place.placeName}</PlaceName>
+        <StyledLink to={`/ratings/${place.placeId}`}>
+          <PlaceName>{place.placeName}</PlaceName>
+        </StyledLink>
         <PlaceComment>{place.comment}</PlaceComment>
       </NameComment>
       <PlaceRatings>
@@ -82,9 +93,18 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   );
 };
 
-const PlaceImage = styled.div<{ url?: string }>`
+const StyledLink = styled(Link)`
+  color: #5d5d5d;
+  text-decoration: none;
   grid-area: img;
 
+  &:visited {
+    color: #5d5d5d;
+    text-decoration: none;
+  }
+`;
+
+export const PlaceImage = styled.div<{ url?: string }>`
   background: ${props => (props.url ? `url(${props.url})` : "#6495ed")};
   background-repeat: no-repeat;
   background-size: cover;

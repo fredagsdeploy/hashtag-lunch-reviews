@@ -1,9 +1,5 @@
-import {
-  faList,
-  faMap,
-  faPlus,
-  faUser
-} from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faList, faMap, faPlus, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -15,33 +11,41 @@ export const StatusBar = () => {
   const user = useUserContext()!;
   return (
     <Bar>
-      <NavItem to={"/ratings"} activeClassName="active">
-        <Column>
-          <FontAwesomeIcon icon={faList} style={{ fontSize: "1.7rem" }} />
-          Lista
-        </Column>
-      </NavItem>
-      <NavItem to={"/map"} activeClassName="active">
-        <Column>
-          <FontAwesomeIcon icon={faMap} style={{ fontSize: "1.7rem" }} />
-          Karta
-        </Column>
-      </NavItem>
-      <NavItem to={"/ratings/newplace"} activeClassName="active">
-        <Column>
-          <FontAwesomeIcon icon={faPlus} style={{ fontSize: "1.7rem" }} />
-          Nytt
-        </Column>
-      </NavItem>
-      <NavItem to={"/me"} activeClassName="active">
-        <Column>
-          <FontAwesomeIcon icon={faUser} style={{ fontSize: "1.7rem" }} />
-          {user.displayName}
-        </Column>
-      </NavItem>
+      <NavItemWithIcon to={"/ratings"} title={"Lista"} icon={faList} />
+      <NavItemWithIcon to={"/map"} title={"Karta"} icon={faMap} />
+      <NavItemWithIcon to={"/ratings/newplace"} title={"Nytt"} icon={faPlus} />
+      <NavItemWithIcon to={"/me"} title={user.displayName} icon={faUser} />
     </Bar>
   );
 };
+
+interface NavItemWithIconProps {
+  to: string;
+  title: string;
+  icon: IconProp;
+}
+
+export const NavItemWithIcon: React.FC<NavItemWithIconProps> = ({
+  to,
+  title,
+  icon
+}) => (
+  <NavItem to={to} activeClassName="active">
+    <TabMenuItem title={title} icon={icon} />
+  </NavItem>
+);
+
+interface TabMenuItemProps {
+  title: string;
+  icon: IconProp;
+}
+
+export const TabMenuItem: React.FC<TabMenuItemProps> = ({ title, icon }) => (
+  <Column>
+    <FontAwesomeIcon icon={icon} style={{ fontSize: "1.7rem" }} />
+    {title}
+  </Column>
+);
 
 const NavItem = styled(NavLink)`
   color: #fff;
@@ -69,7 +73,7 @@ const Bar = styled.div`
   position: fixed;
   top: 0;
   z-index: 99;
-  transition: padding-bottom  ease;
+  transition: padding-bottom ease;
 
   @media screen and (max-width: 600px) {
     top: auto;
