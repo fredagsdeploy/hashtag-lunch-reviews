@@ -69,10 +69,12 @@ const Bar = styled.div`
   position: fixed;
   top: 0;
   z-index: 99;
+  transition: padding-bottom  ease;
 
   @media screen and (max-width: 600px) {
     top: auto;
     bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 `;
 
