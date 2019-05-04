@@ -1,15 +1,15 @@
 import React, { Suspense } from "react";
 import { Redirect, Route, Router, Switch } from "react-router-dom";
 import styled from "styled-components";
+import { MapPage } from "./components/MapPage";
 import { NavigationFooter } from "./components/NavigationFooter";
+import { Spinner } from "./components/Spinner";
 
 import { StatsController } from "./components/StatsController";
 import { StatusBar } from "./components/StatusBar";
 import { UserController } from "./components/UserController";
 import { browserHistory } from "./history";
 import { useGoogleAuth } from "./useGoogleAuth";
-import { Spinner } from "./components/Spinner";
-import {MapPage} from "./components/MapPage";
 
 declare global {
   interface Window {

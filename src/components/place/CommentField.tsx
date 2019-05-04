@@ -1,23 +1,20 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useUserContext } from "../../customHooks/useUserContext";
-import { Review } from "../../types";
+import { Review, User } from "../../types";
 import { StarRatingView } from "../StarRating";
 
 interface Props {
   review?: Review;
   placeId: string;
+  user: User;
+  style?: CSSProperties;
 }
 
-export const CommentField = ({
-  review,
-  placeId,
-}: Props) => {
-  const user = useUserContext()!;
-
+export const CommentField = ({ user, review, placeId, style }: Props) => {
   return (
-    <CommentContainer>
+    <CommentContainer style={style}>
       <UserImage url={user.imageUrl} active={Boolean(review)} />
       <div style={{ height: "2em", display: "flex", alignItems: "center" }}>
         <SpeakTriangle />
@@ -30,6 +27,27 @@ export const CommentField = ({
         )}
       </RatingContainer>
     </CommentContainer>
+  );
+};
+
+interface SelfCommentFieldProps {
+  review?: Review;
+  placeId: string;
+}
+
+export const SelfCommentField = ({
+  review,
+  placeId
+}: SelfCommentFieldProps) => {
+  const user = useUserContext()!;
+
+  return (
+    <CommentField
+      placeId={placeId}
+      review={review}
+      user={user}
+      style={{ gridArea: "comments" }}
+    />
   );
 };
 
@@ -55,7 +73,6 @@ const NewCommentForm = ({ placeId }: Pick<Props, "placeId">) => {
 };
 
 const CommentContainer = styled.div`
-  grid-area: comments;
   display: flex;
   padding: 1em;
 `;

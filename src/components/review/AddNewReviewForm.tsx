@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { batch, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { usePlaceById } from "../../customHooks/api";
+import { useRatingByPlaceId } from "../../customHooks/api";
 import { useUserContext } from "../../customHooks/useUserContext";
 import { postReview } from "../../lib/backend";
 import { updateRating } from "../../store/reducers/ratings";
@@ -24,7 +24,7 @@ interface Props {
 
 export const AddNewReviewForm: React.FC<Props> = ({ onClose, placeId }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const place = usePlaceById(placeId);
+  const place = useRatingByPlaceId(placeId);
 
   const user = useUserContext()!;
   const newReviewInitalState: NewReview = {
