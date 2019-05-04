@@ -9,7 +9,6 @@ import { UserController } from "./components/UserController";
 import { browserHistory } from "./history";
 import { useGoogleAuth } from "./useGoogleAuth";
 import { Spinner } from "./components/Spinner";
-import {MapController} from "./components/MapController";
 import {MapPage} from "./components/MapPage";
 
 declare global {
