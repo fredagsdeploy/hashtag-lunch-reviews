@@ -6,7 +6,6 @@ import {
 import * as _ from "lodash";
 import { createResponse, LambdaHandler } from "./common";
 import { getAllPlaces, getPlaceById, Place } from "./repository/places";
-import { getGooglePlace } from "./googlePlaces/googlePlaces";
 
 const calculateRating = (reviews: Review[]): number => {
   if (!_.isEmpty(reviews)) {
@@ -44,25 +43,14 @@ const calculateNormalizedRating = async (place: Place): Promise<number> => {
   return calculateRating(normalizedReviewsGroupedByPlaceId[place.placeId]);
 };
 
-const getGooglePlaceInfo = async (place: Place) => {
-  if (place.googlePlaceId) {
-    const googlePlace = await getGooglePlace(place.googlePlaceId).then(r =>
-      r.json()
-    );
-    return googlePlace.result;
-  }
-};
-
 export const decoratePlace = async (place: Place, reviews: Review[]) => {
   const rating = calculateRating(reviews);
   const normalizedRating: number = await calculateNormalizedRating(place);
-  const googlePlace = await getGooglePlaceInfo(place);
 
   return {
     ...place,
     rating,
-    normalizedRating,
-    googlePlace
+    normalizedRating
   };
 };
 

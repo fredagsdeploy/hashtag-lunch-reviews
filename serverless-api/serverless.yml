@@ -63,6 +63,9 @@ functions:
           method: get
           cors: true
 
+  migratePlace:
+    handler: src/places.migratePhotos
+
   getPlaceById:
     handler: src/places.getById
 

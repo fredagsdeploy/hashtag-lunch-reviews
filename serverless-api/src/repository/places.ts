@@ -1,10 +1,13 @@
 import { dynamodb } from "./documentClient";
+import { GooglePlaceResult } from "../googlePlaces/types";
 
 export interface Place {
   placeId: string;
   placeName: string;
   comment?: string;
   googlePlaceId?: string;
+  googlePlace?: GooglePlaceResult;
+  photoUrl?: string;
 }
 
 export const getPlaceById = async (
@@ -77,6 +80,26 @@ export const savePlace = async (placeInput: Place): Promise<Place> => {
   const placeWithSameName = await getPlaceByName(placeInput.placeName);
   if (placeWithSameName) {
     throw new Error("A place with that name already exists.");
+  }
+
+  await dynamodb.put(params).promise();
+
+  const place = await getPlaceById(placeInput.placeId);
+
+  return place!;
+};
+
+export const updatePlace = async (placeInput: Place): Promise<Place> => {
+  var params = {
+    TableName: "Places",
+    Item: placeInput
+  };
+
+  const placeWithSameName = await getPlaceByName(placeInput.placeName);
+  if (!placeWithSameName) {
+    throw new Error(
+      "A place with that name doesn't already exist. (You're trying to update a place)"
+    );
   }
 
   await dynamodb.put(params).promise();

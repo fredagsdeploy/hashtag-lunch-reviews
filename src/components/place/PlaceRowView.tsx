@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { useReviewsByPlaceId } from "../../customHooks/api";
 
 import { useUserContext } from "../../customHooks/useUserContext";
-import { getPhotoUrl } from "../../googlePlaces/googlePlaces";
 import { Rating } from "../../types";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { SpiderWebChart } from "../SpiderWebChart";
@@ -38,7 +37,7 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const data =
     chartData.length === 1 ? [...chartData, { value: 0, max: 5 }] : chartData;
 
-  return     <>
+  return <>
     <CommentField review={myReview} placeId={placeId} />
     <ChartRow>
       <SpiderWebChart data={data} />
@@ -56,11 +55,7 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
   return (
     <PlaceRow>
       <PlaceImage
-        url={
-          place.googlePlace && place.googlePlace.photos
-            ? getPhotoUrl(place.googlePlace)
-            : undefined
-        }
+        url={ place.photoUrl || undefined }
       >
         <FontAwesomeIcon icon={faUtensils} size={"3x"} />
       </PlaceImage>
