@@ -2,9 +2,12 @@ import { dynamodb } from "./documentClient";
 import { GooglePlaceResult } from "../googlePlaces/types";
 import PlacesAutocomplete from "react-places-autocomplete";
 
+export interface PlaceViewModel extends Place {
+  createdAt: Date;
+}
+
 export interface Place {
   placeId: string;
-  createdAt: Date;
   placeName: string;
   comment?: string;
   googlePlaceId?: string;
@@ -21,7 +24,7 @@ export type PlaceInput = {
 
 export const getPlaceById = async (
   placeId: string
-): Promise<Place | undefined> => {
+): Promise<PlaceViewModel | undefined> => {
   const getParams = {
     TableName: "Places",
     Key: {
@@ -33,14 +36,14 @@ export const getPlaceById = async (
   if (!result.Item) {
     return undefined;
   }
-  const place = result.Item as Place;
+  const place = result.Item as PlaceViewModel;
   place.createdAt = dateFromUUID(place.placeId);
   return place;
 };
 
 export const getPlaceByName = async (
   placeName: string
-): Promise<Place | undefined> => {
+): Promise<PlaceViewModel | undefined> => {
   const queryParams = {
     TableName: "Places",
     IndexName: "placeNameIndex",
@@ -53,14 +56,14 @@ export const getPlaceByName = async (
     return undefined;
   }
 
-  const place = res.Items[0] as Place;
+  const place = res.Items[0] as PlaceViewModel;
   place.createdAt = dateFromUUID(place.placeId);
   return place;
 };
 
 export const getPlaceByGoogleId = async (
   googlePlaceId: string
-): Promise<Place | undefined> => {
+): Promise<PlaceViewModel | undefined> => {
   const queryParams = {
     TableName: "Places",
     IndexName: "placeGoogleIdIndex",
@@ -73,26 +76,26 @@ export const getPlaceByGoogleId = async (
     return undefined;
   }
 
-  const place = res.Items[0] as Place;
+  const place = res.Items[0] as PlaceViewModel;
   place.createdAt = dateFromUUID(place.placeId);
   return place;
 };
 
-export const getAllPlaces = async (): Promise<Place[]> => {
+export const getAllPlaces = async (): Promise<PlaceViewModel[]> => {
   var params = {
     TableName: "Places"
   };
 
   const response = await dynamodb.scan(params).promise();
 
-  const places = response.Items as Place[];
-  return places.map((p: Place) => ({
+  const places = response.Items as PlaceViewModel[];
+  return places.map((p: PlaceViewModel) => ({
     ...p,
     createdAt: dateFromUUID(p.placeId)
   }));
 };
 
-export const savePlace = async (placeInput: Place): Promise<Place> => {
+export const savePlace = async (placeInput: Place): Promise<PlaceViewModel> => {
   var params = {
     TableName: "Places",
     Item: placeInput
@@ -110,7 +113,9 @@ export const savePlace = async (placeInput: Place): Promise<Place> => {
   return place!;
 };
 
-export const updatePlace = async (placeInput: Place): Promise<Place> => {
+export const updatePlace = async (
+  placeInput: Place
+): Promise<PlaceViewModel> => {
   var params = {
     TableName: "Places",
     Item: placeInput
@@ -130,13 +135,13 @@ export const updatePlace = async (placeInput: Place): Promise<Place> => {
   return place!;
 };
 
-const unixtimeFromUUID = (uuid: string) => {
+const unixtimeFromUUID = (uuid: string): number => {
   var uuid_arr = uuid.split("-"),
     time_str = [uuid_arr[2].substring(1), uuid_arr[1], uuid_arr[0]].join("");
   return parseInt(time_str, 16);
 };
 
-const dateFromUUID = (uuid: string) => {
+const dateFromUUID = (uuid: string): Date => {
   var int_time = unixtimeFromUUID(uuid) - 122192928000000000,
     int_millisec = Math.floor(int_time / 10000);
   return new Date(int_millisec);
