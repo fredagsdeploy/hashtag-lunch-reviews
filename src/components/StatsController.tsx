@@ -39,15 +39,35 @@ export const StatsController = ({ history, match }: Props) => {
       />
       <Route
         path={`${match!.path}/newplace`}
-        render={() => (
-          <LunchModal onRequestClose={onClose}>
-            <Suspense fallback={<Spinner size={"large"} />}>
-              <Row>
-                <AddNewPlaceForm onClose={onClose} />
-              </Row>
-            </Suspense>
-          </LunchModal>
-        )}
+        render={props => {
+          console.log("Statscontrolleprops", props);
+
+          let initialPlaceInput = {
+            placeName: "",
+            comment: ""
+          };
+
+          if (props.location.search) {
+            const queryParams = props.location.search.substr(1).split("&");
+            initialPlaceInput = queryParams.reduce((acc, next) => {
+              const [key, value] = next.split("=");
+              return { ...acc, [key]: value };
+            }, initialPlaceInput);
+          }
+
+          return (
+            <LunchModal onRequestClose={onClose}>
+              <Suspense fallback={<Spinner size={"large"} />}>
+                <Row>
+                  <AddNewPlaceForm
+                    onClose={onClose}
+                    initialPlaceInput={initialPlaceInput}
+                  />
+                </Row>
+              </Suspense>
+            </LunchModal>
+          );
+        }}
       />
     </>
   );

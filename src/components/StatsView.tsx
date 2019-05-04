@@ -3,8 +3,11 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Rating } from "../types";
 import { PlaceRowView } from "./place/PlaceRowView";
-import { TextInput } from "./CommonFormComponents";
+import {SaveButton} from "./CommonFormComponents";
 import { useDebounce } from "../customHooks/useDebounce";
+import {StickySearchBar} from "./SearchBar";
+import {Spinner} from "./Spinner";
+import {browserHistory} from "../history";
 
 interface Props {
   ratings: Array<Rating>;
@@ -17,30 +20,27 @@ export const StatsView = ({ ratings }: Props) => {
 
   const debouncedSearchString = useDebounce(searchString, 100);
 
+  const filteredRatings = ratings.filter(rating =>
+    rating.placeName.toLowerCase().includes(debouncedSearchString.toLowerCase())
+  );
+
   return (
     <>
-      <StickySearchBar
-        placeholder="Sök..."
-        name="searchString"
-        value={searchString}
-        onChange={searchStringChange}
-      />
-      {useMemo(
+        <StickySearchBar value={searchString} setSearchString={searchStringChange} />
+        {useMemo(
         () => (
           <RatingsListContainer>
-            {ratings
-              .filter(rating =>
-                rating.placeName
-                  .toLowerCase()
-                  .includes(debouncedSearchString.toLowerCase())
-              )
-              .map(rating => (
+            {filteredRatings.length === 0 ? (
+              <NoSearchResult searchQuery={searchString} />
+            ) : (
+              filteredRatings.map(rating => (
                 <PlaceRowView
                   key={rating.placeId}
                   rating={rating}
                   placeId={rating.placeId}
                 />
-              ))}
+              ))
+            )}
           </RatingsListContainer>
         ),
         [ratings, debouncedSearchString]
@@ -49,15 +49,30 @@ export const StatsView = ({ ratings }: Props) => {
   );
 };
 
-const StickySearchBar = styled(TextInput)`
-  position: sticky;
-  top: 70px;
-  z-index: 2;
-  border-radius: 0;
 
-  @media screen and (max-width: 600px) {
-    top: 0;
-  }
+interface NoSearchResultProps {
+    searchQuery: string
+}
+
+const NoSearchResult = ({searchQuery}: NoSearchResultProps) => {
+    const navigateToCreatePlace = () => {
+        browserHistory.push(`/ratings/newplace?placeName=${searchQuery}`);
+    };
+
+    return (
+        <NoResultContainer>
+            Inget plats med det namnet. <br /> Vill du lägga till ett? <br />
+            <SaveButton onClick={() => navigateToCreatePlace()}>
+                Skapa plats
+            </SaveButton>
+        </NoResultContainer>
+    );
+};
+
+const NoResultContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 const RatingsListContainer = styled.div`

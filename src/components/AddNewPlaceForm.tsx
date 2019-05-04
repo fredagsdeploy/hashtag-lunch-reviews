@@ -20,6 +20,7 @@ import { Spinner } from "./Spinner";
 
 interface EditPlaceRowProps {
   onClose: () => void;
+  initialPlaceInput: Partial<PlaceInput>;
 }
 
 const newPlaceInitialState: PlaceInput = {
@@ -38,10 +39,16 @@ const getSearchOptions = () => ({
   types: ["establishment"]
 });
 
-export const AddNewPlaceForm = ({ onClose }: EditPlaceRowProps) => {
+export const AddNewPlaceForm = ({
+  onClose,
+  initialPlaceInput
+}: EditPlaceRowProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [newPlace, setNewPlace] = useState<PlaceInput>(newPlaceInitialState);
+  const [newPlace, setNewPlace] = useState<PlaceInput>({
+    ...newPlaceInitialState,
+    ...initialPlaceInput
+  });
 
   const dispatch = useDispatch();
 
@@ -110,6 +117,7 @@ export const AddNewPlaceForm = ({ onClose }: EditPlaceRowProps) => {
             <FormLabelWrapper>
               <Label>Googleplats</Label>
               <TextInput
+                autoFocus={true}
                 {...getInputProps({
                   placeholder: "Search Places ...",
                   className: "location-search-input"
