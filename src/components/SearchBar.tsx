@@ -28,15 +28,15 @@ const SearchBarContainer = styled.div`
   display: flex;
   align-items: center;
   background: #edeced;
-`;
-
-const SearchInput = styled(TextInput)`
   position: sticky;
   top: 70px;
   z-index: 2;
-  border-radius: 0;
 
   @media screen and (max-width: 600px) {
     top: 0;
   }
+`;
+
+const SearchInput = styled(TextInput)`
+  border-radius: 0;
 `;
