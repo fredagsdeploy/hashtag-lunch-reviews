@@ -1,4 +1,4 @@
-import { faHashtag, faStar, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faHashtag, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Suspense, useMemo } from "react";
 import { Link } from "react-router-dom";
