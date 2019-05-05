@@ -55,6 +55,7 @@ export const App2: React.FC = () => {
 };
 
 const ContentContainer = styled.div`
+  flex: 1;
   display: grid;
   grid-template-columns: minmax(auto, 800px);
   justify-content: center;
