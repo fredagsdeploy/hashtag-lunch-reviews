@@ -95,7 +95,7 @@ export const SpiderWebChart: React.FC<Props> = ({
   });
 
   return (
-    <svg width={width} height={height} viewBox="0 0 160 160">
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
       {outterPoints.map(([x, y], index) => (
         <line
           key={index}

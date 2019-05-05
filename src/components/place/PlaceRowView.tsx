@@ -1,13 +1,10 @@
-import {
-  faHashtag,
-  faStar,
-  faUtensils
-} from "@fortawesome/free-solid-svg-icons";
+import { faHashtag, faStar, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Suspense, useMemo } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useReviewsByPlaceId } from "../../customHooks/api";
+import { useMedia } from "../../customHooks/useMedia";
 
 import { useUserContext } from "../../customHooks/useUserContext";
 import { Rating } from "../../types";
@@ -21,7 +18,7 @@ interface RatingDisplayProps {
   placeId: string;
 }
 
-const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
+const CommentDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const reviews = useReviewsByPlaceId(placeId);
 
   const user = useUserContext()!;
@@ -29,6 +26,15 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
   const myReview = reviews.filter(
     review => review.user.googleUserId === user.googleUserId
   )[0];
+
+  return <SelfCommentField review={myReview} placeId={placeId} />;
+};
+
+const ChartDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
+  const reviews = useReviewsByPlaceId(placeId);
+
+  const size = useMedia(["(max-width: 600px)"], [100], 160);
+  const radius = useMedia(["(max-width: 600px)"], [40], 60);
 
   const chartData = useMemo(
     () =>
@@ -43,12 +49,7 @@ const RatingDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
     chartData.length === 1 ? [...chartData, { value: 0, max: 5 }] : chartData;
 
   return (
-    <>
-      <SelfCommentField review={myReview} placeId={placeId} />
-      <ChartRow>
-        <SpiderWebChart data={data} />
-      </ChartRow>
-    </>
+    <SpiderWebChart data={data} radius={radius} width={size} height={size} />
   );
 };
 
@@ -57,7 +58,18 @@ interface Props {
   rating: Rating;
 }
 
+const RatingsDisplay = ({ rating }: { rating: Rating }) => (
+  <PlaceRatings>
+    <Blue icon={faHashtag} />
+    {formatStarRating(rating.normalizedRating)}
+    <Yellow icon={faStar} />
+    {formatStarRating(rating.rating)}
+  </PlaceRatings>
+);
+
 export const PlaceRowView = ({ placeId, rating: place }: Props) => {
+  const display = useMedia(["(max-width: 600px)"], ["mobile"], "desktop");
+
   return (
     <PlaceRow>
       <StyledLink to={`/ratings/${place.placeId}`}>
@@ -68,7 +80,47 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
             height: "100%"
           }}
         >
-          <FontAwesomeIcon icon={faUtensils} size={"3x"} />
+          {display === "mobile" && (
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                marginRight: "0.5rem"
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center"
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: "50%",
+
+                    backgroundColor: "white"
+                  }}
+                >
+                  <ChartDisplay placeId={placeId} />
+                </div>
+                <div
+                  style={{
+                    borderRadius: "40px",
+                    backgroundColor: "white",
+                    marginTop: "0.5rem"
+                  }}
+                >
+                  <RatingsDisplay rating={place} />
+                </div>
+              </div>
+            </div>
+          )}
         </PlaceImage>
       </StyledLink>
 
@@ -78,15 +130,15 @@ export const PlaceRowView = ({ placeId, rating: place }: Props) => {
         </StyledLink>
         <PlaceComment>{place.comment}</PlaceComment>
       </NameComment>
-      <PlaceRatings>
-        <Blue icon={faHashtag} />
-        {formatStarRating(place.normalizedRating)}
-        <Yellow icon={faStar} />
-        {formatStarRating(place.rating)}
-      </PlaceRatings>
+      {display === "desktop" && <RatingsDisplay rating={place} />}
       <Suspense fallback={<Spinner />}>
         <ErrorBoundary>
-          <RatingDisplay placeId={placeId} />
+          <CommentDisplay placeId={placeId} />
+          {display === "desktop" && (
+            <ChartRow>
+              <ChartDisplay placeId={placeId} />
+            </ChartRow>
+          )}
         </ErrorBoundary>
       </Suspense>
     </PlaceRow>
@@ -105,19 +157,10 @@ const StyledLink = styled(Link)`
 `;
 
 export const PlaceImage = styled.div<{ url?: string }>`
-  background: ${props => (props.url ? `url(${props.url})` : "#6495ed")};
+  background: ${props => (props.url ? `url(${props.url})` : `url(${require("../../images/utensils-solid.svg")}) #6495ed`)};
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: ${props => (props.url ? "cover" : "60px")};
   background-position: center center;
-
-  display: grid;
-  justify-content: center;
-  align-content: center;
-
-  & > svg {
-    color: white;
-    display: ${props => (props.url ? "none" : "initial")};
-  }
 `;
 
 const PlaceRow = styled.div`
@@ -134,7 +177,7 @@ const PlaceRow = styled.div`
 
   @media screen and (max-width: 600px) {
     grid-template-columns: auto;
-    grid-template-rows: repeat(4, auto);
+    grid-template-rows: 160px repeat(3, auto);
     grid-template-areas:
       "img"
       "place"
@@ -163,14 +206,16 @@ const NameComment = styled.div`
 
 const PlaceRatings = styled.div`
   grid-area: rating;
-  font-size: 1.4em;
+  font-size: 1.4rem;
   display: flex;
   justify-content: flex-end;
-  padding: 1em;
+  padding: 1rem;
 
   @media screen and (max-width: 600px) {
     justify-content: center;
-    font-size: 2.5em;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0.3rem;
   }
 `;
 
