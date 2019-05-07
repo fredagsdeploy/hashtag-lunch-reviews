@@ -24,7 +24,7 @@ export const UserController = () => {
   };
 
   return (
-    <>
+    <Container>
       <Image src={user.imageUrl} alt="User" />
       <FormLabelWrapper>
         <Label>Namn</Label>
@@ -35,12 +35,22 @@ export const UserController = () => {
           onChange={e => setDisplayName(e.target.value)}
         />
       </FormLabelWrapper>
-      <SaveButton onClick={saveUser}>Spara</SaveButton>
-    </>
+      <SaveUserButton onClick={saveUser}>Spara</SaveUserButton>
+    </Container>
   );
 };
 
 const Image = styled.img`
   margin: 1rem 0;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+`;
+
+
+const SaveUserButton = styled(SaveButton)`
+    margin-top: 1em;
+    width: 100%
+`;
+
+const Container = styled.div`
+    margin: 1em;
 `;
