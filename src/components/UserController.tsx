@@ -28,7 +28,7 @@ export const UserController = () => {
       <Image src={user.imageUrl} alt="User" />
       <FormLabelWrapper>
         <Label>Namn</Label>
-        <TextInput
+        <UserNameField
           placeholder="Namn"
           name="displayName"
           value={displayName || ""}
@@ -45,10 +45,15 @@ const Image = styled.img`
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
 `;
 
+const UserNameField = styled(TextInput)`
+    width: 100%
+    max-width: 24em;
+`;
 
 const SaveUserButton = styled(SaveButton)`
     margin-top: 1em;
     width: 100%
+    max-width: 24em;
 `;
 
 const Container = styled.div`
