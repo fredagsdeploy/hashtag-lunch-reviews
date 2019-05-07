@@ -2,8 +2,7 @@ import {
   faGlobe,
   faHashtag,
   faMap,
-  faStar,
-  faUtensils
+  faStar
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
@@ -55,9 +54,7 @@ export const SinglePlaceView: React.FC<Props> = ({ onClose, placeId }) => {
       }
       onClose={onClose}
     >
-      <StyledPlaceImage url={rating.photoUrl || undefined}>
-        <FontAwesomeIcon icon={faUtensils} size={"3x"} />
-      </StyledPlaceImage>
+      <StyledPlaceImage url={rating.photoUrl || undefined} />
       <PlaceName>{rating.placeName}</PlaceName>
       <div>{rating.comment}</div>
       <PlaceRatings>

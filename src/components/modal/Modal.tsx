@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Modal from "react-modal";
+import { Spinner } from "../Spinner";
 import "./modal.css";
 
 interface LunchModalProps {
@@ -18,6 +19,6 @@ export const LunchModal: React.FC<LunchModalProps> = ({
     shouldCloseOnOverlayClick
     onRequestClose={onRequestClose}
   >
-    {children}
+    <Suspense fallback={<Spinner size={"large"} padding={"4rem"} />}>{children}</Suspense>
   </Modal>
 );
