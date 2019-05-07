@@ -62,4 +62,7 @@ const ContentContainer = styled.div`
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
+
+  align-items: flex-start;
+  align-content: flex-start;
 `;
