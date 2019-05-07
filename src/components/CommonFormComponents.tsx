@@ -59,6 +59,8 @@ export const CommentForm = styled.form`
   flex-direction: column;
 
   background-color: #fff;
+
+  margin: 1rem 0;
 `;
 
 export const SaveButton = styled.button`
