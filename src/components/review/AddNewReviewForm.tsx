@@ -7,12 +7,7 @@ import { postReview } from "../../lib/backend";
 import { updateRating } from "../../store/reducers/ratings";
 import { addReview } from "../../store/reducers/reviews";
 import { NewReview, ReviewRating } from "../../types";
-import {
-  CommentForm,
-  FormLabelWrapper,
-  SaveButton,
-  TextArea
-} from "../CommonFormComponents";
+import { CommentForm, SaveButton, TextArea } from "../CommonFormComponents";
 import { ModalContainer } from "../ModalContainer";
 import { Spinner } from "../Spinner";
 import { StarRating } from "../StarRating";
