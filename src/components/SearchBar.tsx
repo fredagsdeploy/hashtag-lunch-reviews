@@ -1,6 +1,7 @@
 import React, { ChangeEventHandler } from "react";
 import styled from "styled-components";
 import { TextInput } from "./CommonFormComponents";
+import { useHideOnScrollDown } from "../customHooks/useHideOnScrollDown";
 
 interface Props {
   setSearchString: ChangeEventHandler<HTMLInputElement>;
@@ -11,8 +12,10 @@ export const StickySearchBar: React.FC<Props> = ({
   setSearchString,
   ...props
 }) => {
+  const hide = useHideOnScrollDown();
+
   return (
-    <SearchBarContainer>
+    <SearchBarContainer hide={hide}>
       <SearchInput
         placeholder="Sök..."
         name="searchString"
@@ -24,19 +27,31 @@ export const StickySearchBar: React.FC<Props> = ({
   );
 };
 
-const SearchBarContainer = styled.div`
+const SearchBarContainer = styled.div<{ hide: boolean }>`
   display: flex;
   align-items: center;
-  background: #edeced;
-  position: sticky;
-  top: 70px;
+  justify-content: center;
+
+  position: fixed;
   z-index: 2;
+  width: 100%;
 
   @media screen and (max-width: 600px) {
     top: 0;
   }
+
+  top: ${props => (props.hide ? "-70px" : "70px")};
+  transition: top 300ms;
+
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: minmax(auto, 800px);
 `;
 
 const SearchInput = styled(TextInput)`
-  border-radius: 0;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  margin-top: 1em;
+  border: solid 2px #ccc;
 `;

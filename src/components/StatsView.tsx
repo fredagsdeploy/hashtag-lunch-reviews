@@ -85,7 +85,7 @@ const RatingsListContainer = styled.div`
   grid-template-rows: 1fr;
   grid-template-columns: minmax(auto, 800px);
   grid-gap: 1em;
-  margin-top: 1rem;
+  margin-top: 5rem;
 `;
 
 export const Button = styled(Link)`
