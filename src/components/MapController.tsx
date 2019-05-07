@@ -69,6 +69,7 @@ export const MapController: React.FC<Props> = ({
       script.addEventListener(`load`, onLoad);
       return () => script.removeEventListener(`load`, onLoad);
     } else onLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -104,6 +105,7 @@ export const MapController: React.FC<Props> = ({
         });
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ratings]);
 
   const onClose = () => {
