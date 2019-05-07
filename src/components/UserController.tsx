@@ -41,6 +41,6 @@ export const UserController = () => {
 };
 
 const Image = styled.img`
-  margin: 2em 0;
+  margin: 1rem 0;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
 `;
