@@ -3,7 +3,13 @@ import { useDispatch } from "react-redux";
 import { useUserContext } from "../customHooks/useUserContext";
 import { putUser } from "../lib/backend";
 import { updateUser } from "../store/reducers/user";
-
+import {
+  Label,
+  FormLabelWrapper,
+  SaveButton,
+  TextInput
+} from "./CommonFormComponents";
+import styled from "styled-components";
 export const UserController = () => {
   const user = useUserContext()!;
 
@@ -19,16 +25,22 @@ export const UserController = () => {
 
   return (
     <>
-      {user.displayName}
-      <img src={user.imageUrl} alt="User" />
-      <input
-        type="text"
-        onChange={e => setDisplayName(e.target.value)}
-        value={displayName}
-      />
-      <button type="button" onClick={saveUser}>
-        Submit!!
-      </button>
+      <Image src={user.imageUrl} alt="User" />
+      <FormLabelWrapper>
+        <Label>Namn</Label>
+        <TextInput
+          placeholder="Namn"
+          name="displayName"
+          value={displayName || ""}
+          onChange={e => setDisplayName(e.target.value)}
+        />
+      </FormLabelWrapper>
+      <SaveButton onClick={saveUser}>Spara</SaveButton>
     </>
   );
 };
+
+const Image = styled.img`
+  margin: 2em 0;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+`;
