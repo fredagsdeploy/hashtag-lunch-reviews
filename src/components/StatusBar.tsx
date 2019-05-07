@@ -54,13 +54,12 @@ const NavItem = styled(NavLink)`
   width: 25%;
 
   &:hover {
-    background-color: #fff2;
+    background-color: #5279c4;
     cursor: pointer;
   }
 
   &.active {
-    color: #002f7d;
-    background-color: #fff2;
+    background-color: #5279c4;
   }
 `;
 
