@@ -2,8 +2,9 @@
 import React from 'react'
 import {MapController} from "./MapController";
 import {useRatings} from "../customHooks/api";
+import {RouteChildrenProps} from "react-router";
 
-interface Props {
+interface Props extends RouteChildrenProps {
 
 }
 
@@ -23,5 +24,5 @@ export const MapPage: React.FC<Props> = (props) => {
     const east = Math.max(...lngs);
     const west = Math.min(...lngs);
     console.log({south, north, east ,west});
-    return <MapController ratings={ratings} bounds={{east, north, south, west}}/>
+    return <MapController {...props} ratings={ratings} bounds={{east, north, south, west}} />
 };

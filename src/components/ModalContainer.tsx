@@ -4,14 +4,16 @@ import styled from "styled-components";
 interface ModalContainerProps {
   title: string | React.ReactNode;
   onClose: () => void;
+  className?: string;
 }
 
 export const ModalContainer: React.FC<ModalContainerProps> = ({
   children,
   onClose,
-  title
+  title,
+  className
 }) => (
-  <CommentContainerWrapper>
+  <CommentContainerWrapper className={className}>
     <Row>
       {typeof title === "string" ? <PlaceName>{title}</PlaceName> : title}
       <button
