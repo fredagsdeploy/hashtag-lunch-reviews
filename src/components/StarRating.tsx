@@ -111,11 +111,17 @@ export const StarRatingView = ({
     <div
       style={{
         display: "flex",
+        alignItems: "center",
         userSelect: "none"
       }}
     >
       <div
-        style={{ width: 5 * starSize, height: starSize, touchAction: "none" }}
+        style={{
+          width: 5 * starSize,
+          height: starSize,
+          touchAction: "none",
+          marginRight: "1rem"
+        }}
         tabIndex={0}
         {...props}
       >

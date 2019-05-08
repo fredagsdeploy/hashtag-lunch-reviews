@@ -91,7 +91,7 @@ const StyledPlaceImage = styled(PlaceImage)`
 const StyledLink = styled.a`
   color: cornflowerblue;
   text-decoration: none;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 3.2rem;
   &:hover {
     background-color: #fff2;
     cursor: pointer;
@@ -102,8 +102,7 @@ const Bar = styled.div`
   display: flex;
   background-color: white;
   color: inherit;
-  justify-content: space-around;
-  margin-top: -1rem;
+  justify-content: center;
   width: 100%;
 `;
 

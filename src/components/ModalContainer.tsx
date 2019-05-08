@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface ModalContainerProps {
   title: string | React.ReactNode;
@@ -24,10 +26,12 @@ export const ModalContainer: React.FC<ModalContainerProps> = ({
           border: 0,
           fontSize: 35,
           color: "#909090",
-          padding: 0
+          padding: 0,
+          fontWeight: 600,
+          cursor: "pointer"
         }}
       >
-        &times;
+        <FontAwesomeIcon icon={faTimes} size={"1x"} color={"#909090"} />
       </button>
     </Row>
     {children}
@@ -43,7 +47,7 @@ const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  padding: 1rem 0;
+  padding: 0 0 1rem;
 `;
 
 const CommentContainerWrapper = styled.div`

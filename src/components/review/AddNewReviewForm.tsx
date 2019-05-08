@@ -7,12 +7,7 @@ import { postReview } from "../../lib/backend";
 import { updateRating } from "../../store/reducers/ratings";
 import { addReview } from "../../store/reducers/reviews";
 import { NewReview, ReviewRating } from "../../types";
-import {
-  CommentForm,
-  FormLabelWrapper,
-  SaveButton,
-  TextArea
-} from "../CommonFormComponents";
+import { CommentForm, SaveButton, TextArea } from "../CommonFormComponents";
 import { ModalContainer } from "../ModalContainer";
 import { Spinner } from "../Spinner";
 import { StarRating } from "../StarRating";
@@ -81,7 +76,7 @@ export const AddNewReviewForm: React.FC<Props> = ({ onClose, placeId }) => {
     <ModalContainer title={place.placeName} onClose={onClose}>
       {place.comment && <PlaceComment>{place.comment}</PlaceComment>}
       <CommentForm onSubmit={submitReview}>
-        <Row>
+        <Row style={{ justifyContent: "center" }}>
           <StarRating
             rating={newReview.rating}
             onChange={ratingChangeHandler}
@@ -89,14 +84,14 @@ export const AddNewReviewForm: React.FC<Props> = ({ onClose, placeId }) => {
             mobileSize={48}
           />
         </Row>
-        <FormLabelWrapper>
+        <Row style={{ marginBottom: "1.5rem" }}>
           <TextArea
             value={newReview.comment}
             placeholder={"Lägg till kommentar"}
             name={"comment"}
             onChange={handleNewReviewInput}
           />
-        </FormLabelWrapper>
+        </Row>
         <SaveButton disabled={isSubmitting}>
           {isSubmitting ? (
             <Row style={{ flex: 1 }}>
@@ -123,4 +118,5 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1rem;
 `;
