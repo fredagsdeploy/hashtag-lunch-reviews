@@ -37,7 +37,7 @@ const SearchBarContainer = styled.div<{ hide: boolean }>`
   width: 100%;
 
   @media screen and (max-width: 600px) {
-    top: 0;
+    top: ${props => (props.hide ? "-70px" : "0")};
   }
 
   top: ${props => (props.hide ? "-70px" : "70px")};
