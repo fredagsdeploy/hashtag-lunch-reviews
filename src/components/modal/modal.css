@@ -2,28 +2,28 @@
   position: fixed;
   top: 71px;
   left: 0;
-  right: 0;
-  bottom: 0;
   z-index: 10;
   background-color: rgba(255, 255, 255, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  width: 100vw;
+  height: 100vh;
   min-height: 100%;
-  overflow: auto;
+  padding-bottom: 71px;
+  overflow: scroll;
 }
 
 .modal-container {
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  max-width: 800px;
   border-radius: 4px;
   outline: none;
-  max-width: 800px;
+  margin: 0 auto;
 }
 
 @media screen and (max-width: 600px) {
   .modal-overlay {
     top: 0;
     z-index: 99;
+    padding-bottom: 0;
   }
   .modal-container {
     width: 100%;

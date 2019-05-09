@@ -15,10 +15,13 @@ export const LunchModal: React.FC<LunchModalProps> = ({
     isOpen
     className={"modal-container"}
     overlayClassName={"modal-overlay"}
+    bodyOpenClassName={"modal-open"}
     shouldCloseOnEsc
     shouldCloseOnOverlayClick
     onRequestClose={onRequestClose}
   >
-    <Suspense fallback={<Spinner size={"large"} padding={"4rem"} />}>{children}</Suspense>
+    <Suspense fallback={<Spinner size={"large"} padding={"4rem"} />}>
+      {children}
+    </Suspense>
   </Modal>
 );
