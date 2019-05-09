@@ -46,6 +46,10 @@ const GlobalStyle = createGlobalStyle`
     background-color: #f6f8fa;
   }
 
+  body.modal-open {
+    overflow: hidden;
+  }
+
   html, #root, body {
     height: 100%;
     color: #5d5d5d;
