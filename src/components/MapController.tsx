@@ -76,7 +76,16 @@ export const MapController: React.FC<Props> = ({
     if (!mapRef.current) {
       return;
     }
-    const c = generateColor("#00FF00", "#FF0000", 5);
+
+    const poor = "#9d9d9d";
+    const common = "#ffffff";
+    const uncommon = "#1eff00";
+    const rare = "#0070dd";
+    const epic = "#a335ee";
+    const legendary = "#ff8000";
+
+    const c = [poor, common, uncommon, rare, epic, legendary];
+
     ratings.forEach(r => {
       if (!r.googlePlace) {
         return;
@@ -85,10 +94,12 @@ export const MapController: React.FC<Props> = ({
       const icon = {
         path:
           "M0 0a10 10 0 0 0-10 10c0 9 10 20 10 20s10-11 10-20a10 10 0 0 0-10-10zm0 12a2 2 0 1 1 2-2 2 2 0 0 1-2 2z",
-        fillColor: `#${c[Math.floor(r.normalizedRating)]}`,
+        strokeColor: "#000",
+        strokeOpacity: 1,
+        fillColor: `${c[Math.round(r.normalizedRating)]}`,
         fillOpacity: 1,
         anchor: new window.google.maps.Point(0, 35),
-        strokeWeight: 0,
+        strokeWeight: 1,
         scale: 1
       };
       let marker = new window.google.maps.Marker({
@@ -178,63 +189,3 @@ const ModalContainerAbsolute = styled(ModalContainer)`
   width: 100%;
   max-width: 800px;
 `;
-
-function hex(c: any) {
-  const s = "0123456789abcdef";
-  let i = parseInt(c);
-  if (i === 0 || isNaN(c)) return "00";
-  i = Math.round(Math.min(Math.max(0, i), 255));
-  return s.charAt((i - (i % 16)) / 16) + s.charAt(i % 16);
-}
-
-/* Convert an RGB triplet to a hex string */
-function convertToHex(rgb: any) {
-  return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
-}
-
-/* Remove '#' in color hex string */
-function trim(s: string) {
-  return s.charAt(0) === "#" ? s.substring(1, 7) : s;
-}
-
-/* Convert a hex string to an RGB triplet */
-function convertToRGB(hex: string) {
-  const color = [];
-  color[0] = parseInt(trim(hex).substring(0, 2), 16);
-  color[1] = parseInt(trim(hex).substring(2, 4), 16);
-  color[2] = parseInt(trim(hex).substring(4, 6), 16);
-  return color;
-}
-
-function generateColor(
-  colorStart: string,
-  colorEnd: string,
-  colorCount: number
-) {
-  // The beginning of your gradient
-  const start = convertToRGB(colorStart);
-
-  // The end of your gradient
-  const end = convertToRGB(colorEnd);
-
-  // The number of colors to compute
-  const len = colorCount;
-
-  //Alpha blending amount
-  let alpha = 0.0;
-
-  const saida = [];
-
-  for (let i = 0; i < len; i++) {
-    const c = [];
-    alpha += 1.0 / len;
-
-    c[0] = start[0] * alpha + (1 - alpha) * end[0];
-    c[1] = start[1] * alpha + (1 - alpha) * end[1];
-    c[2] = start[2] * alpha + (1 - alpha) * end[2];
-
-    saida.push(convertToHex(c));
-  }
-
-  return saida;
-}
