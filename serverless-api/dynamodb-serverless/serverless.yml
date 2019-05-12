@@ -126,3 +126,74 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    circlesTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+
+      Properties:
+        TableName: Circles
+
+
+        AttributeDefinitions:
+          - AttributeName: circleId
+            AttributeType: S
+#          - AttributeName: members
+#            AttributeType: S
+#          - AttributeName: circleName
+#            AttributeType: S
+#          - AttributeName: circleImage
+#            AttributeType: S
+
+        KeySchema:
+          - AttributeName: circleId
+            KeyType: HASH
+
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    circleMembershipTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+
+      Properties:
+        TableName: CircleMemberships
+
+
+        AttributeDefinitions:
+          - AttributeName: circleMembershipId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: circleId
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: circleMembershipId
+            KeyType: HASH
+
+        GlobalSecondaryIndexes:
+          - IndexName: circleMembershipUserIdIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+
+          - IndexName: circleMembershipCircleIdIndex
+            KeySchema:
+                - AttributeName: circleId
+                  KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
