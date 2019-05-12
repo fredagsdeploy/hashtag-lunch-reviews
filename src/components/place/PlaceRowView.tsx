@@ -23,9 +23,11 @@ const CommentDisplay: React.FC<RatingDisplayProps> = ({ placeId }) => {
 
   const user = useUserContext()!;
 
-  const myReview = reviews.filter(
-    review => review.user.googleUserId === user.googleUserId
-  )[0];
+  const myReview = user
+    ? reviews.filter(
+        review => review.user.googleUserId === user.googleUserId
+      )[0]
+    : undefined;
 
   return <SelfCommentField review={myReview} placeId={placeId} />;
 };
@@ -157,7 +159,10 @@ const StyledLink = styled(Link)`
 `;
 
 export const PlaceImage = styled.div<{ url?: string }>`
-  background: ${props => (props.url ? `url(${props.url})` : `url(${require("../../images/utensils-solid.svg")}) #6495ed`)};
+  background: ${props =>
+    props.url
+      ? `url(${props.url})`
+      : `url(${require("../../images/utensils-solid.svg")}) #6495ed`};
   background-repeat: no-repeat;
   background-size: ${props => (props.url ? "cover" : "60px")};
   background-position: center center;

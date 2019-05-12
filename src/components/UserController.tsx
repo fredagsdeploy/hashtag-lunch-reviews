@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useUserContext } from "../customHooks/useUserContext";
 import { putUser } from "../lib/backend";
 import { updateUser } from "../store/reducers/user";
 import {
@@ -9,13 +8,23 @@ import {
   SaveButton,
   TextInput
 } from "./CommonFormComponents";
+import { useGoogleAuth } from "../customHooks/useGoogleAuth";
+
 import styled from "styled-components";
 export const UserController = () => {
-  const user = useUserContext()!;
+  const { googleUser, user, authorize } = useGoogleAuth();
 
   const dispatch = useDispatch();
+  const [displayName, setDisplayName] = useState(user ? user.displayName : "");
 
-  const [displayName, setDisplayName] = useState(user.displayName);
+  if (!googleUser || !user) {
+    return (
+      <>
+        <h1>Authorise google to use this page.</h1>
+        <input onClick={authorize} type="button" value="Authorize!" />
+      </>
+    );
+  }
 
   const saveUser = () => {
     putUser({ ...user, displayName }).then(updatedUser => {
@@ -57,5 +66,5 @@ const SaveUserButton = styled(SaveButton)`
 `;
 
 const Container = styled.div`
-    margin: 1em;
+  margin: 1em;
 `;

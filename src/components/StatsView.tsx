@@ -19,9 +19,15 @@ export const StatsView = ({ ratings }: Props) => {
 
   const debouncedSearchString = useDebounce(searchString, 100);
 
-  const filteredRatings = useMemo(() => ratings.filter(rating =>
-    rating.placeName.toLowerCase().includes(debouncedSearchString.toLowerCase())
-  ), [debouncedSearchString, ratings]);
+  const filteredRatings = useMemo(
+    () =>
+      ratings.filter(rating =>
+        rating.placeName
+          .toLowerCase()
+          .includes(debouncedSearchString.toLowerCase())
+      ),
+    [debouncedSearchString, ratings]
+  );
 
   return (
     <>
@@ -62,7 +68,8 @@ const NoSearchResult = ({ searchQuery }: NoSearchResultProps) => {
 
   return (
     <NoResultContainer>
-      Inget plats vid namn "{searchQuery}". <br /> Vill du lägga till det? <br />
+      Inget plats vid namn "{searchQuery}". <br /> Vill du lägga till det?{" "}
+      <br />
       <CreatePlaceButton onClick={() => navigateToCreatePlace()}>
         Skapa plats
       </CreatePlaceButton>
@@ -71,7 +78,7 @@ const NoSearchResult = ({ searchQuery }: NoSearchResultProps) => {
 };
 
 const CreatePlaceButton = styled(SaveButton)`
-    margin-top: 1em;
+  margin-top: 1em;
 `;
 
 const NoResultContainer = styled.div`

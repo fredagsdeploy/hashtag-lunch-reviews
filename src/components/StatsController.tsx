@@ -7,6 +7,7 @@ import { LunchModal } from "./modal/Modal";
 import { SinglePlaceView } from "./place/SinglePlaceView";
 import { AddNewReviewForm } from "./review/AddNewReviewForm";
 import { StatsView } from "./StatsView";
+import { useUserContext } from "../customHooks/useUserContext";
 
 interface Props extends RouteChildrenProps {
   userId: string;
@@ -14,6 +15,7 @@ interface Props extends RouteChildrenProps {
 
 export const StatsController = ({ history, match }: Props) => {
   const ratings = useRatings();
+  const user = useUserContext();
 
   const onClose = () => {
     history.push("/ratings");
@@ -25,21 +27,29 @@ export const StatsController = ({ history, match }: Props) => {
       <Switch>
         <Route
           path={`${match!.path}/newreview/:placeId`}
-          render={props => (
-            <LunchModal onRequestClose={onClose}>
-              <Row>
-                <AddNewReviewForm
-                  placeId={props.match!.params.placeId}
-                  onClose={onClose}
-                />
-              </Row>
-            </LunchModal>
-          )}
+          render={props => {
+            if (!user) {
+              onClose();
+            }
+
+            return (
+              <LunchModal onRequestClose={onClose}>
+                <Row>
+                  <AddNewReviewForm
+                    placeId={props.match!.params.placeId}
+                    onClose={onClose}
+                  />
+                </Row>
+              </LunchModal>
+            );
+          }}
         />
         <Route
           path={`${match!.path}/newplace`}
           render={props => {
-            console.log("Statscontrolleprops", props);
+            if (!user) {
+              onClose();
+            }
 
             let initialPlaceInput = {
               placeName: "",

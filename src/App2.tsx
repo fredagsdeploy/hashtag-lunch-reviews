@@ -9,7 +9,6 @@ import { StatsController } from "./components/StatsController";
 import { StatusBar } from "./components/StatusBar";
 import { UserController } from "./components/UserController";
 import { browserHistory } from "./history";
-import { useGoogleAuth } from "./useGoogleAuth";
 
 declare global {
   interface Window {
@@ -19,17 +18,6 @@ declare global {
 }
 
 export const App2: React.FC = () => {
-  const { googleUser, user, authorize } = useGoogleAuth();
-
-  if (!googleUser || !user) {
-    return (
-      <>
-        <h1>Authorise google to use this page.</h1>
-        <input onClick={authorize} type="button" value="Authorize!" />
-      </>
-    );
-  }
-
   return (
     <>
       <Router history={browserHistory}>
