@@ -56,9 +56,6 @@ functions:
 
     events:
       - http:
-          authorizer:
-            name: jwtVerify
-            identitySource: method.request.header.Authorization
           path: places
           method: get
           cors: true
@@ -71,9 +68,6 @@ functions:
 
     events:
       - http:
-          authorizer:
-            name: jwtVerify
-            identitySource: method.request.header.Authorization
           path: places/{placeId}
           method: get
           cors: true
@@ -101,15 +95,12 @@ functions:
           path: reviews/{reviewId}
           method: put
           cors: true
-  
+
   getReviews:
     handler: src/reviews.getReviews
 
     events:
       - http:
-          authorizer:
-            name: jwtVerify
-            identitySource: method.request.header.Authorization
           path: reviews
           method: get
           cors: true
@@ -119,9 +110,6 @@ functions:
 
     events:
       - http:
-          authorizer:
-            name: jwtVerify
-            identitySource: method.request.header.Authorization
           path: places/{placeId}/reviews
           method: get
           cors: true
@@ -167,9 +155,6 @@ functions:
 
     events:
       - http:
-          authorizer:
-            name: jwtVerify
-            identitySource: method.request.header.Authorization
           path: ratings
           method: get
           cors: true
@@ -179,17 +164,13 @@ functions:
 
     events:
       - http:
-          authorizer:
-            name: jwtVerify
-            identitySource: method.request.header.Authorization
           path: places/{placeId}/rating
           method: get
-          cors: true  
+          cors: true
           request:
             parameters:
               paths:
-                id: true      
-          
+                id: true
 
 custom:
   serverless-offline:
