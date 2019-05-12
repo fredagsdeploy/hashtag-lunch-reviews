@@ -9,6 +9,8 @@
   min-height: 100%;
   padding-bottom: 71px;
   overflow: scroll;
+  display: flex;
+  align-items: flex-start;
 }
 
 .modal-container {
