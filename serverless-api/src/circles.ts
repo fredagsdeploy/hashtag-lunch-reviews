@@ -4,10 +4,11 @@ import {
     Circle,
     CircleMembership,
     getCircleById,
-    getCircleMembershipsByUserId,
+    getCircleMembershipsByUserId, isUserMemberOfCircle,
     saveCircle,
     saveCircleMembership
 } from "./repository/circles";
+import {getUserById} from "./repository/users";
 
 
 export interface CircleDTO extends Circle {
@@ -34,6 +35,39 @@ export const getCirclesForUser: LambdaHandler = async (event, context) => {
     return createResponse(200, circles);
 };
 
+export const postCircleMembership: LambdaHandler = async (event, context) => {
+    if (!event.pathParameters || !event.pathParameters.circleId) {
+        return createResponse(400, {error: "Missing path parameter"})
+    }
+
+    const circleMembership = parseJSON(event.body) as Partial<CircleMembership>;
+    if (!circleMembership.userId) {
+        return createResponse(400, {error: "Missing userId in body"})
+    }
+
+    if (!await getUserById(circleMembership.userId)) {
+        return createResponse(400, {error: `No user with id ${circleMembership.userId}`})
+    }
+
+
+    const circleId = event.pathParameters.circleId;
+    if (!isUserMemberOfCircle(event.requestContext.authorizer.userId, circleId)) {
+        return createResponse(400, {error: "The user trying to add a circle membership is not part of the circle being added to."})
+    }
+
+
+    const newMembership = await saveCircleMembership(createCircleMembership(circleMembership.userId, circleId));
+    return createResponse(200, newMembership);
+};
+
+const createCircleMembership = (userId: string, circleId: string): CircleMembership => {
+    return {
+        circleMembershipId: uuid(),
+        circleId,
+        userId
+    };
+};
+
 export const post: LambdaHandler = async (event, context) => {
     if (!event.body) {
         return createResponse(400, { error: "Missing body" });
@@ -51,21 +85,19 @@ export const post: LambdaHandler = async (event, context) => {
         circleId,
         circleName,
     };
-    const newCircleMembership: CircleMembership = {
-        circleMembershipId: uuid(),
-        circleId,
-        userId: event.requestContext.authorizer.userId
-    };
+    const newCircleMembership: CircleMembership = createCircleMembership(circleId, event.requestContext.authorizer.userId);
     if (image) {
         newCircle.image = image;
     }
 
     const circle = await saveCircle(newCircle);
-    const circleMembership = await saveCircleMembership(newCircleMembership);
 
+    const circleMembership = await saveCircleMembership(newCircleMembership);
     const circleDTO: CircleDTO = {
         ...circle, members: [circleMembership.userId]
     };
 
     return createResponse(200, circleDTO);
+
+
 };

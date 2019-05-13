@@ -98,6 +98,22 @@ export const getCircleMembershipById = async (
 };
 
 
+export const isUserMemberOfCircle = async (userId: string, circleId: string): Promise<boolean> => {
+    const queryParams = {
+        TableName: CIRCLE_MEMBERSHIP_TABLE,
+        Select: "ALL_ATTRIBUTES",
+        IndexName: "circleMembershipUserIdIndex",
+        KeyConditionExpression: "userId = :userId",
+        ExpressionAttributeValues: { ":userId": userId }
+    };
+
+    const res = await dynamodb.query(queryParams).promise();
+
+    const memberships = res.Items as CircleMembership[] | undefined;
+    const userMembership = memberships && memberships.find(m => m.circleId === circleId);
+    return Promise.resolve(!!userMembership);
+};
+
 export const saveCircleMembership = async (membershipInput: CircleMembership): Promise<CircleMembership> => {
     const params = {
         TableName: CIRCLE_MEMBERSHIP_TABLE,

@@ -230,6 +230,18 @@ functions:
           method: get
           cors: true
 
+  postCircleMembership:
+    handler: src/circles.postCircleMembership
+
+    events:
+      - http:
+          authorizer:
+            name: jwtVerify
+            identitySource: method.request.header.Authorization
+          path: circles/{circleId}/members
+          method: post
+          cors: true
+
 
 custom:
   serverless-offline:
