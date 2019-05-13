@@ -13,22 +13,22 @@ interface Props {
 }
 
 export const CommentField = ({ user, review, placeId, style }: Props) => {
+  if (!user) return null;
+
   return (
-    user && (
-      <CommentContainer style={style}>
-        <UserImage url={user.imageUrl} active={Boolean(review)} />
-        <div style={{ height: "2em", display: "flex", alignItems: "center" }}>
-          <SpeakTriangle />
-        </div>
-        <RatingContainer>
-          {review ? (
-            <CommentOnly review={review} />
-          ) : (
-            <NewCommentForm placeId={placeId} />
-          )}
-        </RatingContainer>
-      </CommentContainer>
-    )
+    <CommentContainer style={style}>
+      <UserImage url={user.imageUrl} active={Boolean(review)} />
+      <div style={{ height: "2em", display: "flex", alignItems: "center" }}>
+        <SpeakTriangle />
+      </div>
+      <RatingContainer>
+        {review ? (
+          <CommentOnly review={review} />
+        ) : (
+          <NewCommentForm placeId={placeId} />
+        )}
+      </RatingContainer>
+    </CommentContainer>
   );
 };
 
