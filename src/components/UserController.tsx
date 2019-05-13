@@ -9,22 +9,19 @@ import {
   TextInput
 } from "./CommonFormComponents";
 import { useGoogleAuth } from "../customHooks/useGoogleAuth";
+import { useUserContext } from "../customHooks/useUserContext";
 
 import styled from "styled-components";
 export const UserController = () => {
-  const { googleUser, user, authorize } = useGoogleAuth();
+  const user = useUserContext();
 
+  return user ? <LoggedIn /> : <NotLoggedIn />;
+};
+
+const LoggedIn = () => {
+  const user = useUserContext()!;
   const dispatch = useDispatch();
   const [displayName, setDisplayName] = useState(user ? user.displayName : "");
-
-  if (!googleUser || !user) {
-    return (
-      <>
-        <h1>Authorise google to use this page.</h1>
-        <input onClick={authorize} type="button" value="Authorize!" />
-      </>
-    );
-  }
 
   const saveUser = () => {
     putUser({ ...user, displayName }).then(updatedUser => {
@@ -49,20 +46,30 @@ export const UserController = () => {
   );
 };
 
+const NotLoggedIn = () => {
+  const { authorize } = useGoogleAuth();
+  return (
+    <>
+      <h1>Logga in med google för att använda sidan</h1>
+      <SaveButton onClick={authorize}>Logga in med google</SaveButton>
+    </>
+  );
+};
+
 const Image = styled.img`
   margin: 1rem 0;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
 `;
 
 const UserNameField = styled(TextInput)`
-    width: 100%
-    max-width: 24em;
+  width: 100%;
+  max-width: 24em;
 `;
 
 const SaveUserButton = styled(SaveButton)`
-    margin-top: 1em;
-    width: 100%
-    max-width: 24em;
+  margin-top: 1em;
+  width: 100%;
+  max-width: 24em;
 `;
 
 const Container = styled.div`
