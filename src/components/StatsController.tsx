@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, RouteChildrenProps, Switch } from "react-router";
+import { Route, RouteChildrenProps, Switch, Redirect } from "react-router";
 import { useRatings } from "../customHooks/api";
 import { AddNewPlaceForm } from "./AddNewPlaceForm";
 import { Row } from "./CommonFormComponents";
@@ -15,7 +15,6 @@ interface Props extends RouteChildrenProps {
 
 export const StatsController = ({ history, match }: Props) => {
   const ratings = useRatings();
-  const user = useUserContext();
 
   const onClose = () => {
     history.push("/ratings");
@@ -28,29 +27,23 @@ export const StatsController = ({ history, match }: Props) => {
         <Route
           path={`${match!.path}/newreview/:placeId`}
           render={props => {
-            if (!user) {
-              onClose();
-            }
-
             return (
-              <LunchModal onRequestClose={onClose}>
-                <Row>
-                  <AddNewReviewForm
-                    placeId={props.match!.params.placeId}
-                    onClose={onClose}
-                  />
-                </Row>
-              </LunchModal>
+              <SignInRequired>
+                <LunchModal onRequestClose={onClose}>
+                  <Row>
+                    <AddNewReviewForm
+                      placeId={props.match!.params.placeId}
+                      onClose={onClose}
+                    />
+                  </Row>
+                </LunchModal>
+              </SignInRequired>
             );
           }}
         />
         <Route
           path={`${match!.path}/newplace`}
           render={props => {
-            if (!user) {
-              onClose();
-            }
-
             let initialPlaceInput = {
               placeName: "",
               comment: ""
@@ -65,14 +58,16 @@ export const StatsController = ({ history, match }: Props) => {
             }
 
             return (
-              <LunchModal onRequestClose={onClose}>
-                <Row>
-                  <AddNewPlaceForm
-                    onClose={onClose}
-                    initialPlaceInput={initialPlaceInput}
-                  />
-                </Row>
-              </LunchModal>
+              <SignInRequired>
+                <LunchModal onRequestClose={onClose}>
+                  <Row>
+                    <AddNewPlaceForm
+                      onClose={onClose}
+                      initialPlaceInput={initialPlaceInput}
+                    />
+                  </Row>
+                </LunchModal>
+              </SignInRequired>
             );
           }}
         />
@@ -90,4 +85,10 @@ export const StatsController = ({ history, match }: Props) => {
       </Switch>
     </>
   );
+};
+
+const SignInRequired: React.FC<{}> = ({ children }) => {
+  const user = useUserContext();
+
+  return user ? <> {children} </> : <Redirect to={"/ratings"} />;
 };
