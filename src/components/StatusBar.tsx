@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { useGoogleAuth } from "../customHooks/useGoogleAuth";
 
@@ -23,7 +23,7 @@ export const StatusBar = () => {
         to={"/ratings/newplace"}
         title={"Nytt"}
         icon={faPlus}
-        active={!!user}
+        disabled={!user}
       />
       {user ? (
         <NavItemWithIcon to={"/me"} title={user.displayName} icon={faUser} />
@@ -40,23 +40,23 @@ interface NavItemWithIconProps {
   to: string;
   title: string;
   icon: IconProp;
-  active?: boolean;
+  disabled?: boolean;
 }
 
 export const NavItemWithIcon: React.FC<NavItemWithIconProps> = ({
   to,
   title,
   icon,
-  active = true
+  disabled = false
 }) =>
-  active ? (
-    <NavItem to={to} activeClassName="active">
-      <TabMenuItem title={title} icon={icon} />
-    </NavItem>
-  ) : (
+  disabled ? (
     <Disabled>
       <TabMenuItem title={title} icon={icon} />
     </Disabled>
+  ) : (
+    <NavItem to={to} activeClassName="active">
+      <TabMenuItem title={title} icon={icon} />
+    </NavItem>
   );
 
 interface TabMenuItemProps {
@@ -71,11 +71,15 @@ export const TabMenuItem: React.FC<TabMenuItemProps> = ({ title, icon }) => (
   </Column>
 );
 
-const NavItem = styled(NavLink)`
-  color: #fff;
+const statusBarItem = css`
   text-decoration: none;
   padding: 0.8rem 1.2rem;
   width: 25%;
+`;
+
+const statusBarItemHover = css`
+  ${statusBarItem}
+  color: #fff;
 
   &:hover {
     background-color: #5279c4;
@@ -85,31 +89,21 @@ const NavItem = styled(NavLink)`
   &.active {
     background-color: #5279c4;
   }
+`;
+
+const NavItem = styled(NavLink)`
+  ${statusBarItemHover}
+`;
+
+const Item = styled.div`
+  ${statusBarItemHover}
 `;
 
 const Disabled = styled.div`
   color: #888;
-  text-decoration: none;
-  padding: 0.8rem 1.2rem;
-  width: 25%;
+  ${statusBarItem}
 
   background-color: rgb(227, 227, 227);
-`;
-
-const Item = styled.div`
-  color: #fff;
-  text-decoration: none;
-  padding: 0.8rem 1.2rem;
-  width: 25%;
-
-  &:hover {
-    background-color: #5279c4;
-    cursor: pointer;
-  }
-
-  &.active {
-    background-color: #5279c4;
-  }
 `;
 
 const Bar = styled.div`
