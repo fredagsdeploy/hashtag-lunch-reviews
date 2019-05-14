@@ -80,6 +80,6 @@ export const SaveButton = styled.button`
 
   &:hover {
     cursor: pointer;
-    background-color: #6495ed;
+    background-color: #5279c4;
   }
 `;

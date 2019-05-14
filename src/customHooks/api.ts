@@ -52,7 +52,6 @@ export const useRatings = (): Rating[] => {
     []
   );
   const dispatch = useDispatch();
-
   const ratings = useMemo<Rating[]>(
     () => (state.resolved ? Object.values(state.data) : []),
     [state.data, state.resolved]

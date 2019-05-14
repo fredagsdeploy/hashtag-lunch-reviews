@@ -2,13 +2,21 @@ import React, { Suspense } from "react";
 import { Provider } from "react-redux";
 import Modal from "react-modal";
 import styled, { createGlobalStyle } from "styled-components";
-import { App2 } from "./App2";
+
 import { Spinner } from "./components/Spinner";
 import { store } from "./store/configureStore";
+import { browserHistory } from "./history";
+import { Router, Switch, Route, Redirect } from "react-router";
+import { StatusBar } from "./components/StatusBar";
+import { MapPage } from "./components/MapPage";
+import { StatsController } from "./components/StatsController";
+import { UserController } from "./components/UserController";
+import { NavigationFooter } from "./components/NavigationFooter";
 
 declare global {
   interface Window {
     gapi: any;
+    google: any;
   }
 }
 
@@ -20,7 +28,24 @@ export const App = () => {
       <LayoutGrid className="App">
         <GlobalStyle />
         <Suspense fallback={<Spinner size={"large"} />}>
-          <App2 />
+          <Router history={browserHistory}>
+            <>
+              <StatusBar />
+              <Suspense fallback={<Spinner size={"large"} />}>
+                <ContentContainer>
+                  <Switch>
+                    <Route path="/ratings" component={StatsController} />
+                    <Route path="/map" component={MapPage} />
+                    <Route exact path="/me" component={UserController} />
+                    <Route>
+                      <Redirect to="/ratings" />
+                    </Route>
+                  </Switch>
+                </ContentContainer>
+              </Suspense>
+            </>
+          </Router>
+          <NavigationFooter />
         </Suspense>
       </LayoutGrid>
     </Provider>
@@ -63,4 +88,17 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: inherit;
   }
 
+`;
+
+const ContentContainer = styled.div`
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(auto, 800px);
+  justify-content: center;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+
+  align-items: flex-start;
+  align-content: flex-start;
 `;

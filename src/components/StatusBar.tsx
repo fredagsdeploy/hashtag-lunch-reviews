@@ -1,20 +1,37 @@
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faList, faMap, faPlus, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faList,
+  faMap,
+  faPlus,
+  faUser
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-import { useUserContext } from "../customHooks/useUserContext";
+import { useGoogleAuth } from "../customHooks/useGoogleAuth";
 
 export const StatusBar = () => {
-  const user = useUserContext()!;
+  const { user, authorize } = useGoogleAuth();
+
   return (
     <Bar>
       <NavItemWithIcon to={"/ratings"} title={"Lista"} icon={faList} />
       <NavItemWithIcon to={"/map"} title={"Karta"} icon={faMap} />
-      <NavItemWithIcon to={"/ratings/newplace"} title={"Nytt"} icon={faPlus} />
-      <NavItemWithIcon to={"/me"} title={user.displayName} icon={faUser} />
+      <NavItemWithIcon
+        to={"/ratings/newplace"}
+        title={"Nytt"}
+        icon={faPlus}
+        disabled={!user}
+      />
+      {user ? (
+        <NavItemWithIcon to={"/me"} title={user.displayName} icon={faUser} />
+      ) : (
+        <Item onClick={authorize}>
+          <TabMenuItem icon={faUser} title={"Logga in"} />
+        </Item>
+      )}
     </Bar>
   );
 };
@@ -23,17 +40,24 @@ interface NavItemWithIconProps {
   to: string;
   title: string;
   icon: IconProp;
+  disabled?: boolean;
 }
 
 export const NavItemWithIcon: React.FC<NavItemWithIconProps> = ({
   to,
   title,
-  icon
-}) => (
-  <NavItem to={to} activeClassName="active">
-    <TabMenuItem title={title} icon={icon} />
-  </NavItem>
-);
+  icon,
+  disabled = false
+}) =>
+  disabled ? (
+    <Disabled>
+      <TabMenuItem title={title} icon={icon} />
+    </Disabled>
+  ) : (
+    <NavItem to={to} activeClassName="active">
+      <TabMenuItem title={title} icon={icon} />
+    </NavItem>
+  );
 
 interface TabMenuItemProps {
   title: string;
@@ -47,11 +71,15 @@ export const TabMenuItem: React.FC<TabMenuItemProps> = ({ title, icon }) => (
   </Column>
 );
 
-const NavItem = styled(NavLink)`
-  color: #fff;
+const statusBarItem = css`
   text-decoration: none;
   padding: 0.8rem 1.2rem;
   width: 25%;
+`;
+
+const statusBarItemHover = css`
+  ${statusBarItem}
+  color: #fff;
 
   &:hover {
     background-color: #5279c4;
@@ -61,6 +89,21 @@ const NavItem = styled(NavLink)`
   &.active {
     background-color: #5279c4;
   }
+`;
+
+const NavItem = styled(NavLink)`
+  ${statusBarItemHover}
+`;
+
+const Item = styled.div`
+  ${statusBarItemHover}
+`;
+
+const Disabled = styled.div`
+  color: #888;
+  ${statusBarItem}
+
+  background-color: rgb(227, 227, 227);
 `;
 
 const Bar = styled.div`

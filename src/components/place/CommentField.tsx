@@ -13,6 +13,8 @@ interface Props {
 }
 
 export const CommentField = ({ user, review, placeId, style }: Props) => {
+  if (!user) return null;
+
   return (
     <CommentContainer style={style}>
       <UserImage url={user.imageUrl} active={Boolean(review)} />

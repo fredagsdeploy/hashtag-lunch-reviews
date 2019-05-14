@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import config from "./config";
-import { getUser, setToken } from "./lib/backend";
-import { StoreState } from "./store/configureStore";
-import { setSignedIn, setSignedOut, UserState } from "./store/reducers/user";
-import { GoogleUser } from "./types";
+import config from "../config";
+import { getUser, setToken } from "../lib/backend";
+import { StoreState } from "../store/configureStore";
+import { setSignedIn, setSignedOut, UserState } from "../store/reducers/user";
+import { GoogleUser } from "../types";
 
 let promiseCache: null | Promise<any> = null;
 let resolved: boolean = false;
