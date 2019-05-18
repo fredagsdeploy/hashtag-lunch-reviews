@@ -13,6 +13,7 @@ import { TabMenuItem } from "../StatusBar";
 import { formatStarRating } from "../utils/formatter";
 import { CommentField } from "./CommentField";
 import { PlaceImage } from "./PlaceRowView";
+import { useUserContext } from "../../customHooks/useUserContext";
 
 interface Props {
   placeId: string;
@@ -23,6 +24,8 @@ export const SinglePlaceView: React.FC<Props> = ({ onClose, placeId }) => {
   const rating = useRatingByPlaceId(placeId);
 
   const reviews = useReviewsByPlaceId(placeId);
+
+  const user = useUserContext();
 
   return (
     <ModalContainer
@@ -63,6 +66,7 @@ export const SinglePlaceView: React.FC<Props> = ({ onClose, placeId }) => {
         <Yellow icon={faStar} />
         {formatStarRating(rating.rating)}
       </PlaceRatings>
+      {user && <CommentField placeId={placeId} user={user} />}
       {reviews.map(review => (
         <CommentField
           key={review.reviewId}
