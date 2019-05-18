@@ -20,7 +20,7 @@ export const CommentField = ({ user, review, placeId, style }: Props) => {
   return (
     <CommentContainer style={style}>
       {review ? (
-        <UserImage url={user.imageUrl} active={Boolean(review)} />
+        <UserImage url={user.imageUrl} />
       ) : (
         <RoundLink to={`/ratings/newreview/${placeId}`}>
           <FontAwesomeIcon
@@ -96,15 +96,13 @@ const round = css`
   border-radius: 50%;
 `;
 
-const UserImage = styled.div<{ url?: string; active: boolean }>`
+const UserImage = styled.div<{ url?: string }>`
   ${round}
   background: ${props => (props.url ? `url(${props.url})` : "#CC0")};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
 
-  filter: ${props => (props.active ? "grayscale(0)" : "grayscale(100%)")};
-  transition: filter 3000ms;
 `;
 
 const RatingContainer = styled.div`
