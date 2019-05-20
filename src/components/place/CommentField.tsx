@@ -1,9 +1,11 @@
 import React, { CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useUserContext } from "../../customHooks/useUserContext";
 import { Review, User } from "../../types";
 import { StarRatingView } from "../StarRating";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface Props {
   review?: Review;
@@ -17,7 +19,16 @@ export const CommentField = ({ user, review, placeId, style }: Props) => {
 
   return (
     <CommentContainer style={style}>
-      <UserImage url={user.imageUrl} active={Boolean(review)} />
+      {review ? (
+        <UserImage url={user.imageUrl} />
+      ) : (
+        <RoundLink to={`/ratings/newreview/${placeId}`}>
+          <FontAwesomeIcon
+            icon={faPlus}
+            style={{ fontSize: "1.1rem", color: "#fff" }}
+          />
+        </RoundLink>
+      )}
       <div style={{ height: "2em", display: "flex", alignItems: "center" }}>
         <SpeakTriangle />
       </div>
@@ -79,19 +90,19 @@ const CommentContainer = styled.div`
   padding: 1em;
 `;
 
-const UserImage = styled.div<{ url?: string; active: boolean }>`
+const round = css`
   height: 2em;
   width: 2em;
+  border-radius: 50%;
+`;
 
+const UserImage = styled.div<{ url?: string }>`
+  ${round}
   background: ${props => (props.url ? `url(${props.url})` : "#CC0")};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
 
-  border-radius: 50%;
-
-  filter: ${props => (props.active ? "grayscale(0)" : "grayscale(100%)")};
-  transition: filter 3000ms;
 `;
 
 const RatingContainer = styled.div`
@@ -128,7 +139,6 @@ const Comment = styled.div`
   text-overflow: ellipsis;
 
   color: #5d5d5d;
-  font-style: italic;
 
   flex: 1;
 `;
@@ -141,8 +151,16 @@ const CommentLink = styled(Link)`
   text-overflow: ellipsis;
 
   color: #5d5d5d;
-  font-style: italic;
 
   flex: 1;
   text-decoration: none;
+`;
+
+const RoundLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: cornflowerblue;
+  ${round}
 `;
