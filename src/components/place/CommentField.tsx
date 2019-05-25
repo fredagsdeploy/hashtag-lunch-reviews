@@ -88,6 +88,7 @@ const NewCommentForm = ({ placeId }: Pick<Props, "placeId">) => {
 const CommentContainer = styled.div`
   display: flex;
   padding: 1em;
+  position: relative;
 `;
 
 const round = css`
