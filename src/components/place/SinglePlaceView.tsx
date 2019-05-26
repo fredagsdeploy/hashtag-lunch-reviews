@@ -2,10 +2,12 @@ import {
   faGlobe,
   faHashtag,
   faMap,
-  faStar
+  faStar,
+  faChevronUp,
+  faChevronDown
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { useRatingByPlaceId, useReviewsByPlaceId } from "../../customHooks/api";
 import { ModalContainer } from "../ModalContainer";
@@ -14,18 +16,40 @@ import { formatStarRating } from "../utils/formatter";
 import { CommentField } from "./CommentField";
 import { PlaceImage } from "./PlaceRowView";
 import { useUserContext } from "../../customHooks/useUserContext";
+import _, { Dictionary } from "lodash";
+import { Review, User } from "../../types";
+import { useCollapse } from "../../customHooks/useCollapse";
 
 interface Props {
   placeId: string;
   onClose: () => void;
 }
 
+const getUsersGrouped = (
+  reviews: Review[],
+  user: User | null
+): [Review[], Dictionary<Review[]>] => {
+  const reviewsGroupedByUser = _.groupBy(
+    reviews,
+    review => review.user.googleUserId
+  );
+
+  if (user) {
+    const { [user.googleUserId]: myReviews, ...rest } = reviewsGroupedByUser;
+    return [myReviews || [], rest];
+  } else {
+    return [[], reviewsGroupedByUser];
+  }
+};
+
 export const SinglePlaceView: React.FC<Props> = ({ onClose, placeId }) => {
+  const user = useUserContext();
+
   const rating = useRatingByPlaceId(placeId);
 
   const reviews = useReviewsByPlaceId(placeId);
 
-  const user = useUserContext();
+  const [myReviews, reviewsGroupedByUser] = getUsersGrouped(reviews, user);
 
   return (
     <ModalContainer
@@ -67,17 +91,72 @@ export const SinglePlaceView: React.FC<Props> = ({ onClose, placeId }) => {
         {formatStarRating(rating.rating)}
       </PlaceRatings>
       {user && <CommentField placeId={placeId} user={user} />}
-      {reviews.map(review => (
-        <CommentField
-          key={review.reviewId}
-          review={review}
+      {user && myReviews.length > 0 && (
+        <ReviewsContainer placeId={placeId} reviews={myReviews} />
+      )}
+      {_.map(reviewsGroupedByUser, (reviews, userGoogleId) => (
+        <ReviewsContainer
+          key={userGoogleId}
+          reviews={reviews}
           placeId={placeId}
-          user={review.user}
         />
       ))}
     </ModalContainer>
   );
 };
+
+interface ReviewsProps {
+  reviews: Review[];
+  placeId: string;
+}
+
+const ReviewsContainer: React.FC<ReviewsProps> = ({ reviews, placeId }) => {
+  const firstElementRef = useRef<HTMLDivElement>(null);
+  const allReviewsRef = useRef<HTMLDivElement>(null);
+
+  const [height, isOpen, toggleIsOpen] = useCollapse(
+    allReviewsRef,
+    firstElementRef
+  );
+
+  return (
+    <>
+      <ReviewsContainerDiv style={{ height: `${height}px` }}>
+        <div ref={allReviewsRef}>
+          <div ref={firstElementRef}>
+            <CommentField
+              key={reviews[0].reviewId}
+              review={reviews[0]}
+              placeId={placeId}
+              user={reviews[0].user}
+            />
+          </div>
+          {reviews.slice(1).map(review => (
+            <CommentField
+              key={review.reviewId}
+              review={review}
+              placeId={placeId}
+              user={review.user}
+            />
+          ))}
+        </div>
+      </ReviewsContainerDiv>
+      {reviews.length > 1 && (
+        <div
+          onClick={toggleIsOpen}
+          style={{ width: "100%", textAlign: "center", cursor: "pointer" }}
+        >
+          <FontAwesomeIcon icon={isOpen ? faChevronUp : faChevronDown} />
+        </div>
+      )}
+    </>
+  );
+};
+
+const ReviewsContainerDiv = styled.div`
+  transition: height 300ms;
+  overflow: hidden;
+`;
 
 const PlaceName = styled.h2`
   margin: 1rem 0 0;
