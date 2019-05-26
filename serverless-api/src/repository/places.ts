@@ -82,7 +82,7 @@ export const getPlaceByGoogleId = async (
 };
 
 export const getAllPlaces = async (): Promise<PlaceViewModel[]> => {
-  var params = {
+  const params = {
     TableName: "Places"
   };
 
@@ -96,7 +96,7 @@ export const getAllPlaces = async (): Promise<PlaceViewModel[]> => {
 };
 
 export const savePlace = async (placeInput: Place): Promise<PlaceViewModel> => {
-  var params = {
+  const params = {
     TableName: "Places",
     Item: placeInput
   };
@@ -116,7 +116,7 @@ export const savePlace = async (placeInput: Place): Promise<PlaceViewModel> => {
 export const updatePlace = async (
   placeInput: Place
 ): Promise<PlaceViewModel> => {
-  var params = {
+  const params = {
     TableName: "Places",
     Item: placeInput
   };
@@ -136,13 +136,13 @@ export const updatePlace = async (
 };
 
 const unixtimeFromUUID = (uuid: string): number => {
-  var uuid_arr = uuid.split("-"),
-    time_str = [uuid_arr[2].substring(1), uuid_arr[1], uuid_arr[0]].join("");
+  const uuid_arr = uuid.split("-"),
+      time_str = [uuid_arr[2].substring(1), uuid_arr[1], uuid_arr[0]].join("");
   return parseInt(time_str, 16);
 };
 
 const dateFromUUID = (uuid: string): Date => {
-  var int_time = unixtimeFromUUID(uuid) - 122192928000000000,
-    int_millisec = Math.floor(int_time / 10000);
+  const int_time = unixtimeFromUUID(uuid) - 122192928000000000,
+      int_millisec = Math.floor(int_time / 10000);
   return new Date(int_millisec);
 };
