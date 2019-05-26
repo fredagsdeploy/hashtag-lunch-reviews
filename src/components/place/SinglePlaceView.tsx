@@ -94,9 +94,9 @@ export const SinglePlaceView: React.FC<Props> = ({ onClose, placeId }) => {
       {user && myReviews.length > 0 && (
         <ReviewsContainer placeId={placeId} reviews={myReviews} />
       )}
-      {_.map(reviewsGroupedByUser, (reviews, userDisplayName) => (
+      {_.map(reviewsGroupedByUser, (reviews, userGoogleId) => (
         <ReviewsContainer
-          key={userDisplayName}
+          key={userGoogleId}
           reviews={reviews}
           placeId={placeId}
         />
