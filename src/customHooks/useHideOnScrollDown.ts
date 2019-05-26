@@ -6,6 +6,8 @@ export const useHideOnScrollDown = () => {
 
   const [hide, setHide] = useState(false);
 
+  const hideThreshold = 80;
+
   useEffect(() => {
     const eventListener = () => {
       hasScrolled.current = true;
@@ -16,7 +18,10 @@ export const useHideOnScrollDown = () => {
     const animationFrameCallback = () => {
       if (hasScrolled.current) {
         const currentScrollY = window.scrollY;
-        if (currentScrollY > lastScrollY.current) {
+        if (
+          currentScrollY > lastScrollY.current &&
+          currentScrollY > hideThreshold
+        ) {
           setHide(true);
         } else {
           setHide(false);
