@@ -96,7 +96,8 @@ export const AddNewPlaceForm = ({
           searchOptions={getSearchOptions()}
           onChange={placeName => {
             handleNewPlaceInput({
-              placeName
+              placeName,
+              googlePlaceId: undefined
             });
           }}
           onSelect={(placeName, googlePlaceId) => {
