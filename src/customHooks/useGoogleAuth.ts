@@ -48,6 +48,12 @@ export const useGoogleAuth = () => {
   useGoogleClientAuthApi();
 
   if (!authPromise) {
+    if (!config.apiKey || config.clientId) {
+      console.log(
+        "Missing apiKey and/or clientId in config. Find them in the google dev console https://console.cloud.google.com/apis/credentials?project=level-gizmo-229612"
+      );
+    }
+
     authPromise = window.gapi.auth2
       .init({
         apiKey: config.apiKey,
