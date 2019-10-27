@@ -12,6 +12,7 @@ import { MapPage } from "./components/MapPage";
 import { StatsController } from "./components/StatsController";
 import { UserController } from "./components/UserController";
 import { NavigationFooter } from "./components/NavigationFooter";
+import config from "./config";
 
 declare global {
   interface Window {
@@ -23,6 +24,12 @@ declare global {
 Modal.setAppElement("#root");
 
 export const App = () => {
+  Object.entries(config).forEach(entry => {
+    if (!entry[1]) {
+      console.log(`Unset environment ${entry[0]}`);
+    }
+  });
+
   return (
     <Provider store={store}>
       <LayoutGrid className="App">

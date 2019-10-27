@@ -10,7 +10,7 @@ Look into [serverless-api/dynamodb-serverless/README.md](serverless-api/dynamodb
 
 ```shell
 yarn
-yarn start
+REACT_APP_GOOGLE_API_KEY="" REACT_APP_CLIENT_ID="" yarn start # Find the keys in the google dev console
 ```
 
 ## Deploy to aws bucket
