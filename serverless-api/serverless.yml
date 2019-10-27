@@ -1,3 +1,5 @@
+org: andresamuelsson94
+app: hashtag-lunch-review-backend-app
 # Welcome to serverless. Read the docs
 # https://serverless.com/framework/docs/
 
@@ -16,7 +18,7 @@ plugins:
 # The `provider` block defines where your service will be deployed
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs10.x
   region: eu-north-1
   stage: ${opt:stage, 'dev'}
   environment:
