@@ -17,9 +17,8 @@ const calculateRating = (reviews: Review[]): number => {
   return 0;
 };
 
-const calculateNormalizedRating = async (place: Place): Promise<number> => {
-  const allReviews = await getAllReviews();
-  const reviewByUserId = _.groupBy(allReviews, "userId");
+const calculateNormalizedRating = (place: Place, reviews: Review[]): number => {
+  const reviewByUserId = _.groupBy(reviews, "userId");
   const normalizedReviews = _.flatMap<_.Dictionary<Review[]>, Review>(
     reviewByUserId,
     (reviewsForUser, userId) => {
@@ -43,9 +42,9 @@ const calculateNormalizedRating = async (place: Place): Promise<number> => {
   return calculateRating(normalizedReviewsGroupedByPlaceId[place.placeId]);
 };
 
-export const decoratePlace = async (place: Place, reviews: Review[]) => {
+export const decoratePlace = (place: Place, reviews: Review[]) => {
   const rating = calculateRating(reviews);
-  const normalizedRating: number = await calculateNormalizedRating(place);
+  const normalizedRating: number = calculateNormalizedRating(place, reviews);
 
   return {
     ...place,
@@ -59,10 +58,7 @@ export const getPlacesWithRatings: LambdaHandler = async () => {
   const places = await getAllPlaces();
 
   const reviewsByPlace = _.groupBy(reviews, r => r.placeId);
-
-  const placesWithRatings = await Promise.all(
-    _.map(places, place => decoratePlace(place, reviewsByPlace[place.placeId]))
-  );
+  const placesWithRatings = _.map(places, place => decoratePlace(place, reviewsByPlace[place.placeId]))
 
   const rankedRatings = _.orderBy(placesWithRatings, "rating", "desc").map(
     (r, i) => ({

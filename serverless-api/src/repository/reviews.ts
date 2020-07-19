@@ -25,12 +25,15 @@ export const getReviewById = async (
 };
 
 export const getAllReviews = async (): Promise<Review[]> => {
+  console.log('getAllReviews start');
   const params = {
     TableName: "Reviews"
   };
 
   const response = await dynamodb.scan(params).promise();
 
+
+  console.log('getAllReviews end');
   return (response.Items || []) as Review[];
 };
 
