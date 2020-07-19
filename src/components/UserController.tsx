@@ -38,7 +38,7 @@ const LoggedIn = () => {
           placeholder="Namn"
           name="displayName"
           value={displayName || ""}
-          onChange={e => setDisplayName(e.target.value)}
+          onChange={(e: any) => setDisplayName(e.target.value)}
         />
       </FormLabelWrapper>
       <SaveUserButton onClick={saveUser}>Spara</SaveUserButton>
