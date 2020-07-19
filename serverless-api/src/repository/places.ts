@@ -82,6 +82,7 @@ export const getPlaceByGoogleId = async (
 };
 
 export const getAllPlaces = async (): Promise<PlaceViewModel[]> => {
+  console.log('getAllPlaces start');
   const params = {
     TableName: "Places"
   };
@@ -89,10 +90,12 @@ export const getAllPlaces = async (): Promise<PlaceViewModel[]> => {
   const response = await dynamodb.scan(params).promise();
 
   const places = response.Items as PlaceViewModel[];
-  return places.map((p: PlaceViewModel) => ({
+  const mappedPlaces = places.map((p: PlaceViewModel) => ({
     ...p,
     createdAt: dateFromUUID(p.placeId)
   }));
+  console.log('getAllPlaces end');
+  return mappedPlaces;
 };
 
 export const savePlace = async (placeInput: Place): Promise<PlaceViewModel> => {
