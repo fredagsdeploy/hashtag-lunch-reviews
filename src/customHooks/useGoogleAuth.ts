@@ -40,6 +40,8 @@ const transformGoogleUser = (profile: gapi.auth2.BasicProfile): GoogleUser => ({
   email: profile.getEmail()
 });
 
+const GOOGLE_CONF_LOCATION_MESSAGE = 'Find them in the google dev console https://console.cloud.google.com/apis/credentials?project=level-gizmo-229612"'
+
 export const useGoogleAuth = () => {
   const state = useSelector<UserState, StoreState>(state => state.user, []);
 
@@ -48,12 +50,13 @@ export const useGoogleAuth = () => {
   useGoogleClientAuthApi();
 
   if (!authPromise) {
-    if (!config.apiKey || !config.clientId) {
-      console.log(
-        "Missing apiKey and/or clientId in config. Find them in the google dev console https://console.cloud.google.com/apis/credentials?project=level-gizmo-229612"
-      );
+    if(!config.apiKey) {
+      console.log(`Missing apiKey in config. ${GOOGLE_CONF_LOCATION_MESSAGE}`)
     }
-
+    if(!config.clientId) {
+      console.log(`Missing clientId in config. ${GOOGLE_CONF_LOCATION_MESSAGE}`)
+    }
+    
     authPromise = window.gapi.auth2
       .init({
         apiKey: config.apiKey,
