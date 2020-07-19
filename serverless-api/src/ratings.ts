@@ -43,7 +43,8 @@ const calculateNormalizedRating = (place: Place, reviews: Review[]): number => {
 };
 
 export const decoratePlace = (place: Place, reviews: Review[]) => {
-  const rating = calculateRating(reviews);
+  const reviewsByPlace = _.groupBy(reviews, r => r.placeId);
+  const rating = calculateRating(reviewsByPlace[place.placeId]);
   const normalizedRating: number = calculateNormalizedRating(place, reviews);
 
   return {
@@ -56,9 +57,7 @@ export const decoratePlace = (place: Place, reviews: Review[]) => {
 export const getPlacesWithRatings: LambdaHandler = async () => {
   const reviews = await getAllReviews();
   const places = await getAllPlaces();
-
-  const reviewsByPlace = _.groupBy(reviews, r => r.placeId);
-  const placesWithRatings = _.map(places, place => decoratePlace(place, reviewsByPlace[place.placeId]))
+  const placesWithRatings = _.map(places, place => decoratePlace(place, reviews))
 
   const rankedRatings = _.orderBy(placesWithRatings, "rating", "desc").map(
     (r, i) => ({
