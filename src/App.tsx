@@ -34,7 +34,7 @@ export const App = () => {
     <Provider store={store}>
       <LayoutGrid className="App">
         <GlobalStyle />
-        <Suspense fallback={<Spinner size={"large"} />}>
+        <Suspense fallback={<Spinner size={"large"} />} >
           <Router history={browserHistory}>
             <>
               <StatusBar />

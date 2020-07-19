@@ -12,7 +12,7 @@ jobs:
 
   build-frontend:
     docker:
-      - image: circleci/node:11.9
+      - image: circleci/node:12
 
     working_directory: ~/repo
 
