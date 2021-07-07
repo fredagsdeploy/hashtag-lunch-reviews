@@ -1808,10 +1808,10 @@
   dependencies:
     "@types/gapi" "*"
 
-"@types/gapi@*", "@types/gapi@^0.0.36":
-  version "0.0.36"
-  resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.36.tgz#e7fb3d4d4a6fbdbd0a9aef1cbd93d3b115d59a3d"
-  integrity sha512-biMDn3eNRoPEMaPTEn5DwKXu64ng3U3cDQkePOllZ7uTRcA9lpPqwcLrDPF1cP0v+CrAtyv8w95/eVDSsQYPYQ==
+"@types/gapi@*", "@types/gapi@^0.0.40":
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@types/gapi/-/gapi-0.0.40.tgz#48e41feaf7191d2a4c439d6612b3a32945cb4769"
+  integrity sha512-HzV7JIp5vgCZYPLzTg+LJCEVbTbZ/wNSCatNYThNvDTtiNXU+ccrUfFLUF2akHsil+KCpf2yp9OUhLUflsOuBw==
 
 "@types/glob@^7.1.1":
   version "7.1.3"
